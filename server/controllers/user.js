@@ -4,6 +4,8 @@ const {
   generateAccessToken,
   generateRefreshToken,
 } = require("../middlewares/jwt");
+const jwt = require("jsonwebtoken");
+const sendMail = require("../ultils/sendMail");
 
 const register = asyncHandler(async (req, res) => {
   const { email, password, firtname, lastname } = req.body;
@@ -67,7 +69,6 @@ const getCurrent = asyncHandler(async (req, res) => {
       mes: "Missing input",
     });
   }
-
   const user = await User.findById({ _id: id }).select(
     "-refreshToken -password -role"
   );
@@ -77,8 +78,65 @@ const getCurrent = asyncHandler(async (req, res) => {
   });
 });
 
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const cookie = req.cookies;
+  if (!cookie && !cookie.refreshToken)
+    throw new Error("No refresh token in cookie");
+  const rs = await jwt.verify(cookie.refreshToken, process.env.JWT_SECRET);
+  const response = await User.findOne({
+    _id: rs.id,
+    refreshToken: cookie.refreshToken,
+  });
+  return res.status(200).json({
+    sucess: response ? true : false,
+    newAccessToken: response
+      ? generateAccessToken(response._id, response.role)
+      : "Refresh token not matched",
+  });
+});
+
+const logout = asyncHandler(async (req, res) => {
+  const cookie = req.cookies;
+  if (!cookie && !cookie.refreshToken) throw new Error("No refresh is cookies");
+  await User.findOneAndUpdate(
+    { refreshToken: cookie.refreshToken },
+    { refreshToken: "" },
+    { new: true }
+  );
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: true,
+  });
+  return res.status(200).json({
+    sucess: true,
+    mes: "Logout is done",
+  });
+});
+
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.query;
+  if (!email) throw new Error("Missing email");
+  const user = await User.findOne({ email });
+  if (!user) throw new Error("User not found");
+  const resetToken = user.createPasswordChangeToken();
+  await user.save();
+  const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. <a href=${process.env.URL_SERVER}/api/user/reset-password/${resetToken}>Click here</a>`;
+  const data = {
+    to: email,
+    html,
+  };
+  const rs = await sendMail(data);
+  return res.status(200).json({
+    sucess: true,
+    rs,
+  });
+});
+
 module.exports = {
   register,
   login,
   getCurrent,
+  refreshAccessToken,
+  logout,
+  forgotPassword,
 };
