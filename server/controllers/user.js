@@ -12,7 +12,7 @@ const register = asyncHandler(async (req, res) => {
   const { email, password, firtname, lastname } = req.body;
   if (!email || !password || !firtname || !lastname) {
     return res.status(400).json({
-      sucess: false,
+      success: false,
       mes: "Missing input",
     });
   }
@@ -22,7 +22,7 @@ const register = asyncHandler(async (req, res) => {
   else {
     const newUser = await User.create(req.body);
     return res.status(200).json({
-      sucess: newUser ? true : false,
+      success: newUser ? true : false,
       mes: newUser
         ? "Register is successfully. Please go login~"
         : "Something went wrong",
@@ -37,7 +37,7 @@ const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({
-      sucess: false,
+      success: false,
       mes: "Missing input",
     });
   }
@@ -57,7 +57,7 @@ const login = asyncHandler(async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     return res.status(200).json({
-      sucess: true,
+      success: true,
       accessToken,
       userData,
     });
@@ -70,7 +70,7 @@ const getCurrent = asyncHandler(async (req, res) => {
   const { id } = req.user;
   if (!id) {
     return res.status(400).json({
-      sucess: false,
+      success: false,
       mes: "Missing input",
     });
   }
@@ -78,7 +78,7 @@ const getCurrent = asyncHandler(async (req, res) => {
     "-refreshToken -password -role"
   );
   return res.status(200).json({
-    sucess: user ? true : false,
+    success: user ? true : false,
     rs: user ? user : "User not found",
   });
 });
@@ -93,7 +93,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     refreshToken: cookie.refreshToken,
   });
   return res.status(200).json({
-    sucess: response ? true : false,
+    success: response ? true : false,
     newAccessToken: response
       ? generateAccessToken(response._id, response.role)
       : "Refresh token not matched",
@@ -113,7 +113,7 @@ const logout = asyncHandler(async (req, res) => {
     secure: true,
   });
   return res.status(200).json({
-    sucess: true,
+    success: true,
     mes: "Logout is done",
   });
 });
@@ -132,7 +132,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
   };
   const rs = await sendMail(data);
   return res.status(200).json({
-    sucess: true,
+    success: true,
     rs,
   });
 });
@@ -155,7 +155,7 @@ const resetPassword = asyncHandler(async (req, res) => {
   user.passwordResetExpires = undefined;
   await user.save();
   return res.status(200).json({
-    sucess: user ? true : false,
+    success: user ? true : false,
     mes: user ? "Updated password" : "Something went wrong",
   });
 });
@@ -163,7 +163,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 const getUsers = asyncHandler(async (req, res) => {
   const response = await User.find().select("-refreshToken -password -role");
   return res.status(200).json({
-    sucess: response ? true : false,
+    success: response ? true : false,
     users: response,
   });
 });
@@ -173,7 +173,7 @@ const deleteUser = asyncHandler(async (req, res) => {
   if (!id) throw new Error("missing input");
   const response = await User.findByIdAndDelete({ _id: id });
   return res.status(200).json({
-    sucess: response ? true : false,
+    success: response ? true : false,
     deletedUser: response
       ? `User with email ${response.email} delete`
       : "No user delete",
@@ -188,7 +188,7 @@ const updateUser = asyncHandler(async (req, res) => {
     new: true,
   }).select("-password -role -refreshToken");
   return res.status(200).json({
-    sucess: response ? true : false,
+    success: response ? true : false,
     deletedUser: response ? response : "Some thing went wrong",
   });
 });
@@ -201,7 +201,7 @@ const updateUserByAdmin = asyncHandler(async (req, res) => {
     new: true,
   }).select("-password -role -refreshToken");
   return res.status(200).json({
-    sucess: response ? true : false,
+    success: response ? true : false,
     deletedUser: response ? response : "Some thing went wrong",
   });
 });
