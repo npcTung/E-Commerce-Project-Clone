@@ -23,6 +23,14 @@ const data = [
     ],
   },
   {
+    cate: "Speaker",
+    brand: [],
+  },
+  {
+    cate: "Camera",
+    brand: [],
+  },
+  {
     cate: "Television",
     brand: ["Apple", "Samsung", "LG", "Asus", "Nokia", "BlackBerry"],
   },

@@ -6,13 +6,14 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const app = express();
+const port = process.env.PORT || 8888;
+
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
     methods: ["GET", "PUT", "POST", "DELETE"],
   })
 );
-const port = process.env.PORT || 8888;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

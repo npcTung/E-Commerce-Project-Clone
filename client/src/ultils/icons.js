@@ -1,12 +1,10 @@
 import { RiPhoneFill } from "react-icons/ri";
 import { TbMailFilled } from "react-icons/tb";
-import { SlHeart, SlScreenDesktop } from "react-icons/sl";
-import { PiHandbagFill } from "react-icons/pi";
-import { FaUserCircle, FaList } from "react-icons/fa";
-import { AiFillHome, AiOutlineLaptop } from "react-icons/ai";
-import { FiSmartphone } from "react-icons/fi";
-import { MdOutlineTabletMac } from "react-icons/md";
-import { TfiHeadphone, TfiPrinter } from "react-icons/tfi";
+import { SlHeart } from "react-icons/sl";
+import { PiHandbagFill, PiListFill } from "react-icons/pi";
+import { FaUserCircle, FaList, FaEye } from "react-icons/fa";
+import { BsStarFill, BsStar } from "react-icons/bs";
+import { HiHeart } from "react-icons/hi";
 
 const icons = {
   RiPhoneFill,
@@ -14,14 +12,12 @@ const icons = {
   SlHeart,
   PiHandbagFill,
   FaUserCircle,
-  AiFillHome,
   FaList,
-  FiSmartphone,
-  AiOutlineLaptop,
-  MdOutlineTabletMac,
-  TfiHeadphone,
-  SlScreenDesktop,
-  TfiPrinter,
+  BsStarFill,
+  BsStar,
+  FaEye,
+  PiListFill,
+  HiHeart,
 };
 
 export default icons;
