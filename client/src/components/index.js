@@ -5,3 +5,8 @@ export { default as Sidebar } from "./Sidebar";
 export { default as BestSellers } from "./BestSellers";
 export { default as Product } from "./Product";
 export { default as SelectOption } from "./SelectOption";
+export { default as DealDaily } from "./DealDaily";
+export { default as CountDown } from "./CountDown";
+export { default as FeaturedProduct } from "./FeaturedProduct";
+export { default as ProductCard } from "./ProductCard";
+export { default as NewArrivals } from "./NewArrivals";

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { apiGetProducts } from "../apis";
-import Product from "./Product";
+import { Product } from "./";
 import Slider from "react-slick";
+import { getNewProduct } from "../store/products/asyncActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const tabs = [
   { id: 1, name: "best seller" },
@@ -10,7 +12,7 @@ const tabs = [
 
 var settings = {
   dots: false,
-  infinite: false,
+  infinite: true,
   speed: 500,
   slidesToShow: 3,
   slidesToScroll: 1,
@@ -18,28 +20,26 @@ var settings = {
 
 const BestSellers = () => {
   const [bestSellers, setBestSellers] = useState(null);
-  const [newProducts, setNewProducts] = useState(null);
   const [activedTab, setActivedTab] = useState(1);
   const [product, setProduct] = useState(null);
+  const dispatch = useDispatch();
+  const { newProduct } = useSelector((state) => state.products);
 
   const fetchProducts = async () => {
-    const response = await Promise.all([
-      apiGetProducts({ sort: "-sold" }),
-      apiGetProducts({ sort: "-createdAt" }),
-    ]);
-    if (response[0].success) {
-      setBestSellers(response[0].products);
-      setProduct(response[0].products);
+    const response = await apiGetProducts({ sort: "-sold" });
+    if (response.success) {
+      setBestSellers(response.products);
+      setProduct(response.products);
     }
-    if (response[1].success) setNewProducts(response[1].products);
   };
 
   useEffect(() => {
     fetchProducts();
+    dispatch(getNewProduct());
   }, []);
   useEffect(() => {
     if (activedTab === 1) setProduct(bestSellers);
-    if (activedTab === 2) setProduct(newProducts);
+    if (activedTab === 2) setProduct(newProduct);
   }, [activedTab]);
 
   return (
@@ -57,7 +57,7 @@ const BestSellers = () => {
           </span>
         ))}
       </div>
-      <div className="mt-10 -mx-[10px]">
+      <div className="mt-5 -mx-[10px]">
         <Slider {...settings}>
           {product?.map((el) => (
             <Product
@@ -84,4 +84,4 @@ const BestSellers = () => {
   );
 };
 
-export default BestSellers;
+export default memo(BestSellers);

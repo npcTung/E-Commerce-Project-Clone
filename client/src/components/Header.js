@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import path from "../ultils/path";
 import Logo from "../assets/logo.png";
 import icons from "../ultils/icons";
@@ -49,4 +49,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default memo(Header);

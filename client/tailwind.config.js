@@ -28,6 +28,9 @@ module.exports = {
         "slide-top":
           "slide-top 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;",
       },
+      fontWeight: {
+        600: "600",
+      },
     },
   },
   plugins: [require("@tailwindcss/line-clamp")],

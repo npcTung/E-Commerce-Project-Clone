@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import LogoImage from "../assets/logo-image.png";
 import LableRed from "../assets/lable-red.png";
 import LableBlue from "../assets/lable-blue.png";
@@ -10,7 +10,7 @@ import icons from "../ultils/icons";
 
 const { FaEye, PiListFill, HiHeart } = icons;
 
-const Product = ({ productData, isNew }) => {
+const Product = ({ productData, isNew, newArrival }) => {
   const [isShowOption, setIsShowOption] = useState(false);
   return (
     <div className="w-full px-[10px]">
@@ -37,7 +37,9 @@ const Product = ({ productData, isNew }) => {
             <img
               src={productData.thumb || LogoImage}
               alt={productData.title}
-              className="w-full h-[243px] object-cover"
+              className={`w-full ${
+                newArrival ? "h-[350px]" : "h-[243px]"
+              } object-contain`}
             />
           </Link>
           <img
@@ -66,4 +68,4 @@ const Product = ({ productData, isNew }) => {
   );
 };
 
-export default Product;
+export default memo(Product);
