@@ -2,8 +2,10 @@ import React from "react";
 import {
   Banner,
   BestSellers,
+  BlogPosts,
   DealDaily,
   FeaturedProduct,
+  HotCollection,
   NewArrivals,
   Sidebar,
 } from "../../components";
@@ -23,6 +25,8 @@ const Home = () => {
       </div>
       <FeaturedProduct />
       <NewArrivals />
+      <HotCollection />
+      <BlogPosts />
     </div>
   );
 };

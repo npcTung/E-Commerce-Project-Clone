@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from "react";
 import icons from "../ultils/icons";
 import LogoImage from "../assets/logo-image.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { apiGetProducts } from "../apis";
 import {
   renderStarFromNumber,
@@ -10,6 +10,7 @@ import {
 } from "../ultils/helpers";
 import { CountDown } from "./";
 import moment from "moment";
+import path from "../ultils/path";
 
 const { BsStarFill, PiListFill } = icons;
 
@@ -19,6 +20,7 @@ const DealDaily = () => {
   const [minute, setMinute] = useState(0);
   const [second, setSecond] = useState(0);
   const [expireTime, setExpireTime] = useState(false);
+  const navigate = useNavigate();
   const fetchDealDaily = async () => {
     const response = await apiGetProducts({
       limit: 1,
@@ -75,7 +77,10 @@ const DealDaily = () => {
         <span></span>
       </div>
       <div className="w-full p-4 mt-6">
-        <Link to={dealDaily?.slug} className="w-full">
+        <Link
+          to={`/${path.DETAIL_PRODUCT}/${dealDaily?._id}/${dealDaily?.slug}`}
+          className="w-full"
+        >
           <img
             src={dealDaily?.thumb || LogoImage}
             alt={dealDaily?.title}
@@ -84,7 +89,7 @@ const DealDaily = () => {
         </Link>
         <div className="flex flex-col gap-4 items-center justify-center py-5">
           <Link
-            to={dealDaily?.slug}
+            to={`/${path.DETAIL_PRODUCT}/${dealDaily?._id}/${dealDaily?.slug}`}
             className="line-clamp-1 hover:text-main capitalize transition-all"
           >
             {dealDaily?.title.toLowerCase()}
@@ -105,6 +110,11 @@ const DealDaily = () => {
           type="button"
           className="flex items-center gap-2 bg-main font-medium hover:bg-[#1c1d1d] transition-all text-white uppercase p-2 w-full justify-center"
           title="Select Option"
+          onClick={() =>
+            navigate(
+              `/${path.DETAIL_PRODUCT}/${dealDaily?._id}/${dealDaily?.slug}`
+            )
+          }
         >
           <PiListFill />
           <span>options</span>

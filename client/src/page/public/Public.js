@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { Header, Navigation } from "../../components";
+import { Footer, Header, Navigation } from "../../components";
 
 const Public = () => {
   return (
@@ -10,6 +10,7 @@ const Public = () => {
       <div className="w-main my-5">
         <Outlet />
       </div>
+      <Footer />
     </div>
   );
 };

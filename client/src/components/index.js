@@ -10,3 +10,7 @@ export { default as CountDown } from "./CountDown";
 export { default as FeaturedProduct } from "./FeaturedProduct";
 export { default as ProductCard } from "./ProductCard";
 export { default as NewArrivals } from "./NewArrivals";
+export { default as HotCollection } from "./HotCollection";
+export { default as BlogPosts } from "./BlogPosts";
+export { default as Footer } from "./Footer";
+export { default as TopHeader } from "./Footer";

@@ -2,16 +2,18 @@ import React, { memo, useState } from "react";
 import LogoImage from "../assets/logo-image.png";
 import LableRed from "../assets/lable-red.png";
 import LableBlue from "../assets/lable-blue.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { formatMoney } from "../ultils/helpers";
 import { renderStarFromNumber } from "../ultils/helpers";
 import SelectOption from "./SelectOption";
 import icons from "../ultils/icons";
+import path from "../ultils/path";
 
 const { FaEye, PiListFill, HiHeart } = icons;
 
 const Product = ({ productData, isNew, newArrival }) => {
   const [isShowOption, setIsShowOption] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className="w-full px-[10px]">
       <div
@@ -28,12 +30,26 @@ const Product = ({ productData, isNew, newArrival }) => {
         <div className="w-full relative">
           {isShowOption && (
             <div className="absolute bottom-0 flex justify-center left-0 right-0 gap-3 animate-slide-top">
-              <SelectOption icon={<HiHeart />} />
-              <SelectOption icon={<PiListFill />} />
-              <SelectOption icon={<FaEye />} />
+              <span>
+                <SelectOption icon={<HiHeart />} />
+              </span>
+              <span
+                onClick={() =>
+                  navigate(
+                    `/${path.DETAIL_PRODUCT}/${productData._id}/${productData.slug}`
+                  )
+                }
+              >
+                <SelectOption icon={<PiListFill />} />
+              </span>
+              <span>
+                <SelectOption icon={<FaEye />} />
+              </span>
             </div>
           )}
-          <Link to={productData.slug}>
+          <Link
+            to={`/${path.DETAIL_PRODUCT}/${productData._id}/${productData.slug}`}
+          >
             <img
               src={productData.thumb || LogoImage}
               alt={productData.title}
@@ -53,7 +69,7 @@ const Product = ({ productData, isNew, newArrival }) => {
         </div>
         <div className="flex flex-col gap-2 mt-4 justify-start w-full">
           <Link
-            to={productData.slug}
+            to={`/${path.DETAIL_PRODUCT}/${productData._id}/${productData.slug}`}
             className="line-clamp-1 capitalize hover:text-main transition-all"
           >
             {productData.title.toLowerCase()}
