@@ -9,7 +9,7 @@ const { RiPhoneFill, TbMailFilled, SlHeart, PiHandbagFill, FaUserCircle } =
 
 const Header = () => {
   return (
-    <div className="w-main h-[110px] py-[35px] flex justify-between">
+    <header className="w-main h-[110px] py-[35px] flex justify-between">
       <a href={`/${path.HOME}`}>
         <img src={Logo || ""} alt="Logo" className="w-[234px] object-contain" />
       </a>
@@ -45,7 +45,7 @@ const Header = () => {
           </span>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

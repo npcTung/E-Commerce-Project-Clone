@@ -9,8 +9,8 @@ const sendMail = require("../ultils/sendMail");
 const crypto = require("crypto");
 
 const register = asyncHandler(async (req, res) => {
-  const { email, password, firtname, lastname } = req.body;
-  if (!email || !password || !firtname || !lastname) {
+  const { email, password, firstName, lastName, phone } = req.body;
+  if (!email || !password || !firstName || !lastName || !phone) {
     return res.status(400).json({
       success: false,
       mes: "Missing input",
@@ -18,7 +18,9 @@ const register = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findOne({ email });
+  const dt = await User.findOne({ phone });
   if (user) throw new Error("User has exised");
+  else if (dt) throw new Error("Phone has exised");
   else {
     const newUser = await User.create(req.body);
     return res.status(200).json({

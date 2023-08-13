@@ -5,11 +5,11 @@ const crypto = require("crypto");
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema(
   {
-    firtname: {
+    firstName: {
       type: String,
       required: true,
     },
-    lastname: {
+    lastName: {
       type: String,
       required: true,
     },
@@ -18,7 +18,7 @@ var userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    mobile: {
+    phone: {
       type: String,
       required: true,
       unique: true,

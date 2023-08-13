@@ -13,4 +13,6 @@ export { default as NewArrivals } from "./NewArrivals";
 export { default as HotCollection } from "./HotCollection";
 export { default as BlogPosts } from "./BlogPosts";
 export { default as Footer } from "./Footer";
-export { default as TopHeader } from "./Footer";
+export { default as TopHeader } from "./TopHeader";
+export { default as InputField } from "./InputField";
+export { default as Button } from "./Button";

@@ -76,12 +76,7 @@ const NewArrivals = () => {
       <div className="mt-5 -mx-[10px]">
         <Slider {...settings}>
           {product?.map((el) => (
-            <Product
-              key={el._id}
-              productData={el}
-              //   isNew={activedTab === 1 ? false : true}
-              newArrival
-            />
+            <Product key={el._id} productData={el} isNew={true} newArrival />
           ))}
         </Slider>
       </div>

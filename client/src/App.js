@@ -18,13 +18,13 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCategories());
-  }, []);
+  }, [dispatch]);
   return (
     <div className="min-h-screen font-main">
       <Routes>
+        <Route path={path.LOGIN} element={<Login />} />
         <Route path={path.PUBLIC} element={<Public />}>
           <Route path={path.HOME} element={<Home />} />
-          <Route path={path.LOGIN} element={<Login />} />
           <Route path={path.PRODUCTS} element={<Products />} />
           <Route
             path={path.DETAIL_PRODUCT__PID__TITLE}
