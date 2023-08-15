@@ -29,3 +29,42 @@ export function seconsToHms(d) {
   const s = Math.floor((d % 3600) % 60);
   return { h, m, s };
 }
+
+export const validate = (payload, setInvalidFields) => {
+  let invalids = 0;
+  const formatPayload = Object.entries(payload);
+  for (let i of formatPayload) {
+    if (i[1].trim() === "") {
+      invalids++;
+      setInvalidFields((prev) => [
+        ...prev,
+        { name: i[0], mes: "Require this field~" },
+      ]);
+    }
+  }
+  for (let i of formatPayload) {
+    switch (i[0]) {
+      case "email":
+        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (!i[1].match(regex)) {
+          invalids++;
+          setInvalidFields((prev) => [
+            ...prev,
+            { name: i[0], mes: "Email invalid~" },
+          ]);
+        }
+        break;
+      case "password":
+        if (i[1].length < 6) {
+          invalids++;
+          setInvalidFields((prev) => [
+            ...prev,
+            { name: i[0], mes: "Passworld minimum 6 characters~" },
+          ]);
+        }
+        break;
+    }
+  }
+
+  return invalids;
+};

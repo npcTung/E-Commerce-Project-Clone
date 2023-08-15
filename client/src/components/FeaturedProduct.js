@@ -31,7 +31,7 @@ const FeaturedProduct = () => {
         <div className="w-1/2 h-full">
           <img
             src="https://digital-world-2.myshopify.com/cdn/shop/files/banner1-bottom-home2_b96bc752-67d4-45a5-ac32-49dc691b1958_600x.jpg?v=1613166661"
-            alt="Featured Image 1"
+            alt="Featured 1"
             className="w-full h-full object-cover cursor-pointer"
           />
         </div>
@@ -39,19 +39,19 @@ const FeaturedProduct = () => {
           <div className="w-1/2 h-full flex flex-col gap-5">
             <img
               src="https://digital-world-2.myshopify.com/cdn/shop/files/banner2-bottom-home2_400x.jpg?v=1613166661"
-              alt="Featured Image 2"
+              alt="Featured 2"
               className="w-full h-1/2 object-cover cursor-pointer"
             />
             <img
               src="https://digital-world-2.myshopify.com/cdn/shop/files/banner3-bottom-home2_400x.jpg?v=1613166661"
-              alt="Featured Image 3"
+              alt="Featured 3"
               className="w-full h-1/2 object-cover cursor-pointer"
             />
           </div>
           <div className="w-1/2 h-full">
             <img
               src="https://digital-world-2.myshopify.com/cdn/shop/files/banner4-bottom-home2_92e12df0-500c-4897-882a-7d061bb417fd_400x.jpg?v=1613166661"
-              alt="Featured Image 4"
+              alt="Featured 4"
               className="w-full h-full object-cover cursor-pointer"
             />
           </div>

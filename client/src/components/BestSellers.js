@@ -36,11 +36,11 @@ const BestSellers = () => {
   useEffect(() => {
     fetchProducts();
     dispatch(getNewProduct());
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     if (activedTab === 1) setProduct(bestSellers);
     if (activedTab === 2) setProduct(newProduct);
-  }, [activedTab]);
+  }, [activedTab, bestSellers, newProduct]);
 
   return (
     <div className="w-full">

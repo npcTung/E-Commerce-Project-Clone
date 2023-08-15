@@ -53,7 +53,7 @@ const NewArrivals = () => {
     if (activedTab === 1) setProduct(smartphone);
     if (activedTab === 2) setProduct(tablet);
     if (activedTab === 3) setProduct(laptop);
-  }, [activedTab]);
+  }, [activedTab, smartphone, laptop, tablet]);
 
   return (
     <div className="mt-6">

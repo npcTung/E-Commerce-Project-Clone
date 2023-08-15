@@ -18,13 +18,21 @@ const InputField = ({
       </label>
       <input
         type={type || "text"}
-        className="input bg-gray-100 placeholder:capitalize w-full"
+        className={`input ${
+          invalidFields?.some((el) => el.name === nameKey) && "input-error"
+        } bg-gray-100 placeholder:capitalize w-full`}
         placeholder={nameKey}
         value={value}
         onChange={(e) =>
           setValue((prev) => ({ ...prev, [nameKey]: e.target.value }))
         }
+        onFocus={() => setInvalidFields([])}
       />
+      {invalidFields?.some((el) => el.name === nameKey) && (
+        <small className="text-main px-2 text-[10px] italic">
+          {invalidFields?.find((el) => el.name === nameKey)?.mes}
+        </small>
+      )}
     </div>
   );
 };

@@ -22,9 +22,7 @@ const TopHeader = () => {
         </span>
         <div className="flex gap-2">
           {isLoggedIn ? (
-            <span className="cursor-pointer capitalize hover:text-black transition-all border-r pr-3 border-[rgba(255,255,255,0.3)] text-xs">
-              account
-            </span>
+            <span></span>
           ) : (
             <Link
               to={`/${path.LOGIN}`}
