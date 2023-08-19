@@ -20,8 +20,9 @@ const Sidebar = () => {
           to={createSlug(el.title)}
           className="capitalize p-3 flex items-center gap-2 item"
         >
-          <span className="hover:text-main transition-all w-full">
-            {el.title}
+          <span className="hover:text-main transition-all w-full flex gap-1">
+            <span>{el.title}</span>
+            {el.brand.length > 0 && <span>{`(${el.brand.length})`}</span>}
           </span>
         </Link>
       ))}

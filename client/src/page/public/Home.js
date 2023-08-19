@@ -12,7 +12,7 @@ import {
 
 const Home = () => {
   return (
-    <div className="w-main">
+    <div className="w-main mx-auto">
       <div className="flex gap-4">
         <div className="flex flex-col gap-5 w-[25%] flex-auto">
           <Sidebar />

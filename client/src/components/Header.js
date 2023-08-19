@@ -1,15 +1,63 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import path from "../ultils/path";
 import Logo from "../assets/logo.png";
 import icons from "../ultils/icons";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const { RiPhoneFill, TbMailFilled, SlHeart, PiHandbagFill, FaUserCircle } =
-  icons;
+const {
+  RiPhoneFill,
+  TbMailFilled,
+  SlHeart,
+  PiHandbagFill,
+  FaUserCircle,
+  IoMdClose,
+} = icons;
 
 const Header = () => {
+  const [isShowAccount, setIsShowAccount] = useState(false);
+  const { isLoggedIn, currentData } = useSelector((state) => state.user);
   return (
-    <header className="w-main h-[110px] py-[35px] flex justify-between">
+    <header className="w-main mx-auto h-[110px] py-[35px] flex justify-between">
+      {isShowAccount && (
+        <div
+          className="fixed flex items-center justify-center top-0 left-0 right-0 bottom-0 bg-[rgba(0,0,0,0.3)] z-20"
+          onClick={() => setIsShowAccount(false)}
+        >
+          <div className="w-[500px] bg-white p-5 flex flex-col gap-3 rounded-md">
+            <span className="flex items-center justify-center relative">
+              <span className="text-main">
+                <FaUserCircle size={35} />
+              </span>
+              <span
+                className="absolute -top-5 -right-5 cursor-pointer"
+                onClick={() => setIsShowAccount(false)}
+              >
+                <IoMdClose size={30} />
+              </span>
+            </span>
+            <span className="flex justify-center">
+              <span className="px-1">Logged in as</span>{" "}
+              <Link to={"#"} className="hover:text-main transition-all">
+                {currentData?.firstName + " " + currentData?.lastName}
+              </Link>
+            </span>
+            <span className="flex gap-4 justify-center">
+              <Link to={"#"} className="hover:text-main transition-all">
+                My Account
+              </Link>
+              <span>/</span>
+              <Link to={"#"} className="hover:text-main transition-all">
+                My Wishlist
+              </Link>
+              <span>/</span>
+              <Link to={"#"} className="hover:text-main transition-all">
+                Log Out
+              </Link>
+            </span>
+          </div>
+        </div>
+      )}
       <a href={`/${path.HOME}`}>
         <img src={Logo || ""} alt="Logo" className="w-[234px] object-contain" />
       </a>
@@ -29,21 +77,30 @@ const Header = () => {
           <span className="text-center">Online Support 24/7</span>
         </div>
         <div className="flex border-r px-6 items-center">
-          <Link to={"#"}>
+          <Link to={"#"} title="Sản phẩm yêu thích">
             <SlHeart color="#ee3131" size={21} />
           </Link>
         </div>
-        <div className="flex border-r px-6">
-          <span className="flex items-center justify-start gap-1 cursor-pointer hover:text-main transition-all">
+        <div className={`flex px-6 ${isLoggedIn && "border-r"}`}>
+          <span
+            className="flex items-center justify-start gap-1 cursor-pointer hover:text-main transition-all"
+            title="Giỏ hàng"
+          >
             <PiHandbagFill color="#ee3131" size={30} />
             <span>0 items</span>
           </span>
         </div>
-        <div className="flex px-6">
-          <span className="flex items-center justify-center cursor-pointer">
-            <FaUserCircle color="#ee3131" size={30} />
-          </span>
-        </div>
+        {isLoggedIn && (
+          <div className="flex px-6">
+            <span
+              className="flex items-center justify-center cursor-pointer"
+              title="Profile"
+              onClick={() => setIsShowAccount(true)}
+            >
+              <FaUserCircle color="#ee3131" size={30} />
+            </span>
+          </div>
+        )}
       </div>
     </header>
   );

@@ -47,42 +47,66 @@ const register = asyncHandler(async (req, res) => {
   else if (dt) throw new Error("Phone has exised");
   else {
     const token = maxToken();
-    res.cookie(
-      "dataRegister",
-      { ...req.body, token },
-      { httpOnly: true, maxAge: 15 * 60 * 1000 }
-    );
-    const html = `Xin vui lòng click vào link dưới đây để hoàn tất quá trình đăng ký.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. <a href=${process.env.URL_SERVER}/api/user/finalregister/${token}>Bấn vào đây</a>`;
-    await sendMail({ email, html, subject: "Hoàn tất đăng ký Digital World" });
+    const emailEdited = btoa(email) + "@" + token;
+    const newUser = await User.create({
+      email: emailEdited,
+      password,
+      firstName,
+      lastName,
+      phone,
+    });
+    if (newUser) {
+      const html = `
+      <div>
+        <img src="https://res.cloudinary.com/dctujuta4/image/upload/v1692084756/cua-hang-dien-tu/logo_yunusj.png" alt='logo' />
+        <p>Chào bạn</p> <br />
+        <p>
+          <span>bạn đang tiến hành đăng ký, mã xác nhận của bạn là: 
+            <span style="color:rgb(0,0,0)">
+              <strong style="color:rgb(78,164,220);font-size:15px">${token}</strong>
+            </span>
+          </span>
+        </p>
+        <p>Vui lòng hoàn thành xác nhận trong vòng 5 phút.</p>
+        <p>Digital World</p>
+        <h5>
+          <span style="color:rgb(119,119,119);font-size:13px">Đây là thư từ hệ thống, vui lòng không trả lời thư.</span>
+        </h5>
+      </div>
+      `;
+      await sendMail({
+        email,
+        html,
+        subject: "Hoàn tất đăng ký Digital World",
+      });
+    }
+    setTimeout(async () => {
+      await User.deleteOne({ email: emailEdited });
+    }, [5 * 60 * 1000]);
     return res.status(200).json({
-      success: true,
-      mes: "Please check your email to active account",
+      success: newUser ? true : false,
+      mes: newUser
+        ? "Vui lòng kiểm tra Email của bạn để kích hoạt tài khoản"
+        : "Phát sinh lỗi, vui lòng thử lại sau",
     });
   }
 });
 
 const finalregister = asyncHandler(async (req, res) => {
-  const cookie = req.cookies;
   const { token } = req.params;
-  if (!cookie || cookie?.dataRegister?.token !== token) {
-    res.clearCookie("dataRegister");
-    return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
-  } else {
-    const newUser = await User.create({
-      email: cookie?.dataRegister?.email,
-      password: cookie?.dataRegister?.password,
-      firstName: cookie?.dataRegister?.firstName,
-      lastName: cookie?.dataRegister?.lastName,
-      phone: cookie?.dataRegister?.phone,
-    });
-    if (newUser) {
-      res.clearCookie("dataRegister");
-      return res.redirect(`${process.env.CLIENT_URL}/finalregister/success`);
-    } else {
-      res.clearCookie("dataRegister");
-      return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
-    }
+  const notActivedEmail = await User.findOne({
+    email: new RegExp(`${token}$`),
+  });
+  if (notActivedEmail) {
+    notActivedEmail.email = atob(notActivedEmail?.email?.split("@")[0]);
+    notActivedEmail.save();
   }
+  return res.status(200).json({
+    success: notActivedEmail ? true : false,
+    mes: notActivedEmail
+      ? "Đăng ký thành công. Vui lòng đăng nhập"
+      : "Phát sinh lỗi, vui lòng thử lại sau",
+  });
 });
 /*
 refresh token => cấp mới access token

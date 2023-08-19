@@ -12,6 +12,7 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const { token } = useParams();
   const [password, setPassword] = useState("");
+  //SUBMIT RESET PASSWORD
   const handleResetPassword = async () => {
     const response = await apis.apiResetPassword({ password, token });
     if (response.success)

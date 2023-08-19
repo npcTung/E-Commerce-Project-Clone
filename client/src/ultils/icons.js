@@ -1,17 +1,30 @@
 import { RiPhoneFill } from "react-icons/ri";
-import { TbMailFilled } from "react-icons/tb";
+import { TbMailFilled, TbLogout } from "react-icons/tb";
 import { SlHeart } from "react-icons/sl";
 import { PiHandbagFill, PiListFill } from "react-icons/pi";
-import { FaUserCircle, FaList, FaEye } from "react-icons/fa";
+import {
+  FaUserCircle,
+  FaList,
+  FaEye,
+  FaGift,
+  FaShieldAlt,
+  FaBlenderPhone,
+} from "react-icons/fa";
 import { BsStarFill, BsStar } from "react-icons/bs";
 import { HiHeart } from "react-icons/hi";
-import { MdOutlineKeyboardArrowRight, MdLocationOn } from "react-icons/md";
+import {
+  MdOutlineKeyboardArrowRight,
+  MdLocationOn,
+  MdLocalShipping,
+} from "react-icons/md";
 import { BiLogoFacebook, BiLogoPinterest } from "react-icons/bi";
 import {
   AiOutlineTwitter,
   AiOutlineInstagram,
   AiOutlineGoogle,
 } from "react-icons/ai";
+import { IoMdClose } from "react-icons/io";
+import { GiReturnArrow } from "react-icons/gi";
 
 const icons = {
   RiPhoneFill,
@@ -32,6 +45,13 @@ const icons = {
   AiOutlineGoogle,
   BiLogoPinterest,
   MdLocationOn,
+  IoMdClose,
+  TbLogout,
+  FaShieldAlt,
+  MdLocalShipping,
+  FaGift,
+  GiReturnArrow,
+  FaBlenderPhone,
 };
 
 export default icons;

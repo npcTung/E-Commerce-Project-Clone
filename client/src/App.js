@@ -14,14 +14,19 @@ import {
 } from "./page/public";
 import path from "./ultils/path";
 import { getCategories } from "./store/app/asyncActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import { getCurrent } from "./store/user/asyncActions";
 
 function App() {
   const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((state) => state.user);
   useEffect(() => {
-    dispatch(getCategories());
-  }, [dispatch]);
+    setTimeout(() => {
+      dispatch(getCategories());
+      if (isLoggedIn) dispatch(getCurrent());
+    }, 1000);
+  }, [dispatch, isLoggedIn]);
   return (
     <div className="min-h-screen font-main">
       <Routes>
@@ -29,7 +34,7 @@ function App() {
           <Route path={path.HOME} element={<Home />} />
           <Route path={path.PRODUCTS} element={<Products />} />
           <Route
-            path={path.DETAIL_PRODUCT__PID__TITLE}
+            path={path.DETAIL_PRODUCT__CATEGORY__PID__TITLE}
             element={<DetailProduct />}
           />
           <Route path={path.BLOGS} element={<Blogs />} />

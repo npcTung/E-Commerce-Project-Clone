@@ -7,7 +7,6 @@ import { formatMoney } from "../ultils/helpers";
 import { renderStarFromNumber } from "../ultils/helpers";
 import SelectOption from "./SelectOption";
 import icons from "../ultils/icons";
-import path from "../ultils/path";
 
 const { FaEye, PiListFill, HiHeart } = icons;
 
@@ -36,7 +35,9 @@ const Product = ({ productData, isNew, newArrival }) => {
               <span
                 onClick={() =>
                   navigate(
-                    `/${path.DETAIL_PRODUCT}/${productData._id}/${productData.slug}`
+                    `/${productData.category.toLowerCase()}/${
+                      productData._id
+                    }/${productData.slug}`
                   )
                 }
               >
@@ -48,7 +49,9 @@ const Product = ({ productData, isNew, newArrival }) => {
             </div>
           )}
           <Link
-            to={`/${path.DETAIL_PRODUCT}/${productData._id}/${productData.slug}`}
+            to={`/${productData.category.toLowerCase()}/${productData._id}/${
+              productData.slug
+            }`}
           >
             <img
               src={productData.thumb || LogoImage}
@@ -69,7 +72,9 @@ const Product = ({ productData, isNew, newArrival }) => {
         </div>
         <div className="flex flex-col gap-2 mt-4 justify-start w-full">
           <Link
-            to={`/${path.DETAIL_PRODUCT}/${productData._id}/${productData.slug}`}
+            to={`/${productData.category.toLowerCase()}/${productData._id}/${
+              productData.slug
+            }`}
             className="line-clamp-1 capitalize hover:text-main transition-all"
           >
             {productData.title.toLowerCase()}

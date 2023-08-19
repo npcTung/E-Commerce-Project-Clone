@@ -42,29 +42,52 @@ export const validate = (payload, setInvalidFields) => {
       ]);
     }
   }
-  for (let i of formatPayload) {
-    switch (i[0]) {
-      case "email":
-        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (!i[1].match(regex)) {
-          invalids++;
-          setInvalidFields((prev) => [
-            ...prev,
-            { name: i[0], mes: "Email invalid~" },
-          ]);
-        }
-        break;
-      case "password":
-        if (i[1].length < 6) {
-          invalids++;
-          setInvalidFields((prev) => [
-            ...prev,
-            { name: i[0], mes: "Passworld minimum 6 characters~" },
-          ]);
-        }
-        break;
-    }
-  }
+  // for (let i of formatPayload) {
+  //   switch (i[0]) {
+  //     case "email":
+  //       const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  //       if (!i[1].match(regex)) {
+  //         invalids++;
+  //         setInvalidFields((prev) => [
+  //           ...prev,
+  //           { name: i[0], mes: "Email invalid~" },
+  //         ]);
+  //       }
+  //       break;
+  //     case "password":
+  //       if (i[1].length < 6) {
+  //         invalids++;
+  //         setInvalidFields((prev) => [
+  //           ...prev,
+  //           { name: i[0], mes: "Passworld minimum 6 characters~" },
+  //         ]);
+  //       }
+  //       break;
+  //     case "phone":
+  //       if (!+i[1]) {
+  //         invalids++;
+  //         setInvalidFields((prev) => [
+  //           ...prev,
+  //           { name: i[0], mes: "Phone must be a number~" },
+  //         ]);
+  //       }
+  //       if (+i[1] < 0) {
+  //         invalids++;
+  //         setInvalidFields((prev) => [
+  //           ...prev,
+  //           { name: i[0], mes: "Phone can't make sound~" },
+  //         ]);
+  //       }
+  //       if (+i[1].length !== 10) {
+  //         invalids++;
+  //         setInvalidFields((prev) => [
+  //           ...prev,
+  //           { name: i[0], mes: "Phone must have 10 numbers~" },
+  //         ]);
+  //       }
+  //       break;
+  //   }
+  // }
 
   return invalids;
 };

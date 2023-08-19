@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
-import Slider from "react-slick";
 import { apiGetProducts } from "../apis";
-import { Product } from "./";
+import { CustomSlider } from "./";
 
 const tabs = [
   {
@@ -17,14 +16,6 @@ const tabs = [
     title: "laptop",
   },
 ];
-
-var settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-};
 
 const NewArrivals = () => {
   const [activedTab, setActivedTab] = useState(1);
@@ -74,11 +65,7 @@ const NewArrivals = () => {
         </span>
       </div>
       <div className="mt-5 -mx-[10px]">
-        <Slider {...settings}>
-          {product?.map((el) => (
-            <Product key={el._id} productData={el} isNew={true} newArrival />
-          ))}
-        </Slider>
+        <CustomSlider product={product} activedTab={activedTab} />
       </div>
     </div>
   );

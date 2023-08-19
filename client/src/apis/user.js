@@ -28,3 +28,15 @@ export const apiResetPassword = (data) =>
     method: "put",
     data,
   });
+
+export const apiFinalRegister = (token) =>
+  axiosConfig({
+    url: "/user/finalregister/" + token,
+    method: "put",
+  });
+
+export const apiGetCurrent = () =>
+  axiosConfig({
+    url: "/user/current/",
+    method: "get",
+  });

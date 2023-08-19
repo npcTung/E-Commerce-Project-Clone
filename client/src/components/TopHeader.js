@@ -2,7 +2,8 @@ import React, { memo } from "react";
 import icons from "../ultils/icons";
 import { Link } from "react-router-dom";
 import path from "../ultils/path";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/user/userSlice";
 
 const {
   BiLogoFacebook,
@@ -10,10 +11,12 @@ const {
   AiOutlineInstagram,
   AiOutlineGoogle,
   BiLogoPinterest,
+  TbLogout,
 } = icons;
 
 const TopHeader = () => {
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const { isLoggedIn, currentData } = useSelector((state) => state.user);
   return (
     <div className="w-full bg-main">
       <div className="py-2 w-main mx-auto text-white flex items-center justify-between">
@@ -22,7 +25,9 @@ const TopHeader = () => {
         </span>
         <div className="flex gap-2">
           {isLoggedIn ? (
-            <span></span>
+            <span className="capitalize border-r pr-3 border-[rgba(255,255,255,0.3)] text-xs">
+              Xin chào, {currentData?.firstName + " " + currentData?.lastName}
+            </span>
           ) : (
             <Link
               to={`/${path.LOGIN}`}
@@ -43,9 +48,22 @@ const TopHeader = () => {
           <span className="cursor-pointer hover:text-black transition-all border-r pr-3 border-[rgba(255,255,255,0.3)]">
             <AiOutlineGoogle />
           </span>
-          <span className="cursor-pointer hover:text-black transition-all">
+          <span
+            className={`cursor-pointer hover:text-black transition-all ${
+              isLoggedIn && "border-r pr-3 border-[rgba(255,255,255,0.3)]"
+            }`}
+          >
             <BiLogoPinterest />
           </span>
+          {isLoggedIn && (
+            <span
+              className="cursor-pointer hover:text-black transition-all"
+              title="Đăng xuất"
+              onClick={() => dispatch(logout())}
+            >
+              <TbLogout />
+            </span>
+          )}
         </div>
       </div>
     </div>

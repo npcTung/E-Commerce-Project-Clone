@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { apiGetProducts } from "../apis";
-import { Product } from "./";
-import Slider from "react-slick";
+import { CustomSlider } from "./";
 import { getNewProduct } from "../store/products/asyncActions";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -9,14 +8,6 @@ const tabs = [
   { id: 1, name: "best seller" },
   { id: 2, name: "new arivals" },
 ];
-
-var settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-};
 
 const BestSellers = () => {
   const [bestSellers, setBestSellers] = useState(null);
@@ -58,15 +49,7 @@ const BestSellers = () => {
         ))}
       </div>
       <div className="mt-5 -mx-[10px]">
-        <Slider {...settings}>
-          {product?.map((el) => (
-            <Product
-              key={el._id}
-              productData={el}
-              isNew={activedTab === 1 ? false : true}
-            />
-          ))}
-        </Slider>
+        <CustomSlider product={product} activedTab={activedTab} />
       </div>
       <div className="flex justify-between mt-5 gap-5">
         <img

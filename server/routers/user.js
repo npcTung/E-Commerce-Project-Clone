@@ -4,7 +4,7 @@ const { verifyAccessToken, isAdmin } = require("../middlewares/verifyToken");
 
 router.post("/register", userController.register);
 router.post("/login", userController.login);
-router.get("/current", verifyAccessToken, userController.getCurrent);
+router.get("/current", [verifyAccessToken], userController.getCurrent);
 router.post("/refresh-token", userController.refreshAccessToken);
 router.get("/logout", userController.logout);
 router.post("/forgot-password", userController.forgotPassword);
@@ -14,7 +14,7 @@ router.delete("/", [verifyAccessToken, isAdmin], userController.deleteUser);
 router.put("/current", [verifyAccessToken], userController.updateUser);
 router.put("/address", [verifyAccessToken], userController.updateUserAddress);
 router.put("/cart", [verifyAccessToken], userController.updateCart);
-router.get("/finalregister/:token", userController.finalregister);
+router.put("/finalregister/:token", userController.finalregister);
 router.put(
   "/:uid",
   [verifyAccessToken, isAdmin],
