@@ -10,7 +10,7 @@ import icons from "../ultils/icons";
 
 const { FaEye, PiListFill, HiHeart } = icons;
 
-const Product = ({ productData, isNew, newArrival }) => {
+const Product = ({ productData, isNew, newArrival, normal }) => {
   const [isShowOption, setIsShowOption] = useState(false);
   const navigate = useNavigate();
   return (
@@ -61,11 +61,13 @@ const Product = ({ productData, isNew, newArrival }) => {
               } object-contain`}
             />
           </Link>
-          <img
-            src={isNew ? LableRed : LableBlue}
-            alt={isNew ? "Labale New" : "Lable Old"}
-            className="absolute -left-[24px] -top-[18px] w-[100px] h-[35px] object-cover"
-          />
+          {!normal && (
+            <img
+              src={isNew ? LableRed : LableBlue}
+              alt={isNew ? "Labale New" : "Lable Old"}
+              className="absolute -left-[24px] -top-[18px] w-[100px] h-[35px] object-cover"
+            />
+          )}
           <span className="absolute -left-2 -top-2 text-white uppercase font-medium text-xs">
             {isNew ? "new" : "trending"}
           </span>

@@ -2,7 +2,6 @@ import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { formatMoney, renderStarFromNumber } from "../ultils/helpers";
 import LogoImage from "../assets/logo-image.png";
-import path from "../ultils/path";
 
 const ProductCard = ({ productData }) => {
   return (
@@ -11,7 +10,9 @@ const ProductCard = ({ productData }) => {
       key={productData?._id}
     >
       <Link
-        to={`/${path.DETAIL_PRODUCT}/${productData._id}/${productData.slug}`}
+        to={`/${productData?.category.toLowerCase()}/${productData._id}/${
+          productData.slug
+        }`}
         className="p-2"
       >
         <img
@@ -22,7 +23,9 @@ const ProductCard = ({ productData }) => {
       </Link>
       <div className="flex flex-col gap-2 w-full">
         <Link
-          to={`/${path.DETAIL_PRODUCT}/${productData._id}/${productData.slug}`}
+          to={`/${productData?.category.toLowerCase()}/${productData._id}/${
+            productData.slug
+          }`}
           className="hover:text-main transition-all capitalize w-full line-clamp-1"
         >
           {productData?.title.toLowerCase()}

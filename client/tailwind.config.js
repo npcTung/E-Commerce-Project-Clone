@@ -42,6 +42,10 @@ module.exports = {
         9: "9 9 0%",
         10: "10 10 0%",
       },
+      listStyleType: {
+        square: "square",
+        roman: "upper-roman",
+      },
     },
   },
   plugins: [require("@tailwindcss/line-clamp"), require("daisyui")],

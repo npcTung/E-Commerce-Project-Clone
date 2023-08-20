@@ -65,7 +65,7 @@ const NewArrivals = () => {
         </span>
       </div>
       <div className="mt-5 -mx-[10px]">
-        <CustomSlider product={product} activedTab={activedTab} />
+        <CustomSlider product={product} activedTab={activedTab} normal={true} />
       </div>
     </div>
   );

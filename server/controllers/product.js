@@ -36,6 +36,8 @@ const getProducts = asyncHandler(async (req, res) => {
   // Filltering
   if (queries?.title)
     formatedQueries.title = { $regex: queries.title, $options: "i" };
+  if (queries?.category)
+    formatedQueries.category = { $regex: queries.category, $options: "i" };
   let queryCommand = Product.find(formatedQueries);
   // Sorting
   if (req.query.sort) {
@@ -108,7 +110,7 @@ const ratings = asyncHandler(async (req, res) => {
     );
   } else {
     // add star & comment
-    const response = await Product.findByIdAndUpdate(
+    await Product.findByIdAndUpdate(
       pid,
       {
         $push: { ratings: { star, comment, postedBy: id } },
