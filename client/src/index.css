@@ -75,3 +75,22 @@
 input {
   appearance: none;
 }
+
+.my-masonry-grid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: auto;
+  gap: 1rem;
+}
+.my-masonry-grid_column {
+  background-clip: padding-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.my-masonry-grid_column > div {
+  border-width: 1px;
+  padding: 20px;
+}

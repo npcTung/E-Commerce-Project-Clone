@@ -10,13 +10,15 @@ import icons from "../ultils/icons";
 
 const { FaEye, PiListFill, HiHeart } = icons;
 
-const Product = ({ productData, isNew, newArrival, normal }) => {
+const Product = ({ productData, isNew, newArrival, normal, masonry }) => {
   const [isShowOption, setIsShowOption] = useState(false);
   const navigate = useNavigate();
   return (
     <div className="w-full px-[10px]">
       <div
-        className="w-full border p-4 flex flex-col items-center"
+        className={`w-full ${
+          !masonry && "border p-4"
+        } flex flex-col items-center`}
         onMouseEnter={(e) => {
           e.stopPropagation();
           setIsShowOption(true);

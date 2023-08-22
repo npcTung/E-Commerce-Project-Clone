@@ -20,3 +20,5 @@ export { default as Breadcrumbs } from "./Breadcrumbs";
 export { default as CustomSlider } from "./CustomSlider";
 export { default as SelectQuantity } from "./SelectQuantity";
 export { default as ProductInfomation } from "./ProductInfomation";
+export { default as SearchItem } from "./SearchItem";
+export { default as InputSelect } from "./InputSelect";

@@ -16,6 +16,7 @@ import {
   MdOutlineKeyboardArrowRight,
   MdLocationOn,
   MdLocalShipping,
+  MdOutlineKeyboardArrowDown,
 } from "react-icons/md";
 import { BiLogoFacebook, BiLogoPinterest } from "react-icons/bi";
 import {
@@ -52,6 +53,7 @@ const icons = {
   FaGift,
   GiReturnArrow,
   FaBlenderPhone,
+  MdOutlineKeyboardArrowDown,
 };
 
 export default icons;

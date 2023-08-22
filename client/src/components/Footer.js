@@ -1,7 +1,8 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import icons from "../ultils/icons";
 import { Link } from "react-router-dom";
 import path from "../ultils/path";
+import Swal from "sweetalert2";
 
 const {
   TbMailFilled,
@@ -14,6 +15,14 @@ const {
 } = icons;
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const handledEmail = () => {
+    if (email)
+      Swal.fire("Successfully", "Email sent Successfully", "success").then(
+        setEmail("")
+      );
+    else Swal.fire("Oops!", "Email sent Failed", "error").then(setEmail(""));
+  };
   return (
     <footer className="w-full">
       <div className="bg-main text-white py-3">
@@ -29,9 +38,13 @@ const Footer = () => {
               type="email"
               name="email"
               placeholder="Email address"
+              value={email}
               className="bg-transparent py-2 text-white outline-none placeholder:text-white placeholder:opacity-70 w-full"
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <TbMailFilled size={23} />
+            <span onClick={handledEmail} className="cursor-pointer">
+              <TbMailFilled size={23} />
+            </span>
           </div>
         </div>
       </div>
