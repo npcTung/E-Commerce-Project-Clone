@@ -17,18 +17,22 @@ import { getCategories } from "./store/app/asyncActions";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { getCurrent } from "./store/user/asyncActions";
+import { Modal } from "./components";
 
 function App() {
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.user);
+  const { isShowModal, modalChildren } = useSelector((state) => state.app);
   useEffect(() => {
-    setTimeout(() => {
+    const setTimeoutId = setTimeout(() => {
       dispatch(getCategories());
       if (isLoggedIn) dispatch(getCurrent());
     }, 1000);
+    return () => clearTimeout(setTimeoutId);
   }, [dispatch, isLoggedIn]);
   return (
-    <div className="min-h-screen font-main">
+    <div className="font-main">
+      {isShowModal && <Modal>{modalChildren}</Modal>}
       <Routes>
         <Route path={path.PUBLIC} element={<Public />}>
           <Route path={path.HOME} element={<Home />} />

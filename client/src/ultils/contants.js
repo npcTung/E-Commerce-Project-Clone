@@ -1,9 +1,16 @@
 import path from "./path";
 import icons from "./icons";
 
-const { FaShieldAlt, MdLocalShipping, FaGift, GiReturnArrow, FaBlenderPhone } =
-  icons;
-
+// ICONS
+const {
+  FaShieldAlt,
+  MdLocalShipping,
+  FaGift,
+  GiReturnArrow,
+  FaBlenderPhone,
+  BsStarFill,
+} = icons;
+// NAVIGATION
 export const navigation = [
   {
     id: 1,
@@ -31,7 +38,7 @@ export const navigation = [
     path: `/${path.FAQS}`,
   },
 ];
-
+// PRODUCT INFO
 export const productInfo = [
   {
     id: 1,
@@ -64,18 +71,18 @@ export const productInfo = [
     icon: <FaBlenderPhone />,
   },
 ];
-
+// SIDEWAYS
 export const Sideways = [
   {
     id: 1,
-    title: "description",
-    header: "description",
+    title: "miêu tả",
+    header: "miêu tả",
     content: [],
   },
   {
     id: 2,
-    title: "warranty",
-    header: "warranty information",
+    title: "bảo hành",
+    header: "thông tin bảo hành",
     content: [
       "limited warranties",
       "Limited Warranties are non-transferable. The following Limited Warranties are given to the original retail purchaser of the following Ashley Furniture Industries, Inc.Products:",
@@ -86,8 +93,8 @@ export const Sideways = [
   },
   {
     id: 3,
-    title: "delivery",
-    header: "purchasing & delivery",
+    title: "vận chuyển",
+    header: "mua hàng và giao hàng",
     content: [
       "Before you make your purchase, it’s helpful to know the measurements of the area you plan to place the furniture. You should also measure any doorways and hallways through which the furniture will pass to get to its final destination.",
       "Picking up at the store",
@@ -99,8 +106,8 @@ export const Sideways = [
   },
   {
     id: 4,
-    title: "payment",
-    header: "purchasing & delivery",
+    title: "thanh toán",
+    header: "mua hàng và giao hàng",
     content: [
       "Before you make your purchase, it’s helpful to know the measurements of the area you plan to place the furniture. You should also measure any doorways and hallways through which the furniture will pass to get to its final destination.",
       "Picking up at the store",
@@ -110,14 +117,8 @@ export const Sideways = [
       "In preparation for your delivery, please remove existing furniture, pictures, mirrors, accessories, etc. to prevent damages. Also insure that the area where you would like your furniture placed is clear of any old furniture and any other items that may obstruct the passageway of the delivery team. Shopify Shop will deliver, assemble, and set-up your new furniture purchase and remove all packing materials from your home. Our delivery crews are not permitted to move your existing furniture or other household items. Delivery personnel will attempt to deliver the purchased items in a safe and controlled manner but will not attempt to place furniture if they feel it will result in damage to the product or your home. Delivery personnel are unable to remove doors, hoist furniture or carry furniture up more than 3 flights of stairs. An elevator must be available for deliveries to the 4th floor and above.",
     ],
   },
-  {
-    id: 5,
-    title: "customer review",
-    header: "customer review",
-    content: [],
-  },
 ];
-
+// COLORS
 export const colors = [
   "black",
   "brown",
@@ -130,7 +131,7 @@ export const colors = [
   "green",
   "blue",
 ];
-
+// SORTS
 export const sorts = [
   {
     id: 1,
@@ -166,5 +167,33 @@ export const sorts = [
     id: 7,
     value: "date",
     text: "Date, new to old",
+  },
+];
+// RATINGS
+export const ratings = [
+  {
+    id: 1,
+    title: "Rất tệ",
+    icon: <BsStarFill />,
+  },
+  {
+    id: 2,
+    title: "Tệ",
+    icon: <BsStarFill />,
+  },
+  {
+    id: 3,
+    title: "Bình thường",
+    icon: <BsStarFill />,
+  },
+  {
+    id: 4,
+    title: "Tốt",
+    icon: <BsStarFill />,
+  },
+  {
+    id: 5,
+    title: "Rất tốt",
+    icon: <BsStarFill />,
   },
 ];

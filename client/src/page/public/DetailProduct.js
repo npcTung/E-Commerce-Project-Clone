@@ -31,6 +31,7 @@ const DetailProduct = () => {
   const [products, setProducts] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [imageBig, setImageBig] = useState("");
+  const [update, setUpdate] = useState(false);
   // PRODUCT DETAIL
   const fetchProductData = async () => {
     const response = await apis.apiGetProduct(pid);
@@ -58,13 +59,22 @@ const DetailProduct = () => {
     const response = await apis.apiGetProducts({ category });
     if (response.success) setProducts(response.products);
   };
+  // RE-UPDATING DATA
+  const rerender = useCallback(() => {
+    setUpdate(!update);
+  }, [update]);
   // USEEFFECT PRODUCT DATA
   useEffect(() => {
     if (pid) {
       fetchProductData();
       fetchProducts();
     }
+    window.scrollTo(0, 0);
   }, [pid]);
+  // USEEFFECT RE-UPDATING DATA
+  useEffect(() => {
+    if (pid) fetchProductData();
+  }, [update]);
 
   return (
     <div className="w-full">
@@ -119,17 +129,19 @@ const DetailProduct = () => {
             <h1 className="text-4xl font-semibold">{`${formatMoney(
               productData?.price
             )} VND `}</h1>
-            <span className="text-sm text-red-400">{`Kho: ${productData?.sold}`}</span>
+            <span className="flex flex-col items-end">
+              <span className="text-sm text-red-400">{`Kho: ${productData?.sold}`}</span>
+              <span className="text-sm text-red-400">{`Đã bán: ${productData?.quantity}`}</span>
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <span className="flex gap-1 text-yellow-500">
               {renderStarFromNumber(productData?.totalRatings)}
             </span>
-            <span className="text-sm text-red-400">{`(Đã bán: ${productData?.quantity})`}</span>
+            {productData?.totalRatings > 0 && (
+              <span className="text-sm text-gray-400">{`${productData?.totalRatings} reviews`}</span>
+            )}
           </div>
-          {productData?.ratings.length > 0 && (
-            <span className="text-sm text-gray-400">{`${productData?.ratings.length} reviews`}</span>
-          )}
           <ul className="list-item list-square mx-4">
             {productData?.description?.map((el, index) => (
               <li key={index} className="text-sm">
@@ -178,7 +190,14 @@ const DetailProduct = () => {
         </div>
       </div>
       <div className="w-main mx-auto mt-5">
-        <ProductInfomation description={productData?.description} />
+        <ProductInfomation
+          description={productData?.description}
+          totalRating={productData?.totalRatings}
+          ratings={productData?.ratings}
+          nameProduct={productData?.title}
+          pid={pid}
+          rerender={rerender}
+        />
       </div>
       <div className="w-main mx-auto mt-5">
         <div className="border-b-2 border-main py-4 flex items-center justify-between">

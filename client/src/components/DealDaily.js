@@ -10,7 +10,6 @@ import {
 } from "../ultils/helpers";
 import { CountDown } from "./";
 import moment from "moment";
-import path from "../ultils/path";
 
 const { BsStarFill, PiListFill } = icons;
 
@@ -21,6 +20,7 @@ const DealDaily = () => {
   const [second, setSecond] = useState(0);
   const [expireTime, setExpireTime] = useState(false);
   const navigate = useNavigate();
+
   const fetchDealDaily = async () => {
     const response = await apiGetProducts({
       limit: 1,
@@ -46,6 +46,7 @@ const DealDaily = () => {
   useEffect(() => {
     fetchDealDaily();
   }, [expireTime]);
+
   useEffect(() => {
     const idInterval = setInterval(() => {
       if (second > 0) setSecond((prev) => prev - 1);
@@ -78,7 +79,7 @@ const DealDaily = () => {
       </div>
       <div className="w-full p-4 mt-6">
         <Link
-          to={`/${path.DETAIL_PRODUCT}/${dealDaily?._id}/${dealDaily?.slug}`}
+          to={`/${dealDaily?.category}/${dealDaily?._id}/${dealDaily?.slug}`}
           className="w-full"
         >
           <img
@@ -89,7 +90,7 @@ const DealDaily = () => {
         </Link>
         <div className="flex flex-col gap-4 items-center justify-center py-5">
           <Link
-            to={`/${path.DETAIL_PRODUCT}/${dealDaily?._id}/${dealDaily?.slug}`}
+            to={`/${dealDaily?.category}/${dealDaily?._id}/${dealDaily?.slug}`}
             className="line-clamp-1 hover:text-main capitalize transition-all"
           >
             {dealDaily?.title.toLowerCase()}
@@ -112,7 +113,7 @@ const DealDaily = () => {
           title="Select Option"
           onClick={() =>
             navigate(
-              `/${path.DETAIL_PRODUCT}/${dealDaily?._id}/${dealDaily?.slug}`
+              `/${dealDaily?.category}/${dealDaily?._id}/${dealDaily?.slug}`
             )
           }
         >
