@@ -10,7 +10,7 @@ import {
   FaShieldAlt,
   FaBlenderPhone,
 } from "react-icons/fa";
-import { BsStarFill, BsStar } from "react-icons/bs";
+import { BsStarFill, BsStar, BsThreeDots } from "react-icons/bs";
 import { HiHeart } from "react-icons/hi";
 import {
   MdOutlineKeyboardArrowRight,
@@ -54,6 +54,7 @@ const icons = {
   GiReturnArrow,
   FaBlenderPhone,
   MdOutlineKeyboardArrowDown,
+  BsThreeDots,
 };
 
 export default icons;

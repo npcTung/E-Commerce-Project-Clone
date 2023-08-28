@@ -1,7 +1,12 @@
 import React, { memo, useEffect, useState } from "react";
 import icons from "../ultils/icons";
 import { colors } from "../ultils/contants";
-import { createSearchParams, useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import * as apis from "../apis";
 import useDebounce from "../hooks/useDebounce";
 import Swal from "sweetalert2";
@@ -16,11 +21,12 @@ const SearchItem = ({
 }) => {
   const navigate = useNavigate();
   const { category } = useParams();
+  const [params] = useSearchParams();
   const [selected, setSelected] = useState([]);
   const [bestPrice, setBestPrice] = useState(null);
   const [price, setPrice] = useState({ from: "", to: "" });
-  const debouncePriceFrom = useDebounce(price.from, 3000);
-  const debouncePriceTo = useDebounce(price.to, 3000);
+  const debouncePriceFrom = useDebounce(price.from, 1500);
+  const debouncePriceTo = useDebounce(price.to, 1500);
   // SELECT CHEACKBOK
   const handleSelect = (e) => {
     changeActiveFilter(null);
@@ -34,34 +40,61 @@ const SearchItem = ({
     const response = await apis.apiGetProducts({ sort: "-price", limit: 1 });
     if (response.success) setBestPrice(response.products[0]?.price);
   };
-  // NAVIGATE PARAM
+  // CHECK PRICE
   useEffect(() => {
-    if (selected.length > 0)
-      navigate({
-        pathname: `/${category}`,
-        search: createSearchParams({
-          color: selected.join(","),
-        }).toString(),
-      });
-    else navigate(`/${category}`);
-  }, [selected]);
-  //PRICE
+    if (price.from < 0) return;
+    if (price.to > +bestPrice) return;
+    const TimeOutId = setTimeout(() => {
+      if (price.from && price.to && price.from > price.to)
+        Swal.fire(
+          "Oops!",
+          "From price cannot greater than To price",
+          "error"
+        ).then(() => {
+          setPrice({ from: "", to: "" });
+          changeActiveFilter(name);
+        });
+    }, 1000);
+    return clearTimeout(TimeOutId);
+  }, [price]);
+  // NAVIGATE COLOR
   useEffect(() => {
-    if (price.from > price.to)
-      Swal.fire(
-        "Oops!",
-        "From price cannot greater than To price",
-        "error"
-      ).then(() => {
-        setPrice({ from: "", to: "" });
-        changeActiveFilter(name);
-      });
-    const data = {};
-    if (Number(price.from) > 0) data.from = price.from;
-    if (Number(price.to) > 0) data.to = price.to;
+    let param = [];
+    const queries = {};
+    for (let i of params.entries()) param.push(i);
+    for (let i of param) queries[i[0]] = i[1];
+    if (selected.length > 0) {
+      if (selected) queries.color = selected.join(",");
+      delete queries.page;
+    } else delete queries.color;
     navigate({
       pathname: `/${category}`,
-      search: createSearchParams(data).toString(),
+      search: createSearchParams(queries).toString(),
+    });
+  }, [selected]);
+  // NAVIGATE PRICE
+  useEffect(() => {
+    let param = [];
+    const queries = {};
+    for (let i of params.entries()) param.push(i);
+    for (let i of param) queries[i[0]] = i[1];
+    if (Number(price.from) > 0) {
+      queries.from = price.from;
+      delete queries.page;
+    } else {
+      delete queries.from;
+      delete queries.page;
+    }
+    if (Number(price.to) > 0) {
+      queries.to = price.to;
+      delete queries.page;
+    } else {
+      delete queries.to;
+      delete queries.page;
+    }
+    navigate({
+      pathname: `/${category}`,
+      search: createSearchParams(queries).toString(),
     });
   }, [debouncePriceFrom, debouncePriceTo]);
   // BEST PRICE PRODUCT
@@ -74,7 +107,7 @@ const SearchItem = ({
       onClick={() => {
         changeActiveFilter(name);
       }}
-      className={`p-4 border border-gray-800 ${
+      className={`p-4 border rounded-md border-gray-800 ${
         activeClick === name ? "border-2" : "hover:border-2"
       } h-14 cursor-default flex items-center justify-between relative`}
     >

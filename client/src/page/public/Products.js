@@ -8,6 +8,7 @@ import {
 import {
   Breadcrumbs,
   InputSelect,
+  Pagination,
   Product,
   SearchItem,
 } from "../../components";
@@ -27,13 +28,13 @@ const Products = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [activeClick, setActiveClick] = useState(null);
+  const [sort, setSort] = useState();
   const [params] = useSearchParams();
   const queries = {};
-  const [sort, setSort] = useState();
   // CALL API PRODUCT
   const fetchProductsByCategory = async (queries) => {
     const response = await apis.apiGetProducts(queries);
-    if (response.success) setProduct(response.products);
+    if (response.success) setProduct(response);
   };
   // ACTIVE FILTER
   const changeActiveFilter = useCallback(
@@ -50,13 +51,21 @@ const Products = () => {
     },
     [sort]
   );
-  // SORT
+  // NAVIGATE SORT
   useEffect(() => {
+    let param = [];
+    const queries = {};
+    for (let i of params.entries()) param.push(i);
+    for (let i of param) queries[i[0]] = i[1];
+    if (sort) {
+      queries.sort = sort;
+      delete queries.page;
+    } else delete queries.sort;
     navigate({
       pathname: `/${category}`,
-      search: createSearchParams({ sort }).toString(),
+      search: createSearchParams(queries).toString(),
     });
-  }, [sort]);
+  }, [sort, category]);
   // SORT PRODUCT
   useEffect(() => {
     let param = [];
@@ -73,12 +82,15 @@ const Products = () => {
         ],
       };
       delete queries.price;
-    } else if (queries.from) queries.price = { gte: queries.from };
-    else if (queries.to) queries.price = { lte: queries.to };
+    } else {
+      if (queries.from) queries.price = { gte: queries.from };
+      if (queries.to) queries.price = { lte: queries.to };
+    }
     delete queries.to;
     delete queries.from;
     const q = { ...priceQuery, ...queries };
     fetchProductsByCategory(q);
+    window.scrollTo(0, 0);
   }, [params]);
 
   return (
@@ -113,6 +125,7 @@ const Products = () => {
               value={sort}
               options={sorts}
               changeValue={changeValue}
+              category={category}
             />
           </div>
         </div>
@@ -122,7 +135,7 @@ const Products = () => {
             className="my-masonry-grid"
             columnClassName="my-masonry-grid_column"
           >
-            {product?.map((el) => (
+            {product?.products?.map((el) => (
               <Product
                 key={el._id}
                 productData={el}
@@ -133,6 +146,11 @@ const Products = () => {
           </Masonry>
         </div>
       </div>
+      {product?.counts > 10 && (
+        <div className="w-main mx-auto flex justify-end mt-5">
+          <Pagination totalCount={product?.counts} />
+        </div>
+      )}
     </div>
   );
 };

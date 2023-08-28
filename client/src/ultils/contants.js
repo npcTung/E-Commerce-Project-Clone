@@ -9,6 +9,7 @@ const {
   GiReturnArrow,
   FaBlenderPhone,
   BsStarFill,
+  BsStar,
 } = icons;
 // NAVIGATION
 export const navigation = [
@@ -140,22 +141,22 @@ export const sorts = [
   },
   {
     id: 2,
-    value: "-title",
+    value: "title",
     text: "Alphabetically, A-Z",
   },
   {
     id: 3,
-    value: "title",
+    value: "-title",
     text: "Alphabetically, Z-A",
   },
   {
     id: 4,
-    value: "-price",
+    value: "price",
     text: "Price, low to high",
   },
   {
     id: 5,
-    value: "price",
+    value: "-price",
     text: "Price, high to low",
   },
   {
@@ -174,26 +175,31 @@ export const ratings = [
   {
     id: 1,
     title: "Rất tệ",
-    icon: <BsStarFill />,
+    icon: <BsStar />,
+    iconClick: <BsStarFill />,
   },
   {
     id: 2,
     title: "Tệ",
-    icon: <BsStarFill />,
+    icon: <BsStar />,
+    iconClick: <BsStarFill />,
   },
   {
     id: 3,
     title: "Bình thường",
-    icon: <BsStarFill />,
+    icon: <BsStar />,
+    iconClick: <BsStarFill />,
   },
   {
     id: 4,
     title: "Tốt",
-    icon: <BsStarFill />,
+    icon: <BsStar />,
+    iconClick: <BsStarFill />,
   },
   {
     id: 5,
     title: "Rất tốt",
-    icon: <BsStarFill />,
+    icon: <BsStar />,
+    iconClick: <BsStarFill />,
   },
 ];

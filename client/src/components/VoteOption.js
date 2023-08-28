@@ -47,7 +47,9 @@ const VoteOption = ({ nameProduct, handleSubmitVoteOption }) => {
                     : "text-yellow-500"
                 } cursor-pointer text-lg`}
               >
-                {el.icon}
+                {Number(chosenScore) && chosenScore >= el.id
+                  ? el.iconClick
+                  : el.icon}
               </span>
               <span>{el.title}</span>
             </span>
