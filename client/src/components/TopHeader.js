@@ -1,9 +1,10 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import icons from "ultils/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import path from "ultils/path";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "store/user/userSlice";
+import { logout, clearMessages } from "store/user/userSlice";
+import Swal from "sweetalert2";
 
 const {
   BiLogoFacebook,
@@ -16,7 +17,17 @@ const {
 
 const TopHeader = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, currentData } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const { isLoggedIn, currentData, mes } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (mes)
+      Swal.fire("Oops!", mes, "info").then(() => {
+        navigate(`/${path.LOGIN}`);
+        dispatch(clearMessages());
+      });
+  }, [mes, navigate]);
+
   return (
     <div className="w-full bg-main">
       <div className="py-2 w-main mx-auto text-white flex items-center justify-between">
@@ -24,7 +35,7 @@ const TopHeader = () => {
           order online or call us (+1800) 000 8808
         </span>
         <div className="flex gap-2">
-          {isLoggedIn ? (
+          {isLoggedIn && currentData ? (
             <span className="capitalize border-r pr-3 border-[rgba(255,255,255,0.3)] text-xs">
               Xin chào, {currentData?.firstName + " " + currentData?.lastName}
             </span>
