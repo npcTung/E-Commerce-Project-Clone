@@ -41,7 +41,7 @@ export const validate = (payload, setInvalidFields) => {
       invalids++;
       setInvalidFields((prev) => [
         ...prev,
-        { name: i[0], mes: "Require this field~" },
+        { name: i[0], mes: "Trường này không được để trống~" },
       ]);
     }
   }
@@ -53,7 +53,7 @@ export const validate = (payload, setInvalidFields) => {
           invalids++;
           setInvalidFields((prev) => [
             ...prev,
-            { name: i[0], mes: "Email invalid~" },
+            { name: i[0], mes: "Email không hợp lệ~" },
           ]);
         }
         break;
@@ -62,7 +62,7 @@ export const validate = (payload, setInvalidFields) => {
           invalids++;
           setInvalidFields((prev) => [
             ...prev,
-            { name: i[0], mes: "Passworld minimum 6 characters~" },
+            { name: i[0], mes: "Mật khẩu tối thiểu 6 ký tự~" },
           ]);
         }
         break;
@@ -71,21 +71,21 @@ export const validate = (payload, setInvalidFields) => {
           invalids++;
           setInvalidFields((prev) => [
             ...prev,
-            { name: i[0], mes: "Phone must be a number~" },
+            { name: i[0], mes: "Số điện thoại phải là số~" },
           ]);
         }
         if (+i[1] < 0) {
           invalids++;
           setInvalidFields((prev) => [
             ...prev,
-            { name: i[0], mes: "Phone can't make sound~" },
+            { name: i[0], mes: "Số điện thoại không là số âm~" },
           ]);
         }
         if (+i[1].length !== 10) {
           invalids++;
           setInvalidFields((prev) => [
             ...prev,
-            { name: i[0], mes: "Phone must have 10 numbers~" },
+            { name: i[0], mes: "Điện thoại phải có 10 số~" },
           ]);
         }
         break;

@@ -9,30 +9,6 @@ const sendMail = require("../ultils/sendMail");
 const crypto = require("crypto");
 const maxToken = require("uniqid");
 
-// const register = asyncHandler(async (req, res) => {
-//   const { email, password, firstName, lastName, phone } = req.body;
-//   if (!email || !password || !firstName || !lastName || !phone) {
-//     return res.status(400).json({
-//       success: false,
-//       mes: "Missing input",
-//     });
-//   }
-
-//   const user = await User.findOne({ email });
-//   const dt = await User.findOne({ phone });
-//   if (user) throw new Error("User has exised");
-//   else if (dt) throw new Error("Phone has exised");
-//   else {
-//     const newUser = await User.create(req.body);
-//     return res.status(200).json({
-//       success: newUser ? true : false,
-//       mes: newUser
-//         ? "Register is successfully. Please go login~"
-//         : "Something went wrong",
-//     });
-//   }
-// });
-
 const register = asyncHandler(async (req, res) => {
   const { email, password, firstName, lastName, phone } = req.body;
   if (!email || !password || !firstName || !lastName || !phone) {
@@ -154,7 +130,7 @@ const getCurrent = asyncHandler(async (req, res) => {
     });
   }
   const user = await User.findById({ _id: id }).select(
-    "-refreshToken -password -role"
+    "-refreshToken -password"
   );
   return res.status(200).json({
     success: user ? true : false,

@@ -18,7 +18,11 @@ import {
   MdLocalShipping,
   MdOutlineKeyboardArrowDown,
 } from "react-icons/md";
-import { BiLogoFacebook, BiLogoPinterest } from "react-icons/bi";
+import {
+  BiLogoFacebook,
+  BiLogoPinterest,
+  BiSolidInfoCircle,
+} from "react-icons/bi";
 import {
   AiOutlineTwitter,
   AiOutlineInstagram,
@@ -55,6 +59,7 @@ const icons = {
   FaBlenderPhone,
   MdOutlineKeyboardArrowDown,
   BsThreeDots,
+  BiSolidInfoCircle,
 };
 
 export default icons;

@@ -3,7 +3,8 @@ import path from "ultils/path";
 import Logo from "assets/logo.png";
 import icons from "ultils/icons";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "store/user/userSlice";
 
 const {
   RiPhoneFill,
@@ -16,6 +17,7 @@ const {
 
 const Header = () => {
   const [isShowAccount, setIsShowAccount] = useState(false);
+  const dispatch = useDispatch();
   const { isLoggedIn, currentData } = useSelector((state) => state.user);
   return (
     <header className="w-main mx-auto h-[110px] py-[35px] flex justify-between">
@@ -24,7 +26,10 @@ const Header = () => {
           className="fixed flex items-center justify-center top-0 left-0 right-0 bottom-0 bg-[rgba(0,0,0,0.3)] z-20"
           onClick={() => setIsShowAccount(false)}
         >
-          <div className="w-[500px] bg-white p-5 flex flex-col gap-3 rounded-md">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white p-5 flex flex-col gap-3 rounded-md"
+          >
             <span className="flex items-center justify-center relative">
               <span className="text-main">
                 <FaUserCircle size={35} />
@@ -37,23 +42,43 @@ const Header = () => {
               </span>
             </span>
             <span className="flex justify-center">
-              <span className="px-1">Logged in as</span>{" "}
-              <Link to={"#"} className="hover:text-main transition-all">
+              <span className="px-1">Tài khoản</span>{" "}
+              <Link
+                to={`/${path.MEMBER}/${path.PERSONAL}`}
+                className="hover:text-main transition-all"
+              >
                 {currentData?.firstName + " " + currentData?.lastName}
               </Link>
             </span>
             <span className="flex gap-4 justify-center">
-              <Link to={"#"} className="hover:text-main transition-all">
-                My Account
+              <Link
+                to={`/${path.MEMBER}/${path.PERSONAL}`}
+                className="hover:text-main transition-all"
+              >
+                Tài khoản của tôi
               </Link>
               <span>/</span>
               <Link to={"#"} className="hover:text-main transition-all">
-                My Wishlist
+                Sản phẩm yêu thích
               </Link>
+              {+currentData?.role === 2002 && (
+                <>
+                  <span>/</span>
+                  <Link
+                    to={`/${path.ADMIN}/${path.DASH_BOARD}`}
+                    className="hover:text-main transition-all"
+                  >
+                    Quản trị viên
+                  </Link>
+                </>
+              )}
               <span>/</span>
-              <Link to={"#"} className="hover:text-main transition-all">
-                Log Out
-              </Link>
+              <span
+                onClick={() => dispatch(logout())}
+                className="hover:text-main transition-all cursor-pointer"
+              >
+                Đăng xuất
+              </span>
             </span>
           </div>
         </div>

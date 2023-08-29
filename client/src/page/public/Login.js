@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Button, InputField } from "components";
+import { Button, InputField, Loading } from "components";
 import * as apis from "apis";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import Logo from "assets/logo.png";
 import { toast } from "react-toastify";
 import { validate } from "ultils/helpers";
 import icons from "ultils/icons";
+import { showModal } from "store/app/appSlice";
 
 const { IoMdClose } = icons;
 
@@ -21,6 +22,7 @@ const Login = () => {
   const [invalidFields, setInvalidFields] = useState([]);
   const [isVerifiedEmail, setIsVerifiedEmail] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [email, setEmail] = useState("");
   const [payLoad, setPayLoad] = useState({
     firstName: "",
     lastName: "",
@@ -45,7 +47,9 @@ const Login = () => {
       : validate(data, setInvalidFields);
     if (invalids === 0) {
       if (isRegister) {
+        dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
         const response = await apis.apiRegister(payLoad);
+        dispatch(showModal({ isShowModal: false, modalChildren: null }));
         if (response.success) setIsVerifiedEmail(true);
         else Swal.fire("Oops!", response.mes, "error");
       } else {
@@ -67,7 +71,6 @@ const Login = () => {
       }
     }
   }, [payLoad, isRegister, dispatch, navigate]);
-  const [email, setEmail] = useState("");
   //SUBMIT FORGOT PASSWORD
   const handleForgotPassword = async () => {
     const response = await apis.apiForgotPassword({ email });
@@ -89,6 +92,13 @@ const Login = () => {
         setCode("");
       });
     else Swal.fire("Oop!", response.mes, "error");
+  };
+  // EVENT ONBLUR
+  const eventOnBlur = () => {
+    const { firstName, lastName, phone, ...data } = payLoad;
+    isRegister
+      ? validate(payLoad, setInvalidFields)
+      : validate(data, setInvalidFields);
   };
   return (
     <div className="w-screen h-screen relative">
@@ -201,6 +211,8 @@ const Login = () => {
                     value={payLoad.firstName}
                     setValue={setPayLoad}
                     nameKey={"firstName"}
+                    handleEnter={handleSubmit}
+                    eventOnBlur={eventOnBlur}
                   />
                   <InputField
                     invalidFields={invalidFields}
@@ -208,6 +220,8 @@ const Login = () => {
                     value={payLoad.lastName}
                     setValue={setPayLoad}
                     nameKey={"lastName"}
+                    handleEnter={handleSubmit}
+                    eventOnBlur={eventOnBlur}
                   />
                 </div>
                 <InputField
@@ -216,6 +230,8 @@ const Login = () => {
                   value={payLoad.phone}
                   setValue={setPayLoad}
                   nameKey={"phone"}
+                  handleEnter={handleSubmit}
+                  eventOnBlur={eventOnBlur}
                 />
               </>
             )}
@@ -226,6 +242,8 @@ const Login = () => {
               value={payLoad.email}
               setValue={setPayLoad}
               nameKey={"email"}
+              handleEnter={handleSubmit}
+              eventOnBlur={eventOnBlur}
             />
             <InputField
               invalidFields={invalidFields}
@@ -234,6 +252,8 @@ const Login = () => {
               value={payLoad.password}
               setValue={setPayLoad}
               nameKey={"password"}
+              handleEnter={handleSubmit}
+              eventOnBlur={eventOnBlur}
             />
             <Button
               name={isRegister ? "sign up" : "sign in"}

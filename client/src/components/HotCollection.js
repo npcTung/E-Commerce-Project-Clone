@@ -30,7 +30,7 @@ const HotCollection = () => {
                     <li key={index} className="flex text-gray-500 text-[15px]">
                       <MdOutlineKeyboardArrowRight />
                       <Link
-                        to={createSlug(item)}
+                        to={`/${createSlug(el.title)}/${createSlug(item)}`}
                         className="hover:text-main transition-all"
                       >
                         {item}

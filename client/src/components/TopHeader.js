@@ -19,14 +19,14 @@ const TopHeader = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLoggedIn, currentData, mes } = useSelector((state) => state.user);
-
+  // ERROR TOKEN
   useEffect(() => {
     if (mes)
       Swal.fire("Oops!", mes, "info").then(() => {
         navigate(`/${path.LOGIN}`);
         dispatch(clearMessages());
       });
-  }, [mes, navigate]);
+  }, [mes, navigate, dispatch]);
 
   return (
     <div className="w-full bg-main">

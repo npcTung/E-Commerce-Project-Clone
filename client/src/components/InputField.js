@@ -1,4 +1,7 @@
 import React, { memo } from "react";
+import icons from "ultils/icons";
+
+const { BiSolidInfoCircle } = icons;
 
 const InputField = ({
   value,
@@ -7,9 +10,11 @@ const InputField = ({
   type,
   invalidFields,
   setInvalidFields,
+  handleEnter,
+  eventOnBlur,
 }) => {
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       <label
         htmlFor={nameKey}
         className="label label-text capitalize opacity-70"
@@ -26,12 +31,19 @@ const InputField = ({
         onChange={(e) =>
           setValue((prev) => ({ ...prev, [nameKey]: e.target.value }))
         }
-        onFocus={() => setInvalidFields([])}
+        onFocus={() => {
+          setInvalidFields([]);
+        }}
+        onKeyDown={(e) => e.key === "Enter" && handleEnter && handleEnter()}
+        onBlur={() => eventOnBlur && eventOnBlur()}
       />
       {invalidFields?.some((el) => el.name === nameKey) && (
-        <small className="text-main px-2 text-[10px] italic">
-          {invalidFields?.find((el) => el.name === nameKey)?.mes}
-        </small>
+        <span
+          className="cursor-default absolute bottom-4 text-lg text-main right-[2px]"
+          title={invalidFields?.find((el) => el.name === nameKey)?.mes}
+        >
+          <BiSolidInfoCircle />
+        </span>
       )}
     </div>
   );
