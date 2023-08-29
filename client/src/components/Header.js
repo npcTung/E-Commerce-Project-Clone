@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
-import path from "../ultils/path";
-import Logo from "../assets/logo.png";
-import icons from "../ultils/icons";
+import path from "ultils/path";
+import Logo from "assets/logo.png";
+import icons from "ultils/icons";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 

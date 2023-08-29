@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef } from "react";
-import icons from "../ultils/icons";
+import icons from "ultils/icons";
 
 const { BsStarFill } = icons;
 

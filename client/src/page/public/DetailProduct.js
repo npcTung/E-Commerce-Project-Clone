@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import * as apis from "../../apis";
+import * as apis from "apis";
 import {
   Breadcrumbs,
   Button,
   CustomSlider,
   ProductInfomation,
   SelectQuantity,
-} from "../../components";
+} from "components";
 import Slider from "react-slick";
 import ReactImageMagnify from "react-image-magnify";
-import { renderStarFromNumber, formatMoney } from "../../ultils/helpers";
-import icons from "../../ultils/icons";
-import { productInfo } from "../../ultils/contants";
+import { renderStarFromNumber, formatMoney } from "ultils/helpers";
+import icons from "ultils/icons";
+import { productInfo } from "ultils/contants";
 
 // SETTING SLIDER
 var settings = {

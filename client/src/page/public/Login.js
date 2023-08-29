@@ -1,15 +1,15 @@
 import React, { useCallback, useState } from "react";
-import { Button, InputField } from "../../components";
-import * as apis from "../../apis";
+import { Button, InputField } from "components";
+import * as apis from "apis";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import path from "../../ultils/path";
-import { login } from "../../store/user/userSlice";
+import path from "ultils/path";
+import { login } from "store/user/userSlice";
 import { useDispatch } from "react-redux";
-import Logo from "../../assets/logo.png";
+import Logo from "assets/logo.png";
 import { toast } from "react-toastify";
-import { validate } from "../../ultils/helpers";
-import icons from "../../ultils/icons";
+import { validate } from "ultils/helpers";
+import icons from "ultils/icons";
 
 const { IoMdClose } = icons;
 

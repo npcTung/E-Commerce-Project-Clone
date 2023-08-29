@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
-import { formatMoney, renderStarFromNumber } from "../ultils/helpers";
-import LogoImage from "../assets/logo-image.png";
+import { formatMoney, renderStarFromNumber } from "ultils/helpers";
+import LogoImage from "assets/logo-image.png";
 
 const ProductCard = ({ productData }) => {
   return (

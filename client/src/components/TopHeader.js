@@ -1,9 +1,9 @@
 import React, { memo } from "react";
-import icons from "../ultils/icons";
+import icons from "ultils/icons";
 import { Link } from "react-router-dom";
-import path from "../ultils/path";
+import path from "ultils/path";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../store/user/userSlice";
+import { logout } from "store/user/userSlice";
 
 const {
   BiLogoFacebook,

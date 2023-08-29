@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
-import icons from "../ultils/icons";
+import icons from "ultils/icons";
 import { Link } from "react-router-dom";
-import path from "../ultils/path";
+import path from "ultils/path";
 import Swal from "sweetalert2";
 
 const {

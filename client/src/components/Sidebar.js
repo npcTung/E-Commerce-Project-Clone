@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
-import icons from "../ultils/icons";
-import { createSlug } from "../ultils/helpers";
+import icons from "ultils/icons";
+import { createSlug } from "ultils/helpers";
 import { useSelector } from "react-redux";
 
 const { FaList } = icons;

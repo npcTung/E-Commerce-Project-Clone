@@ -1,14 +1,14 @@
 import React, { memo, useCallback, useState } from "react";
-import { Sideways } from "../ultils/contants";
+import { Sideways } from "ultils/contants";
 import { VoteBar, VoteOption, Button, Comment } from "./";
-import { renderStarFromNumber } from "../ultils/helpers";
-import * as apis from "../apis";
+import { renderStarFromNumber } from "ultils/helpers";
+import * as apis from "apis";
 import { useDispatch, useSelector } from "react-redux";
-import { showModal } from "../store/app/appSlice";
+import { showModal } from "store/app/appSlice";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import path from "../ultils/path";
+import path from "ultils/path";
 
 const ProductInfomation = ({
   description,

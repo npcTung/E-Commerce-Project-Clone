@@ -1,4 +1,4 @@
-import axiosConfig from "../axios";
+import axiosConfig from "axiosConfig";
 
 export const apiRegister = (data) =>
   axiosConfig({

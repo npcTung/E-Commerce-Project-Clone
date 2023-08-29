@@ -8,7 +8,7 @@ import {
   HotCollection,
   NewArrivals,
   Sidebar,
-} from "../../components";
+} from "components";
 
 const Home = () => {
   return (

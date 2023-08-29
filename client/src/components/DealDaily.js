@@ -1,13 +1,9 @@
 import React, { useState, useEffect, memo } from "react";
-import icons from "../ultils/icons";
-import LogoImage from "../assets/logo-image.png";
+import icons from "ultils/icons";
+import LogoImage from "assets/logo-image.png";
 import { Link, useNavigate } from "react-router-dom";
-import { apiGetProducts } from "../apis";
-import {
-  renderStarFromNumber,
-  formatMoney,
-  seconsToHms,
-} from "../ultils/helpers";
+import { apiGetProducts } from "apis";
+import { renderStarFromNumber, formatMoney, seconsToHms } from "ultils/helpers";
 import { CountDown } from "./";
 import moment from "moment";
 

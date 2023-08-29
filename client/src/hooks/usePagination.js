@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { generateRange } from "../ultils/helpers";
-import icons from "../ultils/icons";
+import { generateRange } from "ultils/helpers";
+import icons from "ultils/icons";
 
 const { BsThreeDots } = icons;
 

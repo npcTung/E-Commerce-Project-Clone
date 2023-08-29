@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Button } from "../../components";
-import path from "../../ultils/path";
-import Logo from "../../assets/logo.png";
+import { Button } from "components";
+import path from "ultils/path";
+import Logo from "assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import * as apis from "../../apis";
+import * as apis from "apis";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 

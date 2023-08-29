@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
-import Ant from "../assets/ant.png";
-import { ratings } from "../ultils/contants";
+import Ant from "assets/ant.png";
+import { ratings } from "ultils/contants";
 import { Button } from "./";
 
 const VoteOption = ({ nameProduct, handleSubmitVoteOption }) => {

@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { createSlug } from "../ultils/helpers";
-import icons from "../ultils/icons";
+import { createSlug } from "ultils/helpers";
+import icons from "ultils/icons";
 
 const { MdOutlineKeyboardArrowRight } = icons;
 
