@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect } from "react";
 import { apiGetProducts } from "apis";
-import { ProductCard } from "./";
+import { ProductCard } from "components";
 
 const FeaturedProduct = () => {
   const [featuredProduct, setFeaturedProduct] = useState(null);

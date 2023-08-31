@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { apiGetProducts } from "apis";
-import { CustomSlider } from "./";
+import { CustomSlider } from "components";
 
 const tabs = [
   {

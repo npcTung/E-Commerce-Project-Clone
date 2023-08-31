@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { apiGetProducts } from "apis";
-import { CustomSlider } from "./";
+import { CustomSlider } from "..";
 import { getNewProduct } from "store/products/asyncActions";
 import { useDispatch, useSelector } from "react-redux";
 

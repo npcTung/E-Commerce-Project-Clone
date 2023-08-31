@@ -5,7 +5,7 @@ import LableBlue from "assets/lable-blue.png";
 import { Link, useNavigate } from "react-router-dom";
 import { formatMoney } from "ultils/helpers";
 import { renderStarFromNumber } from "ultils/helpers";
-import SelectOption from "./SelectOption";
+import { SelectOption } from "components";
 import icons from "ultils/icons";
 
 const { FaEye, PiListFill, HiHeart } = icons;

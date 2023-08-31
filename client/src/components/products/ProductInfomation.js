@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { Sideways } from "ultils/contants";
-import { VoteBar, VoteOption, Button, Comment } from "./";
+import { VoteBar, VoteOption, Button, Comment } from "components";
 import { renderStarFromNumber } from "ultils/helpers";
 import * as apis from "apis";
 import { useDispatch, useSelector } from "react-redux";
@@ -161,16 +161,18 @@ const ProductInfomation = ({
                 />
               </div>
               <div className="w-full flex flex-col gap-4">
-                {ratings?.map((el) => (
-                  <Comment
-                    key={el._id}
-                    star={el.star}
-                    updatedAt={el.updatedAt}
-                    comment={el.comment}
-                    name={el.postedBy.firstName + " " + el.postedBy.lastName}
-                    image={el.postedBy.avatar}
-                  />
-                ))}
+                {ratings
+                  ?.filter((el) => el.postedBy !== null)
+                  ?.map((el) => (
+                    <Comment
+                      key={el._id}
+                      star={el.star}
+                      updatedAt={el.updatedAt}
+                      comment={el.comment}
+                      name={el.postedBy.firstName + " " + el.postedBy.lastName}
+                      image={el.postedBy.avatar}
+                    />
+                  ))}
               </div>
             </div>
           )}

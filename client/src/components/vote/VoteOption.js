@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import Ant from "assets/ant.png";
 import { ratings } from "ultils/contants";
-import { Button } from "./";
+import { Button } from "components";
 
 const VoteOption = ({ nameProduct, handleSubmitVoteOption }) => {
   const [chosenScore, setChosenScore] = useState(null);
