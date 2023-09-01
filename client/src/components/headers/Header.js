@@ -28,7 +28,7 @@ const Header = () => {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white p-5 flex flex-col gap-3 rounded-md"
+            className="bg-white p-5 flex flex-col gap-3 rounded-md animate-scale-in-center"
           >
             <span className="flex items-center justify-center relative">
               <span className="text-main">
@@ -66,6 +66,7 @@ const Header = () => {
                   <span>/</span>
                   <Link
                     to={`/${path.ADMIN}/${path.DASH_BOARD}`}
+                    target="_blank"
                     className="hover:text-main transition-all"
                   >
                     Quản trị viên
@@ -74,7 +75,10 @@ const Header = () => {
               )}
               <span>/</span>
               <span
-                onClick={() => dispatch(logout())}
+                onClick={() => {
+                  dispatch(logout());
+                  setIsShowAccount(false);
+                }}
                 className="hover:text-main transition-all cursor-pointer"
               >
                 Đăng xuất

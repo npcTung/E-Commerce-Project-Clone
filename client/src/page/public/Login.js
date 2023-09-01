@@ -55,7 +55,7 @@ const Login = () => {
       } else {
         const response = await apis.apiLogin(data);
         if (response.success)
-          Swal.fire("Congratulations", "Login is successfully", "success").then(
+          Swal.fire("Congratulations", "Đăng nhập thành công", "success").then(
             () => {
               dispatch(
                 login({
@@ -213,6 +213,7 @@ const Login = () => {
                     nameKey={"firstName"}
                     handleEnter={handleSubmit}
                     eventOnBlur={eventOnBlur}
+                    wf
                   />
                   <InputField
                     invalidFields={invalidFields}
@@ -222,6 +223,7 @@ const Login = () => {
                     nameKey={"lastName"}
                     handleEnter={handleSubmit}
                     eventOnBlur={eventOnBlur}
+                    wf
                   />
                 </div>
                 <InputField
@@ -232,6 +234,7 @@ const Login = () => {
                   nameKey={"phone"}
                   handleEnter={handleSubmit}
                   eventOnBlur={eventOnBlur}
+                  wf
                 />
               </>
             )}
@@ -244,6 +247,7 @@ const Login = () => {
               nameKey={"email"}
               handleEnter={handleSubmit}
               eventOnBlur={eventOnBlur}
+              wf
             />
             <InputField
               invalidFields={invalidFields}
@@ -254,6 +258,7 @@ const Login = () => {
               nameKey={"password"}
               handleEnter={handleSubmit}
               eventOnBlur={eventOnBlur}
+              wf
             />
             <Button
               name={isRegister ? "sign up" : "sign in"}

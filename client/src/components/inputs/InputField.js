@@ -12,27 +12,36 @@ const InputField = ({
   setInvalidFields,
   handleEnter,
   eventOnBlur,
+  placeholder,
+  classInput,
+  classDiv,
+  wf,
+  isShowLable,
 }) => {
   return (
-    <div className="w-full relative">
-      <label
-        htmlFor={nameKey}
-        className="label label-text capitalize opacity-70"
-      >
-        {nameKey}
-      </label>
+    <div className={`${wf && "w-full"} ${classDiv} relative`}>
+      {!isShowLable && value?.trim() !== "" && (
+        <label
+          htmlFor={nameKey}
+          className="label label-text capitalize opacity-70"
+        >
+          {nameKey}
+        </label>
+      )}
       <input
         type={type || "text"}
         className={`input ${
           invalidFields?.some((el) => el.name === nameKey) && "input-error"
-        } bg-gray-100 placeholder:capitalize w-full`}
-        placeholder={nameKey}
+        } bg-gray-100 w-full ${classInput} placeholder:text-sm`}
+        placeholder={
+          placeholder || nameKey?.slice(0, 1).toUpperCase() + nameKey?.slice(1)
+        }
         value={value}
         onChange={(e) =>
           setValue((prev) => ({ ...prev, [nameKey]: e.target.value }))
         }
         onFocus={() => {
-          setInvalidFields([]);
+          setInvalidFields && setInvalidFields([]);
         }}
         onKeyDown={(e) => e.key === "Enter" && handleEnter && handleEnter()}
         onBlur={() => eventOnBlur && eventOnBlur()}

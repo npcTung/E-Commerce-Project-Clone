@@ -1,24 +1,21 @@
 import React, { memo } from "react";
 import {
   createSearchParams,
+  useLocation,
   useNavigate,
-  useParams,
   useSearchParams,
 } from "react-router-dom";
 
 const PagiItem = ({ value }) => {
   const [params] = useSearchParams();
   const navigate = useNavigate();
-  const { category } = useParams();
+  const location = useLocation();
 
   const handlePagination = () => {
-    let param = [];
-    const queries = {};
-    for (let i of params.entries()) param.push(i);
-    for (let i of param) queries[i[0]] = i[1];
+    const queries = Object.fromEntries([...params]);
     if (Number(value)) queries.page = value;
     navigate({
-      pathname: `/${category}`,
+      pathname: location.pathname,
       search: createSearchParams(queries).toString(),
     });
   };

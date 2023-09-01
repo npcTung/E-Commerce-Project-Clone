@@ -1,13 +1,21 @@
 import React, { memo } from "react";
 
-const Button = ({ name, handleOnClick, styles, iconAfter, iconBefore, wf }) => {
+const Button = ({
+  name,
+  handleOnClick,
+  styles,
+  iconAfter,
+  iconBefore,
+  wf,
+  type = "button",
+}) => {
   return (
     <div className="w-full">
       <button
-        type="button"
-        className={`uppercase btn bg-main btn-error text-white ${
-          styles && styles
-        } ${wf ? "w-full" : "w-fit"}`}
+        type={type}
+        className={`uppercase btn bg-main btn-error text-white ${styles} ${
+          wf ? "w-full" : "w-fit"
+        }`}
         onClick={() => {
           handleOnClick && handleOnClick();
         }}

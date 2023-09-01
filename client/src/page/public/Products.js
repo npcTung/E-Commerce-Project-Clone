@@ -53,10 +53,7 @@ const Products = () => {
   );
   // NAVIGATE SORT
   useEffect(() => {
-    let param = [];
-    const queries = {};
-    for (let i of params.entries()) param.push(i);
-    for (let i of param) queries[i[0]] = i[1];
+    const queries = Object.fromEntries([...params]);
     if (sort) {
       queries.sort = sort;
       delete queries.page;
@@ -68,12 +65,10 @@ const Products = () => {
   }, [sort, category]);
   // SORT PRODUCT
   useEffect(() => {
-    let param = [];
+    const queries = Object.fromEntries([...params]);
     let priceQuery = {};
-    if (category === ":category") queries.category = null;
+    if (category === ":category") delete queries.category;
     else queries.category = category;
-    for (let i of params.entries()) param.push(i);
-    for (let i of params) queries[i[0]] = i[1];
     if (queries.to && queries.from) {
       priceQuery = {
         $and: [
@@ -146,7 +141,7 @@ const Products = () => {
           </Masonry>
         </div>
       </div>
-      {product?.counts > 10 && (
+      {product?.counts > +process.env.REACT_APP_LIMIT && (
         <div className="w-main mx-auto flex justify-end mt-5">
           <Pagination totalCount={product?.counts} />
         </div>

@@ -17,7 +17,9 @@ export { default as Header } from "./headers/Header";
 export { default as TopHeader } from "./headers/TopHeader";
 // INPUTS
 export { default as InputField } from "./inputs/InputField";
+export { default as InputForm } from "./inputs/InputForm";
 export { default as InputSelect } from "./inputs/InputSelect";
+export { default as Select } from "./inputs/Select";
 // NAVIGATION
 export { default as Navigation } from "./navigation/Navigation";
 // PAGINATION
@@ -37,6 +39,9 @@ export { default as SelectOption } from "./search/SelectOption";
 export { default as SearchItem } from "./search/SearchItem";
 // SIDEBAR
 export { default as Sidebar } from "./sidebar/Sidebar";
+export { default as AdminSidebar } from "./sidebar/AdminSidebar";
+// USERS
+export { default as EditUserAdmin } from "./users/EditUserAdmin";
 // VOTE
 export { default as VoteBar } from "./vote/VoteBar";
 export { default as Ratings } from "./vote/Ratings";

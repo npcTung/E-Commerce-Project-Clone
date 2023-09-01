@@ -15,7 +15,7 @@ const VoteOption = ({ nameProduct, handleSubmitVoteOption }) => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="bg-white w-[700px] rounded-lg p-4"
+      className="bg-white w-[700px] rounded-lg p-4 animate-slide-top"
     >
       <img src={Ant} alt="logo" className="w-[150px] mx-auto object-contain" />
       <h2 className="text-2xl text-center font-semibold">

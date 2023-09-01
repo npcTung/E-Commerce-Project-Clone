@@ -59,10 +59,7 @@ const SearchItem = ({
   }, [price]);
   // NAVIGATE COLOR
   useEffect(() => {
-    let param = [];
-    const queries = {};
-    for (let i of params.entries()) param.push(i);
-    for (let i of param) queries[i[0]] = i[1];
+    const queries = Object.fromEntries([...params]);
     if (selected.length > 0) {
       if (selected) queries.color = selected.join(",");
       delete queries.page;
@@ -74,10 +71,7 @@ const SearchItem = ({
   }, [selected]);
   // NAVIGATE PRICE
   useEffect(() => {
-    let param = [];
-    const queries = {};
-    for (let i of params.entries()) param.push(i);
-    for (let i of param) queries[i[0]] = i[1];
+    const queries = Object.fromEntries([...params]);
     if (Number(price.from) > 0) {
       queries.from = price.from;
       delete queries.page;
