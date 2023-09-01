@@ -11,7 +11,7 @@ const EditUserAdmin = ({
   handleSubmit,
 }) => {
   return (
-    <div>
+    <div className="w-full">
       <h3 className="text-2xl uppercase font-semibold p-5 border-b border-gray-400 border-dashed">
         {`Sửa tài khoản người dùng "${dataUser?.firstName} ${dataUser?.lastName}"`}
       </h3>

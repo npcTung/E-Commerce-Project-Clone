@@ -27,9 +27,7 @@ const Select = ({
           errors[id] && "select-error"
         }`}
       >
-        <option value="" disabled>
-          -----CHOOSE-----
-        </option>
+        <option value="">-----CHOOSE-----</option>
         {options?.map((el) => (
           <option key={el.code} value={el.code}>
             {el.value}

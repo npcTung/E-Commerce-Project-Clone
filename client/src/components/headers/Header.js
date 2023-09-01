@@ -19,6 +19,7 @@ const Header = () => {
   const [isShowAccount, setIsShowAccount] = useState(false);
   const dispatch = useDispatch();
   const { isLoggedIn, currentData } = useSelector((state) => state.user);
+
   return (
     <header className="w-main mx-auto h-[110px] py-[35px] flex justify-between">
       {isShowAccount && (
@@ -30,17 +31,32 @@ const Header = () => {
             onClick={(e) => e.stopPropagation()}
             className="bg-white p-5 flex flex-col gap-3 rounded-md animate-scale-in-center"
           >
-            <span className="flex items-center justify-center relative">
-              <span className="text-main">
-                <FaUserCircle size={35} />
-              </span>
+            <div className="flex items-center justify-center relative">
+              {currentData?.avatar ? (
+                <div
+                  className={`w-[80px] h-[80px] flex items-center rounded-full border p-[2px] ${
+                    currentData?.isBlocked ? "border-main" : "border-green-500"
+                  }`}
+                >
+                  <img
+                    src={currentData?.avatar}
+                    alt={`avatar ${currentData?.firstName} ${currentData?.lastName}`}
+                    className="w-full h-full object-contain rounded-full"
+                  />
+                </div>
+              ) : (
+                <span className="text-main">
+                  <FaUserCircle size={35} />
+                </span>
+              )}
+
               <span
                 className="absolute -top-5 -right-5 cursor-pointer"
                 onClick={() => setIsShowAccount(false)}
               >
                 <IoMdClose size={30} />
               </span>
-            </span>
+            </div>
             <span className="flex justify-center">
               <span className="px-1">Tài khoản</span>{" "}
               <Link
@@ -121,13 +137,29 @@ const Header = () => {
         </div>
         {isLoggedIn && (
           <div className="flex px-6">
-            <span
-              className="flex items-center justify-center cursor-pointer"
-              title="Profile"
-              onClick={() => setIsShowAccount(true)}
-            >
-              <FaUserCircle color="#ee3131" size={30} />
-            </span>
+            {currentData?.avatar ? (
+              <div
+                onClick={() => setIsShowAccount(true)}
+                className={`w-[50px] h-[50px] flex items-center rounded-full border p-[2px] cursor-pointer ${
+                  currentData?.isBlocked ? "border-main" : "border-green-500"
+                }`}
+              >
+                <img
+                  src={currentData?.avatar}
+                  alt={`avatar ${currentData?.firstName} ${currentData?.lastName}`}
+                  className="w-full h-full object-contain rounded-full"
+                  title="Thông tin tài khoản"
+                />
+              </div>
+            ) : (
+              <span
+                className="flex items-center justify-center cursor-pointer"
+                title="Profile"
+                onClick={() => setIsShowAccount(true)}
+              >
+                <FaUserCircle color="#ee3131" size={30} />
+              </span>
+            )}
           </div>
         )}
       </div>

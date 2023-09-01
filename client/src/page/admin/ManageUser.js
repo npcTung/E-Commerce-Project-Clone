@@ -100,7 +100,7 @@ const ManageUser = () => {
         phone: editElm?.phone,
         isBlocked: editElm?.isBlocked,
       });
-  }, [editElm]);
+  }, [editElm, reset]);
 
   useEffect(() => {
     const queries = Object.fromEntries([...params]);
@@ -121,7 +121,7 @@ const ManageUser = () => {
     )
       setStyles("btn-disabled");
     else setStyles("");
-  }, [watch()]);
+  }, [watch(), watch, editElm]);
 
   return (
     <div className="w-full">
@@ -186,7 +186,7 @@ const ManageUser = () => {
                     <img
                       src={el.avatar || Avatar}
                       alt={`${el.firstName}-${el.lastName}-avatar`}
-                      className={`w-10 rounded-full object-contain p-1 border ${
+                      className={`w-10 h-10 rounded-full object-contain p-[2px] border ${
                         el.isBlocked ? "border-red-500" : "border-green-500"
                       }`}
                     />

@@ -20,6 +20,7 @@ export { default as InputField } from "./inputs/InputField";
 export { default as InputForm } from "./inputs/InputForm";
 export { default as InputSelect } from "./inputs/InputSelect";
 export { default as Select } from "./inputs/Select";
+export { default as MarkDownEditer } from "./inputs/MarkDownEditer";
 // NAVIGATION
 export { default as Navigation } from "./navigation/Navigation";
 // PAGINATION

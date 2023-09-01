@@ -27,7 +27,7 @@ const InputForm = ({
         {...register(id, validate)}
         disabled={disabled}
         placeholder={placeholder}
-        className={`input w-full bg-gray-100 placeholder:capitalize ${classInput} ${
+        className={`input w-full bg-gray-100 ${classInput} ${
           errors[id] && "input-error"
         }`}
         defaultValue={defaultValue}
