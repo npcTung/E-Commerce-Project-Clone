@@ -23,8 +23,8 @@ const Admin = () => {
   return (
     <div className="w-full flex min-h-screen">
       <AdminSidebar />
-      <div className="w-[327px]"></div>
-      <main className="flex-auto bg-slate-50">
+      <div className="w-[17%]"></div>
+      <main className="w-[83%] bg-slate-50">
         <Outlet />
       </main>
     </div>

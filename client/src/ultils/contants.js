@@ -166,12 +166,12 @@ export const sorts = [
   },
   {
     id: 6,
-    value: "-date",
+    value: "createdAt",
     text: "Date, old to new",
   },
   {
     id: 7,
-    value: "date",
+    value: "-createdAt",
     text: "Date, new to old",
   },
 ];

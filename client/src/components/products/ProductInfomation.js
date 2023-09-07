@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import path from "ultils/path";
+import DOMPurify from "dompurify";
 
 const ProductInfomation = ({
   description,
@@ -104,12 +105,20 @@ const ProductInfomation = ({
       </div>
       <div className="border p-4">
         <div className="w-full">
-          {activedTab === 1 && (
+          {activedTab === 1 && description?.length > 1 && (
             <ul className="list-item list-disc ml-5 text-sm">
               {description?.map((el, index) => (
                 <li key={index}>{el}</li>
               ))}
             </ul>
+          )}
+          {activedTab === 1 && description?.length === 1 && (
+            <div
+              className="text-sm flex flex-col gap-2"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(description[0]),
+              }}
+            />
           )}
           {Sideways.some((el) => el.id === activedTab) && (
             <div className="w-full flex flex-col gap-5">

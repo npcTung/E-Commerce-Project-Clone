@@ -9,6 +9,7 @@ import {
   FaGift,
   FaShieldAlt,
   FaBlenderPhone,
+  FaUpload,
 } from "react-icons/fa";
 import { BsStarFill, BsStar, BsThreeDots } from "react-icons/bs";
 import { HiHeart } from "react-icons/hi";
@@ -34,6 +35,7 @@ import {
 import { IoMdClose } from "react-icons/io";
 import { GiReturnArrow } from "react-icons/gi";
 import { LuEdit } from "react-icons/lu";
+import { FaArrowDownShortWide, FaArrowUpWideShort } from "react-icons/fa6";
 
 const icons = {
   RiPhoneFill,
@@ -71,6 +73,9 @@ const icons = {
   MdOutlineCreate,
   LuEdit,
   RiDeleteBin6Line,
+  FaUpload,
+  FaArrowDownShortWide,
+  FaArrowUpWideShort,
 };
 
 export default icons;

@@ -30,7 +30,6 @@ const Products = () => {
   const [activeClick, setActiveClick] = useState(null);
   const [sort, setSort] = useState();
   const [params] = useSearchParams();
-  const queries = {};
   // CALL API PRODUCT
   const fetchProductsByCategory = async (queries) => {
     const response = await apis.apiGetProducts(queries);

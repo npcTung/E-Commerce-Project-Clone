@@ -13,6 +13,8 @@ import ReactImageMagnify from "react-image-magnify";
 import { renderStarFromNumber, formatMoney } from "ultils/helpers";
 import icons from "ultils/icons";
 import { productInfo } from "ultils/contants";
+import DOMPurify from "dompurify";
+import NoImg from "assets/logo-image.png";
 
 // SETTING SLIDER
 var settings = {
@@ -40,7 +42,12 @@ const DetailProduct = () => {
   // QUANTITY
   const handaleQuantity = useCallback(
     (number) => {
-      if (!Number(number) || Number(number) < 1) return;
+      if (
+        !Number(number) ||
+        Number(number) < 1 ||
+        Number(number) > productData?.quantity
+      )
+        return;
       else setQuantity(number);
     },
     [quantity]
@@ -49,6 +56,7 @@ const DetailProduct = () => {
   const handaleChargeQuantity = useCallback(
     (flag) => {
       if (flag === "minus" && quantity === 1) return;
+      else if (flag === "plus" && quantity >= productData?.quantity) return;
       else if (flag === "minus") setQuantity((prev) => +prev - 1);
       else if (flag === "plus") setQuantity((prev) => +prev + 1);
     },
@@ -88,7 +96,7 @@ const DetailProduct = () => {
       </div>
       <div className="w-main mx-auto flex gap-4 mt-5">
         <div className="w-[35%] flex flex-col gap-4">
-          <div className="border">
+          <div className="border flex items-center">
             <ReactImageMagnify
               {...{
                 smallImage: {
@@ -107,6 +115,16 @@ const DetailProduct = () => {
           {productData?.images?.length > 0 && (
             <div className="w-full">
               <Slider className="image-slider" {...settings}>
+                <div
+                  className="w-full px-2 cursor-pointer"
+                  onClick={() => setImageBig(productData?.thumb)}
+                >
+                  <img
+                    src={productData?.thumb || NoImg}
+                    alt={productData?.title}
+                    className="w-[143px] h-[143px] object-contain border p-2"
+                  />
+                </div>
                 {productData?.images?.map((el, index) => (
                   <div
                     key={index}
@@ -130,25 +148,35 @@ const DetailProduct = () => {
               productData?.price
             )} VND `}</h1>
             <span className="flex flex-col items-end">
-              <span className="text-sm text-red-400">{`Kho: ${productData?.sold}`}</span>
-              <span className="text-sm text-red-400">{`Đã bán: ${productData?.quantity}`}</span>
+              <span className="text-sm text-red-400">{`Kho: ${productData?.quantity}`}</span>
+              <span className="text-sm text-red-400">{`Đã bán: ${productData?.sold}`}</span>
             </span>
           </div>
           <div className="flex items-center gap-2">
             <span className="flex gap-1 text-yellow-500">
               {renderStarFromNumber(productData?.totalRatings)}
             </span>
-            {productData?.totalRatings > 0 && (
-              <span className="text-sm text-gray-400">{`${productData?.totalRatings} reviews`}</span>
+            {productData?.ratings.length > 0 && (
+              <span className="text-sm text-gray-400">{`${productData?.ratings.length} reviews`}</span>
             )}
           </div>
-          <ul className="list-item list-square mx-4">
-            {productData?.description?.map((el, index) => (
-              <li key={index} className="text-sm">
-                {el}
-              </li>
-            ))}
-          </ul>
+          {productData?.description.length > 1 && (
+            <ul className="list-item list-square mx-4">
+              {productData?.description?.map((el, index) => (
+                <li key={index} className="text-sm">
+                  {el}
+                </li>
+              ))}
+            </ul>
+          )}
+          {productData?.description.length === 1 && (
+            <div
+              className="text-sm flex flex-col gap-2"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(productData?.description[0]),
+              }}
+            />
+          )}
           <div className="flex flex-col gap-4">
             <span className="font-medium">Internal</span>
             <span className="font-medium">Color</span>

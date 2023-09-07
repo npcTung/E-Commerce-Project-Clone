@@ -29,7 +29,7 @@ const InputForm = ({
         placeholder={placeholder}
         className={`input w-full bg-gray-100 ${classInput} ${
           errors[id] && "input-error"
-        }`}
+        } placeholder:text-sm`}
         defaultValue={defaultValue}
       />
       {errors[id] && (

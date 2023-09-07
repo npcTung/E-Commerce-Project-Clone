@@ -20,10 +20,10 @@ const AdminSidebar = () => {
     else setActiveClick(true);
   }, [activeClick]);
   return (
-    <div className="w-[327px] float-none fixed top-0 bottom-0">
+    <div className="w-[17%] float-none fixed top-0 bottom-0">
       <div className="w-full flex flex-col items-center justify-center gap-2 p-6 border-b">
         <img src={Logo} alt="Logo" className="w-[200px] object-contain" />
-        <small className="capitalize">
+        <small className="capitalize text-center">
           không gian làm việc của quản trị viên
         </small>
       </div>

@@ -1,19 +1,25 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, InputForm, Select, MarkDownEditer } from "components";
+import { Button, InputForm, Select, MarkDownEditer, Loading } from "components";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { validate, getBase64 } from "ultils/helpers";
 import { toast } from "react-toastify";
 import icons from "ultils/icons";
+import * as apis from "apis";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import path from "ultils/path";
+import { showModal } from "store/app/appSlice";
 
-const { RiDeleteBin6Line } = icons;
+const { FaUpload } = icons;
 
 const CreateProduct = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.app);
   const [invalidFields, setInvalidFields] = useState([]);
   const [payload, setPayload] = useState({ description: "" });
   const [preview, setPreview] = useState({ thumb: null, images: [] });
-  const [hoverElm, setHoverElm] = useState(null);
   const {
     register,
     formState: { errors },
@@ -21,14 +27,20 @@ const CreateProduct = () => {
     handleSubmit,
     watch,
   } = useForm();
-
+  // RESER DATA
+  const resetData = () => {
+    reset();
+    setPayload({ description: "" });
+    setPreview({ thumb: null, images: [] });
+  };
+  // MÔ TẢ
   const changeValue = useCallback(
     (e) => {
       setPayload(e);
     },
     [payload]
   );
-
+  // TẠO SẢN PHẨM MỚI
   const handleCreateProduct = async (data) => {
     const invalids = validate(payload, setInvalidFields);
     if (invalids === 0) {
@@ -39,9 +51,34 @@ const CreateProduct = () => {
       const finalPayload = { ...data, ...payload };
       const formData = new FormData();
       for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1]);
+      if (finalPayload.thumb) formData.append("thumb", finalPayload.thumb[0]);
+      if (finalPayload.images)
+        for (let image of finalPayload.images) formData.append("images", image);
+      dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
+      const response = await apis.apiCreateProduct(formData);
+      dispatch(showModal({ isShowModal: false, modalChildren: null }));
+      if (response.success)
+        Swal.fire("Success", "Thêm sản phẩm thành công!!!", "success").then(
+          () => {
+            resetData();
+            Swal.fire({
+              text: `Bạn có muốn thêm sản phẩm tiếp`,
+              showCancelButton: true,
+              cancelButtonColor: "#ee3131",
+              cancelButtonText: "không",
+              confirmButtonText: "có",
+              confirmButtonColor: "#2563EB",
+              title: "Oops!",
+            }).then((rs) => {
+              if (!rs.isConfirmed)
+                navigate(`/${path.ADMIN}/${path.MANAGER_PRODUCT}`);
+            });
+          }
+        );
+      else toast.error(response.mes);
     }
   };
-
+  // ẢNH ĐẠI DIỆN CỦA SẢN PHẨM
   const handlePreviewThumb = async (file) => {
     if (
       file.type !== "image/png" &&
@@ -58,7 +95,7 @@ const CreateProduct = () => {
       setPreview((prev) => ({ ...prev, thumb: base64Thumb }));
     }
   };
-
+  // ẢNH SẢN PHẨM
   const handlePreviewImages = async (files) => {
     const imagesPreview = [];
     for (let file of files) {
@@ -81,15 +118,6 @@ const CreateProduct = () => {
       setPreview((prev) => ({ ...prev, images: imagesPreview }));
   };
 
-  const handleRemoveImage = (name) => {
-    if (preview.images?.some((el) => el.name === name)) {
-      setPreview((prev) => ({
-        ...prev,
-        images: prev.images?.filter((el) => el.name !== name),
-      }));
-    }
-  };
-
   useEffect(() => {
     if (watch("thumb").length > 0) handlePreviewThumb(watch("thumb")[0]);
   }, [watch("thumb")]);
@@ -100,9 +128,12 @@ const CreateProduct = () => {
 
   return (
     <div className="w-full">
-      <h1 className="flex justify-between items-center text-3xl font-semibold border-b border-gray-300 p-[30px]">
-        <span className="uppercase">tạo sản phẩm mới</span>
-      </h1>
+      <div className="h-[115px]"></div>
+      <div className="fixed z-10 bg-gray-50 top-0 w-full">
+        <h1 className="flex justify-between items-center text-3xl font-semibold border-b border-gray-300 px-[30px] py-[39px]">
+          <span className="uppercase">tạo sản phẩm mới</span>
+        </h1>
+      </div>
       <div className="w-full py-4 px-10">
         <form
           onSubmit={handleSubmit(handleCreateProduct)}
@@ -185,16 +216,25 @@ const CreateProduct = () => {
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
           />
-          <div className="flex flex-col gap-2">
-            <label htmlFor="thumb" className="lable label-text opacity-70">
+          <div className="w-full flex flex-col gap-2">
+            <span className="lable label-text opacity-70">
               Tải lên hình ảnh đại diện của sản phẩm
-            </label>
-            <input
-              type="file"
-              id="thumb"
-              {...register("thumb", { required: "Điền thông tin bắt buộc." })}
-              className="cursor-pointer file:cursor-pointer"
-            />
+            </span>
+            <div className="w-full">
+              <label
+                htmlFor="thumb"
+                className="lable label-text flex flex-col gap-2 w-full h-[200px] border-[3px] items-center justify-center border-dashed rounded cursor-pointer"
+              >
+                <FaUpload size={40} />
+                <span>Thêm ảnh</span>
+              </label>
+              <input
+                type="file"
+                id="thumb"
+                {...register("thumb", { required: "Điền thông tin bắt buộc." })}
+                hidden
+              />
+            </div>
             {errors["thumb"] && (
               <small className="text-xs pl-2 pt-1 text-red-500">
                 {errors["thumb"]?.message}
@@ -202,56 +242,55 @@ const CreateProduct = () => {
             )}
           </div>
           {preview?.thumb && (
-            <div>
+            <div className="w-1/4 h-[300px]">
               <img
                 src={preview.thumb}
                 alt="preview"
-                className="w-[200px] h-[300px] object-contain"
+                className="w-full h-full object-contain"
               />
             </div>
           )}
-          <div className="flex flex-col gap-2">
-            <label htmlFor="images" className="lable label-text opacity-70">
+          <div className="w-full flex flex-col gap-2">
+            <span className="lable label-text opacity-70">
               Tải lên hình ảnh của sản phẩm
-            </label>
-            <input
-              type="file"
-              id="images"
-              multiple
-              {...register("images", { required: "Điền thông tin bắt buộc." })}
-              className="cursor-pointer file:cursor-pointer"
-            />
-            {errors["images"] && (
-              <small className="text-xs pl-2 pt-1 text-red-500">
-                {errors["images"]?.message}
-              </small>
-            )}
+            </span>
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="images"
+                className="lable label-text flex flex-col gap-2 w-full h-[200px] border-[3px] items-center justify-center border-dashed rounded cursor-pointer"
+              >
+                <FaUpload size={40} />
+                <span>Thêm ảnh</span>
+              </label>
+              <input
+                type="file"
+                id="images"
+                multiple
+                {...register("images", {
+                  required: "Điền thông tin bắt buộc.",
+                })}
+                hidden
+              />
+              {errors["images"] && (
+                <small className="text-xs pl-2 pt-1 text-red-500">
+                  {errors["images"]?.message}
+                </small>
+              )}
+            </div>
           </div>
           {preview?.images.length > 0 && (
             <div className="flex flex-wrap items-center gap-2 w-full">
               {preview?.images?.map((el, idx) => (
                 <div
                   key={idx}
-                  className="w-fit relative"
-                  onMouseEnter={() => setHoverElm(el.name)}
-                  onMouseLeave={() => setHoverElm(null)}
+                  className="w-[24%] h-[300px] flex justify-center relative"
                 >
                   <img
                     key={idx}
                     src={el.path}
                     alt={el.name}
-                    className="w-[200px] h-[300px] object-contain"
+                    className="w-full h-full object-contain"
                   />
-                  {hoverElm === el.name && (
-                    <div className="absolute inset-0 bg-[rgba(0,0,0,0.6)] flex items-center justify-center">
-                      <span
-                        className="text-3xl cursor-pointer text-white animate-scale-in-center"
-                        onClick={() => handleRemoveImage(el.name)}
-                      >
-                        <RiDeleteBin6Line />
-                      </span>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>

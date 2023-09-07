@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import * as apis from "apis";
-import { useSearchParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import moment from "moment";
 import { EditUserAdmin, InputField, Pagination } from "components";
 import useDebounce from "hooks/useDebounce";
@@ -8,19 +12,27 @@ import Avatar from "assets/user.png";
 import { useForm } from "react-hook-form";
 import icons from "ultils/icons";
 import Swal from "sweetalert2";
-import { useCallback } from "react";
 import NoUser from "assets/no-person.png";
 import { roles } from "ultils/contants";
 import { toast } from "react-toastify";
+import path from "ultils/path";
 
-const { LuEdit, RiDeleteBin6Line, IoMdClose } = icons;
+const {
+  LuEdit,
+  RiDeleteBin6Line,
+  IoMdClose,
+  FaArrowDownShortWide,
+  FaArrowUpWideShort,
+} = icons;
 
 const ManageUser = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState(null);
   const [queries, setQueries] = useState({ q: "" });
   const [editElm, setEditElm] = useState(null);
   const [update, setUpdate] = useState(false);
   const [styles, setStyles] = useState("");
+  const [sort, setSort] = useState(null);
   const [params] = useSearchParams();
   const queriesDebounce = useDebounce(queries.q, 1000);
   const {
@@ -62,7 +74,7 @@ const ManageUser = () => {
   // XÓA TÀI KHOẢN NGƯỜI DÙNG
   const handleDelete = (data) => {
     Swal.fire({
-      text: `Bạn có chắc muốn xóa tài khoản ${data?.firstName} ${data?.lastName} khỏi hệ thống`,
+      text: `Bạn có chắc muốn xóa tài khoản ${data?.firstName} ${data?.lastName} khỏi hệ thống?`,
       showCancelButton: true,
       cancelButtonColor: "#ee3131",
       cancelButtonText: "Hủy",
@@ -81,7 +93,7 @@ const ManageUser = () => {
             setEditElm(null);
             render();
           });
-        else Swal.fire("Oops!", response.mes, "error");
+        else toast.error(response.mes);
       }
     });
   };
@@ -101,6 +113,19 @@ const ManageUser = () => {
         isBlocked: editElm?.isBlocked,
       });
   }, [editElm, reset]);
+  // NAVIGATE SORT
+  useEffect(() => {
+    const queries = Object.fromEntries([...params]);
+    if (sort) {
+      queries.sort = sort;
+      delete queries.page;
+    } else delete queries.sort;
+    navigate({
+      pathname: `/${path.ADMIN}/${path.MANAGER_USER}`,
+      search: createSearchParams(queries).toString(),
+    });
+  }, [sort]);
+  // SORT PRODUCT
 
   useEffect(() => {
     const queries = Object.fromEntries([...params]);
@@ -121,7 +146,7 @@ const ManageUser = () => {
     )
       setStyles("btn-disabled");
     else setStyles("");
-  }, [watch(), watch, editElm]);
+  }, [watch(), editElm]);
 
   return (
     <div className="w-full">
@@ -146,12 +171,33 @@ const ManageUser = () => {
           </div>
         </div>
       )}
-      <h1 className="flex justify-between items-center text-3xl font-semibold border-b border-gray-300 p-[30px]">
-        <span className="uppercase">Quản lý tài khoản người dùng</span>
-      </h1>
+      <div className="h-[115px]"></div>
+      <div className="fixed z-10 bg-gray-50 top-0 w-full">
+        <h1 className="flex justify-between items-center text-3xl font-semibold border-b border-gray-300 px-[30px] py-[39px]">
+          <span className="uppercase">Quản lý tài khoản người dùng</span>
+        </h1>
+      </div>
 
       <div className="w-full py-4 px-10">
-        <div className="flex justify-end py-4">
+        <div className="flex justify-between py-4">
+          <div className="flex items-center justify-center text-2xl">
+            {(!sort || sort === "createdAt") && (
+              <span
+                className="cursor-pointer"
+                onClick={() => setSort("-createdAt")}
+              >
+                <FaArrowDownShortWide />
+              </span>
+            )}
+            {sort === "-createdAt" && (
+              <span
+                className="cursor-pointer"
+                onClick={() => setSort("createdAt")}
+              >
+                <FaArrowUpWideShort />
+              </span>
+            )}
+          </div>
           <InputField
             value={queries.q}
             nameKey={"q"}
@@ -167,11 +213,11 @@ const ManageUser = () => {
             <thead>
               <tr className="bg-blue-600 text-white">
                 <th>#</th>
-                <th className="w-[234px]">Email address</th>
-                <th className="w-[200px]">Full name</th>
-                <th className="w-20">Role</th>
-                <th className="w-[120px]">Phone</th>
-                <th className="w-[87px]">Status</th>
+                <th>Email address</th>
+                <th>Full name</th>
+                <th>Role</th>
+                <th>Phone</th>
+                <th>Status</th>
                 <th>CreateAt</th>
                 <th>UpdatedAt</th>
                 <th>Actions</th>
@@ -181,8 +227,8 @@ const ManageUser = () => {
               {users?.usersData?.map((el, idx) => (
                 <tr key={el._id}>
                   <td>{idx + 1}</td>
-                  <td className="w-[234px]">{el.email}</td>
-                  <td className="w-[200px] flex gap-2 items-center">
+                  <td>{el.email}</td>
+                  <td className="flex gap-2 items-center">
                     <img
                       src={el.avatar || Avatar}
                       alt={`${el.firstName}-${el.lastName}-avatar`}
@@ -192,10 +238,10 @@ const ManageUser = () => {
                     />
                     {`${el.firstName} ${el.lastName}`}
                   </td>
-                  <td className="w-20">
+                  <td>
                     {roles?.find((role) => +role.code === +el.role)?.value}
                   </td>
-                  <td className="w-[120px]">{el.phone}</td>
+                  <td>{el.phone}</td>
                   <td
                     className={`${
                       el.isBlocked
@@ -210,7 +256,7 @@ const ManageUser = () => {
                   <td className="flex gap-2 capitalize text-blue-500">
                     <span
                       onClick={() => setEditElm(el)}
-                      title="Sửa sản phẩm"
+                      title="Sửa tài khoản"
                       className="hover:underline cursor-pointer text-lg text-yellow-500"
                     >
                       <LuEdit />
@@ -218,7 +264,7 @@ const ManageUser = () => {
                     <span
                       className="hover:underline cursor-pointer text-lg text-main"
                       onClick={() => handleDelete(el)}
-                      title="Xóa sản phẩm"
+                      title="Xóa tài khoản"
                     >
                       <RiDeleteBin6Line />
                     </span>
