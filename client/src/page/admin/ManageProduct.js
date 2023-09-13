@@ -6,33 +6,41 @@ import moment from "moment";
 import { formatMoney } from "ultils/helpers";
 import {
   createSearchParams,
+  useLocation,
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
 import NoProduct from "assets/logo-image.png";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-import path from "ultils/path";
 import { useForm } from "react-hook-form";
+import useDebounce from "hooks/useDebounce";
+import { UpdateProduct } from "./";
 
-const { LuEdit, RiDeleteBin6Line, FaArrowDownShortWide, FaArrowUpWideShort } =
-  icons;
+const {
+  LuEdit,
+  RiDeleteBin6Line,
+  FaArrowDownShortWide,
+  FaArrowUpWideShort,
+  IoMdClose,
+} = icons;
 
 const ManageProduct = () => {
   const [params] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [product, setProduct] = useState(null);
   const [editElm, setEditElm] = useState(null);
   const [update, setUpdate] = useState(false);
   const [sort, setSort] = useState(null);
   const {
     register,
-    handleSubmit,
     formState: { errors },
     reset,
     watch,
   } = useForm();
-
+  // CALL API PRODUCT
+  const queryDecounce = useDebounce(watch("q"), 800);
   const fetchProducts = async (params) => {
     const response = await apis.apiGetProducts({
       ...params,
@@ -66,36 +74,50 @@ const ManageProduct = () => {
       }
     });
   };
-  //SEARCH PRODUCT
-  const handleSearchProduct = (data) => {
-    console.log(data);
-  };
   // RENDER CLIENT
   const render = useCallback(() => {
     setUpdate(!update);
   }, [update]);
-  // NAVIGATE SORT
+  // SORT PRODUCT TO NAVIGATE
+  useEffect(() => {
+    if (queryDecounce)
+      navigate({
+        pathname: location.pathname,
+        search: createSearchParams({ q: queryDecounce }).toString(),
+      });
+    else
+      navigate({
+        pathname: location.pathname,
+      });
+  }, [queryDecounce]);
+  // RENDER PRODUCT
   useEffect(() => {
     const queries = Object.fromEntries([...params]);
-    if (sort) {
-      queries.sort = sort;
-      delete queries.page;
-    } else delete queries.sort;
-    navigate({
-      pathname: `/${path.ADMIN}/${path.MANAGER_PRODUCT}`,
-      search: createSearchParams(queries).toString(),
-    });
-  }, [sort]);
-
-  useEffect(() => {
-    const queries = Object.fromEntries([...params]);
+    if (sort) queries.sort = sort;
     fetchProducts(queries);
     window.scrollTo(0, 0);
-  }, [params, update]);
+  }, [params, update, sort]);
 
   return (
     <div className="w-full">
       <div className="h-[115px]"></div>
+      {editElm && (
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.6)] z-20 flex justify-center items-center">
+          <div className="w-[70%] h-[90%] bg-white flex flex-col gap-4 p-4 items-center justify-center rounded-md relative animate-scale-in-center">
+            <span
+              onClick={() => setEditElm(null)}
+              className="absolute top-1 right-1 text-2xl cursor-pointer"
+            >
+              <IoMdClose />
+            </span>
+            <UpdateProduct
+              productData={editElm}
+              render={render}
+              setProductData={setEditElm}
+            />
+          </div>
+        </div>
+      )}
       <div className="fixed z-10 bg-gray-50 top-0 w-full">
         <h1 className="flex justify-between items-center text-3xl font-semibold border-b border-gray-300 px-[30px] py-[39px]">
           <span className="uppercase">Quản lý sản phẩm</span>
@@ -104,24 +126,28 @@ const ManageProduct = () => {
       <div className="w-full py-4 px-10">
         <div className="flex justify-between py-4">
           <div className="flex items-center justify-center text-2xl">
-            {(!sort || sort === "createdAt") && (
-              <span
-                className="cursor-pointer"
-                onClick={() => setSort("-createdAt")}
-              >
-                <FaArrowDownShortWide />
-              </span>
-            )}
-            {sort === "-createdAt" && (
-              <span
-                className="cursor-pointer"
-                onClick={() => setSort("createdAt")}
-              >
-                <FaArrowUpWideShort />
-              </span>
+            {product?.products?.length > 0 && (
+              <>
+                {(!sort || sort === "createdAt") && (
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => setSort("-createdAt")}
+                  >
+                    <FaArrowDownShortWide />
+                  </span>
+                )}
+                {sort === "-createdAt" && (
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => setSort("createdAt")}
+                  >
+                    <FaArrowUpWideShort />
+                  </span>
+                )}
+              </>
             )}
           </div>
-          <form onSubmit={handleSubmit(handleSearchProduct)} className="w-2/5">
+          <form className="w-2/5 relative">
             <InputForm
               id={"q"}
               register={register}
@@ -130,13 +156,21 @@ const ManageProduct = () => {
               classInput={"input-bordered"}
               wf
             />
+            {watch("q")?.length > 0 && (
+              <span
+                className="absolute top-3 right-1 text-2xl cursor-pointer"
+                onClick={() => reset()}
+              >
+                <IoMdClose />
+              </span>
+            )}
           </form>
         </div>
         {product?.products?.length > 0 && (
           <table className="table table-zebra mb-5 bg-slate-200">
             <thead>
               <tr className="bg-blue-600 text-white">
-                <th>#</th>
+                <th>Thumb</th>
                 <th className="w-[150px]">Title</th>
                 <th>Brand</th>
                 <th>Price(VND)</th>
@@ -153,29 +187,58 @@ const ManageProduct = () => {
             <tbody>
               {product?.products?.map((el) => (
                 <tr key={el._id}>
-                  <td className="w-[100px] h-[100px]">
-                    <img
-                      src={el.thumb || NoProduct}
-                      alt={el.title}
-                      className="w-full h-full object-contain p-[2px]"
-                    />
+                  <td>
+                    <div className="w-[60px] h-[60px]">
+                      <img
+                        src={el.thumb || NoProduct}
+                        alt={el.title}
+                        className="w-full h-full object-contain p-[2px]"
+                      />
+                    </div>
                   </td>
-                  <td className="w-[150px] capitalize">
-                    {el.title.toLowerCase()}
+                  <td className="w-[150px]">
+                    <span className="capitalize line-clamp-2">
+                      {el.title.toLowerCase()}
+                    </span>
                   </td>
-                  <td className="capitalize">{el.brand.toLowerCase()}</td>
-                  <td>{formatMoney(el.price)}</td>
-                  <td className="capitalize">{el.color?.toLowerCase()}</td>
-                  <td>{el.category}</td>
-                  <td>{el.quantity}</td>
-                  <td>{el.sold}</td>
-                  <td>{el.totalRatings}</td>
-                  <td>{moment(el.createdAt).format("DD-MM-YYYY HH:mm:ss")}</td>
-                  <td>{moment(el.updatedAt).format("DD-MM-YYYY HH:mm:ss")}</td>
+                  <td>
+                    <span className="capitalize">{el.brand.toLowerCase()}</span>
+                  </td>
+                  <td>
+                    <span>{formatMoney(el.price)}</span>
+                  </td>
+                  <td>
+                    <span className="capitalize line-clamp-2">
+                      {el.color ? el.color?.toLowerCase() : "no color"}
+                    </span>
+                  </td>
+                  <td>
+                    <span>{el.category}</span>
+                  </td>
+                  <td>
+                    <span>{el.quantity}</span>
+                  </td>
+                  <td>
+                    <span>{el.sold}</span>
+                  </td>
+                  <td>
+                    <span>{el.totalRatings}</span>
+                  </td>
+                  <td>
+                    <span>
+                      {moment(el.createdAt).format("DD-MM-YYYY HH:mm:ss")}
+                    </span>
+                  </td>
+                  <td>
+                    <span>
+                      {moment(el.updatedAt).format("DD-MM-YYYY HH:mm:ss")}
+                    </span>
+                  </td>
                   <td className="flex gap-2 capitalize text-blue-500">
                     <span
                       title="Sửa sản phẩm"
                       className="hover:underline cursor-pointer text-lg text-yellow-500"
+                      onClick={() => setEditElm(el)}
                     >
                       <LuEdit />
                     </span>

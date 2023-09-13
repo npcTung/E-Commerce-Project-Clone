@@ -21,7 +21,6 @@ var productSchema = new mongoose.Schema(
     },
     brand: {
       type: String,
-      required: true,
     },
     thumb: {
       type: String,

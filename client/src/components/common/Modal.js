@@ -9,7 +9,7 @@ const Modal = ({ children }) => {
       onClick={() =>
         dispatch(showModal({ isShowModal: false, modalChildren: null }))
       }
-      className="fixed inset-0 bg-[rgba(0,0,0,0.6)] z-20 flex justify-center items-center"
+      className="fixed inset-0 bg-[rgba(0,0,0,0.6)] z-50 flex justify-center items-center"
     >
       {children}
     </div>

@@ -27,8 +27,8 @@ const Pagination = ({ totalCount }) => {
         <span className="text-sm italic">{`Hiển thị sản phẩm từ ${range()} trên ${totalCount} sản phẩm`}</span>
       ) : null}
       <div className="flex items-center gap-2">
-        {pagination?.map((el) => (
-          <PagiItem key={el} value={el} />
+        {pagination?.map((el, idx) => (
+          <PagiItem key={idx} value={el} />
         ))}
       </div>
     </div>

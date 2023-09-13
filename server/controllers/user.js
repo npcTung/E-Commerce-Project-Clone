@@ -35,7 +35,7 @@ const register = asyncHandler(async (req, res) => {
     if (newUser) {
       const html = `
       <div>
-        <img src="https://res.cloudinary.com/dctujuta4/image/upload/v1692084756/cua-hang-dien-tu/logo_yunusj.png" alt='logo' />
+        <img src="https://res.cloudinary.com/npctungadmin/image/upload/v1692084756/cua-hang-dien-tu/logo_yunusj.png" alt='logo' />
         <p>Chào bạn</p> <br />
         <p>
           <span>bạn đang tiến hành đăng ký, mã xác nhận của bạn là: 
@@ -118,7 +118,7 @@ const login = asyncHandler(async (req, res) => {
       userData,
     });
   } else {
-    throw new Error("Invalid credentials!");
+    throw new Error("Thông tin không hợp lệ!");
   }
 });
 
@@ -181,7 +181,21 @@ const forgotPassword = asyncHandler(async (req, res) => {
   if (!user) throw new Error("User not found");
   const resetToken = user.createPasswordChangeToken();
   await user.save();
-  const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. <a href=${process.env.CLIENT_URL}/reset-password/${resetToken}>Bấn vào đây</a>`;
+  const html = `
+      <div>
+        <img src="https://res.cloudinary.com/npctungadmin/image/upload/v1692084756/cua-hang-dien-tu/logo_yunusj.png" alt='logo' />
+        <p>Chào bạn</p> <br />
+        <p>
+          Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. 
+            <a href=${process.env.CLIENT_URL}/reset-password/${resetToken}>Bấn vào đây</a>
+        </p>
+        <p>Vui lòng hoàn thành xác nhận trong vòng 5 phút.</p>
+        <p>Digital World</p>
+        <h5>
+          <span style="color:rgb(119,119,119);font-size:13px">Đây là thư từ hệ thống, vui lòng không trả lời thư.</span>
+        </h5>
+      </div>
+      `;
   const data = {
     email,
     html,

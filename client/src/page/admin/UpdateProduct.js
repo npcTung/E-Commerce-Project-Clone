@@ -1,37 +1,56 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, InputForm, Select, MarkDownEditer, Loading } from "components";
+import { Button, InputForm, Loading, MarkDownEditer, Select } from "components";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { validate, getBase64 } from "ultils/helpers";
-import { toast } from "react-toastify";
 import icons from "ultils/icons";
-import * as apis from "apis";
+import { getBase64, validate } from "ultils/helpers";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
-import path from "ultils/path";
+import * as apis from "apis";
 import { showModal } from "store/app/appSlice";
 
 const { FaUpload } = icons;
 
-const CreateProduct = () => {
-  const navigate = useNavigate();
+const UpdateProduct = ({ productData, render, setProductData }) => {
   const dispatch = useDispatch();
-  const { categories } = useSelector((state) => state.app);
   const [invalidFields, setInvalidFields] = useState([]);
   const [payload, setPayload] = useState({ description: "" });
   const [preview, setPreview] = useState({ thumb: null, images: [] });
+  const [styles, setStyles] = useState("");
+  const { categories } = useSelector((state) => state.app);
   const {
+    handleSubmit,
     register,
     formState: { errors },
     reset,
-    handleSubmit,
     watch,
   } = useForm();
-  // RESER DATA
-  const resetData = () => {
-    reset();
-    setPayload({ description: "" });
-    setPreview({ thumb: null, images: [] });
+  // UPDATE PRODUCT
+  const handleUpdateProduct = async (data) => {
+    const invalids = validate(payload, setInvalidFields);
+    if (invalids === 0) {
+      const finalPayload = { ...data, ...payload };
+      finalPayload.thumb =
+        data?.thumb.length === 0 ? preview.thumb : data.thumb[0];
+      const formData = new FormData();
+      for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1]);
+      finalPayload.images =
+        data.images?.length === 0 ? preview.images : data.images;
+      for (let image of finalPayload.images) formData.append("images", image);
+      dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
+      const response = await apis.apiUpdateProduct(formData, productData._id);
+      dispatch(showModal({ isShowModal: false, modalChildren: null }));
+      if (response.success)
+        Swal.fire(
+          "Thành công",
+          `Cập nhật sản phẩm '${response.updatedProduct.title}' thành công`,
+          "success"
+        ).then(() => {
+          setProductData(null);
+          render();
+        });
+      else toast.error("Lỗi! Có chuyện gì đó đã xảy ra", { theme: "colored" });
+    }
   };
   // MÔ TẢ
   const changeValue = useCallback(
@@ -40,44 +59,6 @@ const CreateProduct = () => {
     },
     [payload]
   );
-  // TẠO SẢN PHẨM MỚI
-  const handleCreateProduct = async (data) => {
-    const invalids = validate(payload, setInvalidFields);
-    if (invalids === 0) {
-      if (data.category)
-        data.category = categories?.find(
-          (el) => el._id === data.category
-        )?.title;
-      const finalPayload = { ...data, ...payload };
-      const formData = new FormData();
-      for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1]);
-      if (finalPayload.thumb) formData.append("thumb", finalPayload.thumb[0]);
-      if (finalPayload.images)
-        for (let image of finalPayload.images) formData.append("images", image);
-      dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
-      const response = await apis.apiCreateProduct(formData);
-      dispatch(showModal({ isShowModal: false, modalChildren: null }));
-      if (response.success)
-        Swal.fire("Success", "Thêm sản phẩm thành công!!!", "success").then(
-          () => {
-            resetData();
-            Swal.fire({
-              text: `Bạn có muốn thêm sản phẩm tiếp`,
-              showCancelButton: true,
-              cancelButtonColor: "#ee3131",
-              cancelButtonText: "không",
-              confirmButtonText: "có",
-              confirmButtonColor: "#2563EB",
-              title: "Oops!",
-            }).then((rs) => {
-              if (!rs.isConfirmed)
-                navigate(`/${path.ADMIN}/${path.MANAGER_PRODUCT}`);
-            });
-          }
-        );
-      else toast.error(response.mes, { theme: "colored" });
-    }
-  };
   // ẢNH ĐẠI DIỆN CỦA SẢN PHẨM
   const handlePreviewThumb = async (file) => {
     if (
@@ -105,7 +86,7 @@ const CreateProduct = () => {
         file.type !== "image/jpeg"
       ) {
         toast.warning(
-          "Định dạng ảnh sai\nChỉ nhận định dạng file có đuôi .png hoặc .jpg",
+          "Định dạng ảnh sai chỉ nhận định dạng file có đuôi .png hoặc .jpg",
           { theme: "colored" }
         );
         return;
@@ -117,26 +98,62 @@ const CreateProduct = () => {
     if (imagesPreview.length > 0)
       setPreview((prev) => ({ ...prev, images: imagesPreview }));
   };
-
+  // LẤY DỮ LIỆU VÀ RENDER
   useEffect(() => {
-    if (watch("thumb").length > 0) handlePreviewThumb(watch("thumb")[0]);
+    reset({
+      price: productData?.price || "",
+      color: productData?.color?.toLowerCase() || "",
+      title: productData?.title?.toLowerCase() || "",
+      category: productData?.category || "",
+      brand: productData?.brand?.toLowerCase() || "",
+    });
+    setPayload({
+      description:
+        typeof productData?.description === "object"
+          ? productData?.description.join(", ")
+          : productData?.description,
+    });
+    setPreview({
+      images: productData?.images || [],
+      thumb: productData?.thumb || "",
+    });
+  }, [productData]);
+  // RENDER THUMB
+  useEffect(() => {
+    if (watch("thumb") instanceof FileList && watch("thumb").length > 0)
+      handlePreviewThumb(watch("thumb")[0]);
   }, [watch("thumb")]);
-
+  // RENDER IMAGES
   useEffect(() => {
-    if (watch("images").length > 0) handlePreviewImages(watch("images"));
+    if (watch("images") instanceof FileList && watch("images").length > 0)
+      handlePreviewImages(watch("images"));
   }, [watch("images")]);
+  // CHECK EDIT
+  useEffect(() => {
+    if (
+      watch() &&
+      (watch("title") === productData?.title?.toLowerCase() || "") &&
+      (watch("price") === productData?.price || "") &&
+      (watch("color") === productData?.color?.toLowerCase() || "") &&
+      (watch("category") === productData?.category || "") &&
+      (watch("brand") === productData?.brand?.toLowerCase() || "") &&
+      watch("thumb") instanceof FileList &&
+      watch("thumb")?.length === 0 &&
+      watch("images") instanceof FileList &&
+      watch("images")?.length === 0
+    )
+      setStyles("btn-disabled");
+    else setStyles("");
+  }, [watch(), productData]);
 
   return (
-    <div className="w-full">
-      <div className="h-[115px]"></div>
-      <div className="fixed z-10 bg-gray-50 top-0 w-full">
-        <h1 className="flex justify-between items-center text-3xl font-semibold border-b border-gray-300 px-[30px] py-[39px]">
-          <span className="uppercase">tạo sản phẩm mới</span>
-        </h1>
-      </div>
-      <div className="w-full py-4 px-10">
+    <div className="w-full h-[90%]">
+      <h1 className="flex justify-between items-center text-3xl font-semibold border-b border-dashed border-gray-300 px-[30px] pb-[39px]">
+        <span>{`Sửa sản phẩm '${productData.title.toLowerCase()}'`}</span>
+      </h1>
+      <div className="w-full h-[90%] py-4 px-10 overflow-y-scroll">
         <form
-          onSubmit={handleSubmit(handleCreateProduct)}
+          onSubmit={handleSubmit(handleUpdateProduct)}
           className="flex flex-col gap-5 w-full"
         >
           <InputForm
@@ -162,17 +179,6 @@ const CreateProduct = () => {
               type={"number"}
             />
             <InputForm
-              label={"Số lượng sản phẩm"}
-              register={register}
-              errors={errors}
-              id={"quantity"}
-              validate={{ required: "Điền thông tin bắt buộc." }}
-              wf
-              placeholder={"Nhập số lượng sản phẩm..."}
-              classInput={"input-bordered"}
-              type={"number"}
-            />
-            <InputForm
               label={"Màu sản phẩm"}
               register={register}
               errors={errors}
@@ -190,7 +196,7 @@ const CreateProduct = () => {
               register={register}
               errors={errors}
               options={categories?.map((el) => ({
-                code: el._id,
+                code: el.title,
                 value: el.title,
               }))}
               wf
@@ -203,8 +209,8 @@ const CreateProduct = () => {
               register={register}
               errors={errors}
               options={categories
-                ?.find((el) => el._id === watch("category"))
-                ?.brand?.map((el) => ({ code: el, value: el }))}
+                ?.find((el) => el.title === watch("category"))
+                ?.brand?.map((el) => ({ code: el.toLowerCase(), value: el }))}
               wf
               classSelect={"select-bordered bg-gray-100"}
             />
@@ -215,6 +221,7 @@ const CreateProduct = () => {
             label={"Miêu tả"}
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
+            value={payload.description}
           />
           <div className="w-full flex flex-col gap-2">
             <span className="lable label-text opacity-70">
@@ -228,12 +235,7 @@ const CreateProduct = () => {
                 <FaUpload size={40} />
                 <span>Thêm ảnh</span>
               </label>
-              <input
-                type="file"
-                id="thumb"
-                {...register("thumb", { required: "Điền thông tin bắt buộc." })}
-                hidden
-              />
+              <input type="file" id="thumb" {...register("thumb")} hidden />
             </div>
             {errors["thumb"] && (
               <small className="text-xs pl-2 pt-1 text-red-500">
@@ -242,7 +244,7 @@ const CreateProduct = () => {
             )}
           </div>
           {preview?.thumb && (
-            <div className="w-1/4 h-[300px]">
+            <div className="w-1/4 h-[300px] border border-gray-500">
               <img
                 src={preview.thumb}
                 alt="preview"
@@ -266,9 +268,7 @@ const CreateProduct = () => {
                 type="file"
                 id="images"
                 multiple
-                {...register("images", {
-                  required: "Điền thông tin bắt buộc.",
-                })}
+                {...register("images")}
                 hidden
               />
               {errors["images"] && (
@@ -287,8 +287,8 @@ const CreateProduct = () => {
                 >
                   <img
                     key={idx}
-                    src={el.path}
-                    alt={el.name}
+                    src={typeof el === "object" ? el.path : el}
+                    alt={productData?.title}
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -296,10 +296,10 @@ const CreateProduct = () => {
             </div>
           )}
           <Button
-            name={"Tạo sản phẩm mới"}
+            name={"Sửa sản phẩm"}
             wf
             type={"submit"}
-            styles={`mt-5`}
+            styles={`mt-5 ${styles}`}
           />
         </form>
       </div>
@@ -307,4 +307,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default UpdateProduct;

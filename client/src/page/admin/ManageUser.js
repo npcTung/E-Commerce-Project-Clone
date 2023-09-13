@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import * as apis from "apis";
 import {
   createSearchParams,
+  useLocation,
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
@@ -15,7 +16,6 @@ import Swal from "sweetalert2";
 import NoUser from "assets/no-person.png";
 import { roles } from "ultils/contants";
 import { toast } from "react-toastify";
-import path from "ultils/path";
 
 const {
   LuEdit,
@@ -27,6 +27,7 @@ const {
 
 const ManageUser = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [users, setUsers] = useState(null);
   const [queries, setQueries] = useState({ q: "" });
   const [editElm, setEditElm] = useState(null);
@@ -34,7 +35,7 @@ const ManageUser = () => {
   const [styles, setStyles] = useState("");
   const [sort, setSort] = useState(null);
   const [params] = useSearchParams();
-  const queriesDebounce = useDebounce(queries.q, 1000);
+  const queriesDebounce = useDebounce(queries.q, 800);
   const {
     handleSubmit,
     register,
@@ -101,7 +102,7 @@ const ManageUser = () => {
   const render = useCallback(() => {
     setUpdate(!update);
   }, [update]);
-
+  // RENDER CLIENT
   useEffect(() => {
     if (editElm)
       reset({
@@ -112,28 +113,27 @@ const ManageUser = () => {
         phone: editElm?.phone,
         isBlocked: editElm?.isBlocked,
       });
-  }, [editElm, reset]);
-  // NAVIGATE SORT
+  }, [editElm]);
+  // SORT USERS TO NAVIGATE
+  useEffect(() => {
+    if (queriesDebounce)
+      navigate({
+        pathname: location.pathname,
+        search: createSearchParams({ q: queriesDebounce }).toString(),
+      });
+    else
+      navigate({
+        pathname: location.pathname,
+      });
+  }, [queriesDebounce]);
+  // RENDER USERS
   useEffect(() => {
     const queries = Object.fromEntries([...params]);
-    if (sort) {
-      queries.sort = sort;
-      delete queries.page;
-    } else delete queries.sort;
-    navigate({
-      pathname: `/${path.ADMIN}/${path.MANAGER_USER}`,
-      search: createSearchParams(queries).toString(),
-    });
-  }, [sort]);
-  // SORT PRODUCT
-
-  useEffect(() => {
-    const queries = Object.fromEntries([...params]);
-    if (queriesDebounce) queries.q = queriesDebounce;
+    if (sort) queries.sort = sort;
     fetchUsers(queries);
     window.scrollTo(0, 0);
-  }, [queriesDebounce, params, update]);
-
+  }, [params, update, sort]);
+  // CHECK EDIT
   useEffect(() => {
     if (
       watch() &&
@@ -152,7 +152,7 @@ const ManageUser = () => {
     <div className="w-full">
       {/* UPDATE USER */}
       {editElm && (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] z-10 flex items-center justify-center">
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] z-20 flex items-center justify-center">
           <div className="bg-white flex flex-col gap-4 p-4 items-center justify-center rounded-md relative animate-scale-in-center">
             <span
               onClick={() => setEditElm(null)}
@@ -177,36 +177,48 @@ const ManageUser = () => {
           <span className="uppercase">Quản lý tài khoản người dùng</span>
         </h1>
       </div>
-
       <div className="w-full py-4 px-10">
         <div className="flex justify-between py-4">
           <div className="flex items-center justify-center text-2xl">
-            {(!sort || sort === "createdAt") && (
-              <span
-                className="cursor-pointer"
-                onClick={() => setSort("-createdAt")}
-              >
-                <FaArrowDownShortWide />
-              </span>
+            {users?.usersData.length > 0 && (
+              <>
+                {(!sort || sort === "createdAt") && (
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => setSort("-createdAt")}
+                  >
+                    <FaArrowDownShortWide />
+                  </span>
+                )}
+                {sort === "-createdAt" && (
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => setSort("createdAt")}
+                  >
+                    <FaArrowUpWideShort />
+                  </span>
+                )}
+              </>
             )}
-            {sort === "-createdAt" && (
+          </div>
+          <div className="w-2/5 relative">
+            <InputField
+              value={queries.q}
+              nameKey={"q"}
+              setValue={setQueries}
+              placeholder={"Tìm kiếm theo tên hoặc email người dùng..."}
+              classInput={"input-bordered pr-7"}
+              isShowLable
+            />
+            {queries.q.length > 0 && (
               <span
-                className="cursor-pointer"
-                onClick={() => setSort("createdAt")}
+                className="absolute top-3 right-1 text-2xl cursor-pointer"
+                onClick={() => setQueries({ q: "" })}
               >
-                <FaArrowUpWideShort />
+                <IoMdClose />
               </span>
             )}
           </div>
-          <InputField
-            value={queries.q}
-            nameKey={"q"}
-            setValue={setQueries}
-            placeholder={"Tìm kiếm theo tên hoặc email người dùng..."}
-            classInput={"input-bordered"}
-            classDiv={"w-2/5"}
-            isShowLable
-          />
         </div>
         {users?.usersData.length > 0 && (
           <table className="table table-zebra mb-5 bg-slate-200">
@@ -226,8 +238,12 @@ const ManageUser = () => {
             <tbody>
               {users?.usersData?.map((el, idx) => (
                 <tr key={el._id}>
-                  <td>{idx + 1}</td>
-                  <td>{el.email}</td>
+                  <td>
+                    <span>{idx + 1}</span>
+                  </td>
+                  <td>
+                    <span className="line-clamp-1">{el.email}</span>
+                  </td>
                   <td className="flex gap-2 items-center">
                     <img
                       src={el.avatar || Avatar}
@@ -236,10 +252,12 @@ const ManageUser = () => {
                         el.isBlocked ? "border-red-500" : "border-green-500"
                       }`}
                     />
-                    {`${el.firstName} ${el.lastName}`}
+                    <span className="line-clamp-1">{`${el.firstName} ${el.lastName}`}</span>
                   </td>
                   <td>
-                    {roles?.find((role) => +role.code === +el.role)?.value}
+                    <span>
+                      {roles?.find((role) => +role.code === +el.role)?.value}
+                    </span>
                   </td>
                   <td>{el.phone}</td>
                   <td
@@ -249,10 +267,18 @@ const ManageUser = () => {
                         : "w-[87px] text-green-500"
                     }`}
                   >
-                    {el.isBlocked ? "Blocked" : "Active"}
+                    <span>{el.isBlocked ? "Blocked" : "Active"}</span>
                   </td>
-                  <td>{moment(el.createdAt).format("DD-MM-YYYY HH:mm:ss")}</td>
-                  <td>{moment(el.updatedAt).format("DD-MM-YYYY HH:mm:ss")}</td>
+                  <td>
+                    <span>
+                      {moment(el.createdAt).format("DD-MM-YYYY HH:mm:ss")}
+                    </span>
+                  </td>
+                  <td>
+                    <span>
+                      {moment(el.updatedAt).format("DD-MM-YYYY HH:mm:ss")}
+                    </span>
+                  </td>
                   <td className="flex gap-2 capitalize text-blue-500">
                     <span
                       onClick={() => setEditElm(el)}
