@@ -60,6 +60,16 @@ var productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    varriants: [
+      {
+        color: String,
+        price: Number,
+        thumb: String,
+        images: Array,
+        quantity: { type: Number, default: 0 },
+        sold: { type: Number, default: 0 },
+      },
+    ],
   },
   {
     timestamps: true,

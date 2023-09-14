@@ -34,6 +34,25 @@ const DetailProduct = () => {
   const [quantity, setQuantity] = useState(1);
   const [imageBig, setImageBig] = useState("");
   const [update, setUpdate] = useState(false);
+  const [varriant, setVarriant] = useState(null);
+  const [currentProduct, setCurrentProduct] = useState({
+    thumb: "",
+    images: [],
+    price: null,
+    quantity: null,
+    sold: null,
+    color: "",
+  });
+  // RESET VARRIANT
+  const resetVarriant = () =>
+    setCurrentProduct({
+      thumb: "",
+      images: [],
+      price: 0,
+      quantity: 0,
+      sold: 0,
+      color: "",
+    });
   // PRODUCT DETAIL
   const fetchProductData = async () => {
     const response = await apis.apiGetProduct(pid);
@@ -55,10 +74,17 @@ const DetailProduct = () => {
   // CHARGE QUANTITY
   const handaleChargeQuantity = useCallback(
     (flag) => {
-      if (flag === "minus" && quantity === 1) return;
-      else if (flag === "plus" && quantity >= productData?.quantity) return;
-      else if (flag === "minus") setQuantity((prev) => +prev - 1);
-      else if (flag === "plus") setQuantity((prev) => +prev + 1);
+      if (
+        (varriant && currentProduct.quantity === 0) ||
+        productData?.quantity === 0
+      )
+        return;
+      else {
+        if (flag === "minus" && quantity === 1) return;
+        else if (flag === "plus" && quantity >= productData?.quantity) return;
+        else if (flag === "minus") setQuantity((prev) => +prev - 1);
+        else if (flag === "plus") setQuantity((prev) => +prev + 1);
+      }
     },
     [quantity]
   );
@@ -83,6 +109,28 @@ const DetailProduct = () => {
   useEffect(() => {
     if (pid) fetchProductData();
   }, [update]);
+  // RENDER CURRENT PRODUCT VARRIANT
+  useEffect(() => {
+    if (varriant) {
+      setCurrentProduct({
+        thumb: productData?.varriants?.find((el) => el._id === varriant)?.thumb,
+        color: productData?.varriants?.find((el) => el._id === varriant)?.color,
+        images: productData?.varriants?.find((el) => el._id === varriant)
+          ?.images,
+        price: productData?.varriants?.find((el) => el._id === varriant)?.price,
+        quantity: productData?.varriants?.find((el) => el._id === varriant)
+          ?.quantity,
+        sold: productData?.varriants?.find((el) => el._id === varriant)?.sold,
+      });
+      setImageBig(
+        productData?.varriants?.find((el) => el._id === varriant)?.thumb ||
+          productData?.thumb
+      );
+    } else {
+      resetVarriant();
+      setImageBig(productData?.thumb);
+    }
+  }, [varriant]);
 
   return (
     <div className="w-full">
@@ -102,10 +150,10 @@ const DetailProduct = () => {
                 smallImage: {
                   alt: productData?.title,
                   isFluidWidth: true,
-                  src: imageBig || productData?.thumb,
+                  src: imageBig || currentProduct.thumb || productData?.thumb,
                 },
                 largeImage: {
-                  src: imageBig || productData?.thumb,
+                  src: imageBig || currentProduct.thumb || productData?.thumb,
                   width: 1000,
                   height: 1000,
                 },
@@ -117,27 +165,43 @@ const DetailProduct = () => {
               <Slider className="image-slider" {...settings}>
                 <div
                   className="w-full px-2 cursor-pointer"
-                  onClick={() => setImageBig(productData?.thumb)}
+                  onClick={() =>
+                    setImageBig(currentProduct.thumb || productData?.thumb)
+                  }
                 >
                   <img
-                    src={productData?.thumb || NoImg}
+                    src={currentProduct.thumb || productData?.thumb || NoImg}
                     alt={productData?.title}
                     className="w-[143px] h-[143px] object-contain border p-2"
                   />
                 </div>
-                {productData?.images?.map((el, index) => (
-                  <div
-                    key={index}
-                    className="w-full px-2 cursor-pointer"
-                    onClick={() => setImageBig(el)}
-                  >
-                    <img
-                      src={el}
-                      alt={productData?.title}
-                      className="w-[143px] h-[143px] object-contain border p-2"
-                    />
-                  </div>
-                ))}
+                {!varriant
+                  ? productData?.images?.map((el, index) => (
+                      <div
+                        key={index}
+                        className="w-full px-2 cursor-pointer"
+                        onClick={() => setImageBig(el)}
+                      >
+                        <img
+                          src={el}
+                          alt={productData?.title}
+                          className="w-[143px] h-[143px] object-contain border p-2"
+                        />
+                      </div>
+                    ))
+                  : currentProduct?.images?.map((el) => (
+                      <div
+                        key={varriant}
+                        className="w-full px-2 cursor-pointer"
+                        onClick={() => setImageBig(el)}
+                      >
+                        <img
+                          src={el}
+                          alt={productData?.title}
+                          className="w-[143px] h-[143px] object-contain border p-2"
+                        />
+                      </div>
+                    ))}
               </Slider>
             </div>
           )}
@@ -145,11 +209,15 @@ const DetailProduct = () => {
         <div className="w-[40%] flex flex-col gap-5 px-5">
           <div className="flex items-center justify-between">
             <h1 className="text-4xl font-semibold">{`${formatMoney(
-              productData?.price
+              currentProduct.price || productData?.price
             )} VND `}</h1>
             <span className="flex flex-col items-end">
-              <span className="text-sm text-red-400">{`Kho: ${productData?.quantity}`}</span>
-              <span className="text-sm text-red-400">{`Đã bán: ${productData?.sold}`}</span>
+              <span className="text-sm text-red-400">{`Kho: ${
+                varriant ? currentProduct?.quantity : productData?.quantity
+              }`}</span>
+              <span className="text-sm text-red-400">{`Đã bán: ${
+                varriant ? currentProduct?.sold : productData?.sold
+              }`}</span>
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -178,19 +246,59 @@ const DetailProduct = () => {
             />
           )}
           <div className="flex flex-col gap-4">
-            <span className="font-medium">Internal</span>
-            <span className="font-medium">Color</span>
-            <span className="font-medium">Ram</span>
+            {productData?.color?.length > 0 && (
+              <div className="flex justify-start gap-4">
+                <span className="font-medium">Color: </span>
+                <span
+                  onClick={() => {
+                    setVarriant(null);
+                    setQuantity(1);
+                  }}
+                  className={`p-2 border ${
+                    !varriant ? "border-main text-main" : "border-gray-500"
+                  } cursor-pointer uppercase`}
+                >
+                  {productData?.color}
+                </span>
+                {productData?.varriants?.map((el) => (
+                  <span
+                    key={el._id}
+                    onClick={() => {
+                      setVarriant(el._id);
+                      setQuantity(1);
+                    }}
+                    className={`p-2 border ${
+                      varriant === el._id
+                        ? "border-main text-main"
+                        : "border-gray-500"
+                    } cursor-pointer uppercase`}
+                  >
+                    {el.color}
+                  </span>
+                ))}
+              </div>
+            )}
             <div className="flex items-center gap-5">
-              <span className="font-medium">Quantity</span>
+              <span className="font-medium">Quantity:</span>
               <SelectQuantity
                 quantity={quantity}
                 handaleQuantity={handaleQuantity}
                 handaleChargeQuantity={handaleChargeQuantity}
+                quantityProduct={
+                  varriant ? currentProduct.quantity : productData?.quantity
+                }
               />
             </div>
           </div>
-          <Button wf name={"add to cart"} />
+          <Button
+            wf
+            name={"add to cart"}
+            styles={
+              ((varriant && currentProduct.quantity === 0) ||
+                productData?.quantity === 0) &&
+              "btn-disabled"
+            }
+          />
           <div className="flex gap-3">
             <span className="text-xl p-2 rounded-full bg-black text-white hover:opacity-60 transition-all cursor-pointer">
               <BiLogoFacebook />

@@ -46,8 +46,9 @@ const UpdateProduct = ({ productData, render, setProductData }) => {
           `Cập nhật sản phẩm '${response.updatedProduct.title}' thành công`,
           "success"
         ).then(() => {
-          setProductData(null);
           render();
+          setProductData(null);
+          setPreview({ thumb: "", images: [] });
         });
       else toast.error("Lỗi! Có chuyện gì đó đã xảy ra", { theme: "colored" });
     }
@@ -168,7 +169,7 @@ const UpdateProduct = ({ productData, render, setProductData }) => {
           />
           <div className="flex gap-4 w-full">
             <InputForm
-              label={"Giá sản phẩm"}
+              label={"Giá sản phẩm(VND)"}
               register={register}
               errors={errors}
               id={"price"}

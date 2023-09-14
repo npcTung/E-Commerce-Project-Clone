@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { InputForm, Pagination } from "components";
+import { CustomizeVarriants, InputForm, Pagination } from "components";
 import * as apis from "apis";
 import icons from "ultils/icons";
 import moment from "moment";
@@ -23,6 +23,7 @@ const {
   FaArrowDownShortWide,
   FaArrowUpWideShort,
   IoMdClose,
+  BiCustomize,
 } = icons;
 
 const ManageProduct = () => {
@@ -32,6 +33,7 @@ const ManageProduct = () => {
   const [product, setProduct] = useState(null);
   const [editElm, setEditElm] = useState(null);
   const [update, setUpdate] = useState(false);
+  const [customizeVarriants, setCustomizeVarriants] = useState(null);
   const [sort, setSort] = useState(null);
   const {
     register,
@@ -101,6 +103,7 @@ const ManageProduct = () => {
   return (
     <div className="w-full">
       <div className="h-[115px]"></div>
+      {/* UPDATE PRODUCT */}
       {editElm && (
         <div className="fixed inset-0 bg-[rgba(0,0,0,0.6)] z-20 flex justify-center items-center">
           <div className="w-[70%] h-[90%] bg-white flex flex-col gap-4 p-4 items-center justify-center rounded-md relative animate-scale-in-center">
@@ -114,6 +117,24 @@ const ManageProduct = () => {
               productData={editElm}
               render={render}
               setProductData={setEditElm}
+            />
+          </div>
+        </div>
+      )}
+      {/* CUSTOMIZE VARRIANTS */}
+      {customizeVarriants && (
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.6)] z-20 flex justify-center items-center">
+          <div className="w-[70%] h-[90%] bg-white flex flex-col gap-4 p-4 items-center justify-center rounded-md relative animate-scale-in-center">
+            <span
+              onClick={() => setCustomizeVarriants(null)}
+              className="absolute top-1 right-1 text-2xl cursor-pointer"
+            >
+              <IoMdClose />
+            </span>
+            <CustomizeVarriants
+              customizeVarriants={customizeVarriants}
+              render={render}
+              setCustomizeVarriants={setCustomizeVarriants}
             />
           </div>
         </div>
@@ -179,6 +200,7 @@ const ManageProduct = () => {
                 <th>Quantity</th>
                 <th>Sold</th>
                 <th>Rating</th>
+                <th>Varriants</th>
                 <th>Created At</th>
                 <th>Updated At</th>
                 <th>Actions</th>
@@ -225,6 +247,9 @@ const ManageProduct = () => {
                     <span>{el.totalRatings}</span>
                   </td>
                   <td>
+                    <span>{el.varriants.length}</span>
+                  </td>
+                  <td>
                     <span>
                       {moment(el.createdAt).format("DD-MM-YYYY HH:mm:ss")}
                     </span>
@@ -248,6 +273,13 @@ const ManageProduct = () => {
                       onClick={() => handleDelete(el)}
                     >
                       <RiDeleteBin6Line />
+                    </span>
+                    <span
+                      className="hover:underline cursor-pointer text-lg text-blue-500"
+                      title="Biến thể"
+                      onClick={() => setCustomizeVarriants(el)}
+                    >
+                      <BiCustomize />
                     </span>
                   </td>
                 </tr>

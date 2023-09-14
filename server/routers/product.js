@@ -23,6 +23,15 @@ router.put(
 );
 router.get("/:pid", productController.getProduct);
 router.put(
+  "/varriant/:pid",
+  [verifyAccessToken, isAdmin],
+  uploader.fields([
+    { name: "images", maxCount: 30 },
+    { name: "thumb", maxCount: 1 },
+  ]),
+  productController.addVarriant
+);
+router.put(
   "/:pid",
   [verifyAccessToken, isAdmin],
   uploader.fields([

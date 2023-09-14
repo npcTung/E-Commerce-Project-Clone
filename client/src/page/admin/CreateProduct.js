@@ -151,7 +151,7 @@ const CreateProduct = () => {
           />
           <div className="flex gap-4 w-full">
             <InputForm
-              label={"Giá sản phẩm"}
+              label={"Giá sản phẩm(VND)"}
               register={register}
               errors={errors}
               id={"price"}

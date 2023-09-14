@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import icons from "ultils/icons";
 import { createSlug } from "ultils/helpers";
 import { useSelector } from "react-redux";
+import { siderBar } from "ultils/contants";
 
 const { FaList } = icons;
 
@@ -20,9 +21,18 @@ const Sidebar = () => {
           to={createSlug(el.title)}
           className="capitalize p-3 flex items-center gap-2 item"
         >
-          <span className="hover:text-main transition-all w-full flex gap-1">
-            <span>{el.title}</span>
-            {el.brand.length > 0 && <span>{`(${el.brand.length})`}</span>}
+          <span className="flex gap-3 items-center">
+            {siderBar
+              .filter((els) => els.title === el.title)
+              ?.map((elsx) => (
+                <span className="text-xl" key={elsx.id}>
+                  {elsx.icons}
+                </span>
+              ))}
+            <span className="hover:text-main transition-all w-full">
+              <span>{el.title}</span>
+              {el.brand.length > 0 && <span>{`(${el.brand.length})`}</span>}
+            </span>
           </span>
         </Link>
       ))}

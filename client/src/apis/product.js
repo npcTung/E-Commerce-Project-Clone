@@ -39,3 +39,10 @@ export const apiUpdateProduct = (data, pid) =>
     method: "put",
     data,
   });
+
+export const apiAddVarriant = (data, pid) =>
+  axiosConfig({
+    url: "/product/varriant/" + pid,
+    method: "put",
+    data,
+  });

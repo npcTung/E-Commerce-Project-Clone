@@ -35,6 +35,7 @@ export { default as ProductCard } from "./products/ProductCard";
 export { default as NewArrivals } from "./products/NewArrivals";
 export { default as HotCollection } from "./products/HotCollection";
 export { default as ProductInfomation } from "./products/ProductInfomation";
+export { default as CustomizeVarriants } from "./products/CustomizeVarriants";
 // SEARCH
 export { default as SelectOption } from "./search/SelectOption";
 export { default as SearchItem } from "./search/SearchItem";

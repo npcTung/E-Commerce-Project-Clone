@@ -15,7 +15,16 @@ const {
   TbBrandProducthunt,
   RiBillLine,
   MdOutlineCreate,
+  GiSmartphone,
+  AiOutlineLaptop,
+  SlEarphones,
+  LiaCameraRetroSolid,
+  SlScreenDesktop,
+  CiSpeaker,
+  TfiPrinter,
+  TfiTablet,
 } = icons;
+
 // NAVIGATION
 export const navigation = [
   {
@@ -270,5 +279,48 @@ export const blockStatus = [
   {
     code: false,
     value: "Active",
+  },
+];
+// SIDER BAR
+export const siderBar = [
+  {
+    id: 1,
+    title: "Smartphone",
+    icons: <GiSmartphone />,
+  },
+  {
+    id: 2,
+    title: "Laptop",
+    icons: <AiOutlineLaptop />,
+  },
+  {
+    id: 3,
+    title: "Accessories",
+    icons: <SlEarphones />,
+  },
+  {
+    id: 4,
+    title: "Camera",
+    icons: <LiaCameraRetroSolid />,
+  },
+  {
+    id: 5,
+    title: "Television",
+    icons: <SlScreenDesktop />,
+  },
+  {
+    id: 6,
+    title: "Speaker",
+    icons: <CiSpeaker />,
+  },
+  {
+    id: 7,
+    title: "Printer",
+    icons: <TfiPrinter />,
+  },
+  {
+    id: 8,
+    title: "Tablet",
+    icons: <TfiTablet />,
   },
 ];

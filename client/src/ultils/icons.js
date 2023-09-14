@@ -1,6 +1,6 @@
 import { RiPhoneFill, RiBillLine, RiDeleteBin6Line } from "react-icons/ri";
 import { TbMailFilled, TbLogout, TbBrandProducthunt } from "react-icons/tb";
-import { SlHeart } from "react-icons/sl";
+import { SlHeart, SlEarphones, SlScreenDesktop } from "react-icons/sl";
 import { PiHandbagFill, PiListFill } from "react-icons/pi";
 import {
   FaUserCircle,
@@ -25,17 +25,22 @@ import {
   BiLogoFacebook,
   BiLogoPinterest,
   BiSolidInfoCircle,
+  BiCustomize,
 } from "react-icons/bi";
 import {
   AiOutlineTwitter,
   AiOutlineInstagram,
   AiOutlineGoogle,
   AiOutlineDashboard,
+  AiOutlineLaptop,
 } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
-import { GiReturnArrow } from "react-icons/gi";
+import { GiReturnArrow, GiSmartphone } from "react-icons/gi";
 import { LuEdit } from "react-icons/lu";
 import { FaArrowDownShortWide, FaArrowUpWideShort } from "react-icons/fa6";
+import { LiaCameraRetroSolid } from "react-icons/lia";
+import { CiSpeaker } from "react-icons/ci";
+import { TfiPrinter, TfiTablet } from "react-icons/tfi";
 
 const icons = {
   RiPhoneFill,
@@ -76,6 +81,15 @@ const icons = {
   FaUpload,
   FaArrowDownShortWide,
   FaArrowUpWideShort,
+  BiCustomize,
+  GiSmartphone,
+  AiOutlineLaptop,
+  SlEarphones,
+  LiaCameraRetroSolid,
+  SlScreenDesktop,
+  CiSpeaker,
+  TfiPrinter,
+  TfiTablet,
 };
 
 export default icons;

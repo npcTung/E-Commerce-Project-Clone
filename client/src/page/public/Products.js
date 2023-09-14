@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
   createSearchParams,
+  useLocation,
   useNavigate,
   useParams,
   useSearchParams,
@@ -26,6 +27,7 @@ const breakpointColumnsObj = {
 const Products = () => {
   const { category } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [product, setProduct] = useState(null);
   const [activeClick, setActiveClick] = useState(null);
   const [sort, setSort] = useState();
@@ -85,7 +87,7 @@ const Products = () => {
     const q = { ...priceQuery, ...queries };
     fetchProductsByCategory(q);
     window.scrollTo(0, 0);
-  }, [params]);
+  }, [params, location.pathname]);
 
   return (
     <div className="w-full">
