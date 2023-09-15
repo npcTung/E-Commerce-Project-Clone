@@ -4,18 +4,14 @@ import * as apis from "apis";
 import icons from "ultils/icons";
 import moment from "moment";
 import { formatMoney } from "ultils/helpers";
-import {
-  createSearchParams,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { createSearchParams, useSearchParams } from "react-router-dom";
 import NoProduct from "assets/logo-image.png";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useDebounce from "hooks/useDebounce";
 import { UpdateProduct } from "./";
+import withBase from "hocs/withBase";
 
 const {
   LuEdit,
@@ -26,10 +22,8 @@ const {
   BiCustomize,
 } = icons;
 
-const ManageProduct = () => {
+const ManageProduct = (props) => {
   const [params] = useSearchParams();
-  const navigate = useNavigate();
-  const location = useLocation();
   const [product, setProduct] = useState(null);
   const [editElm, setEditElm] = useState(null);
   const [update, setUpdate] = useState(false);
@@ -83,13 +77,13 @@ const ManageProduct = () => {
   // SORT PRODUCT TO NAVIGATE
   useEffect(() => {
     if (queryDecounce)
-      navigate({
-        pathname: location.pathname,
+      props.navigate({
+        pathname: props.location.pathname,
         search: createSearchParams({ q: queryDecounce }).toString(),
       });
     else
-      navigate({
-        pathname: location.pathname,
+      props.navigate({
+        pathname: props.location.pathname,
       });
   }, [queryDecounce]);
   // RENDER PRODUCT
@@ -305,4 +299,4 @@ const ManageProduct = () => {
   );
 };
 
-export default ManageProduct;
+export default withBase(ManageProduct);

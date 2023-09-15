@@ -20,7 +20,7 @@ import {
   ManageProduct,
   ManageUser,
 } from "page/admin";
-import { Member, Personal } from "page/member";
+import { History, Member, MyCart, Personal, WishList } from "page/member";
 import path from "ultils/path";
 import { getCategories } from "store/app/asyncActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,7 +39,7 @@ function App() {
       if (isLoggedIn) dispatch(getCurrent());
     }, 1000);
     return () => clearTimeout(setTimeoutId);
-  }, [dispatch, isLoggedIn]);
+  }, [isLoggedIn]);
 
   return (
     <div className="font-main">
@@ -73,6 +73,9 @@ function App() {
         {/* MEMBER */}
         <Route path={path.MEMBER} element={<Member />}>
           <Route path={path.PERSONAL} element={<Personal />} />
+          <Route path={path.MY_CART} element={<MyCart />} />
+          <Route path={path.HISTORY} element={<History />} />
+          <Route path={path.WISHLIST} element={<WishList />} />
         </Route>
       </Routes>
       <ToastContainer

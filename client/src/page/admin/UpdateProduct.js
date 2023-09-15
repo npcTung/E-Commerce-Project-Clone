@@ -1,27 +1,26 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, InputForm, Loading, MarkDownEditer, Select } from "components";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import icons from "ultils/icons";
 import { getBase64, validate } from "ultils/helpers";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import * as apis from "apis";
 import { showModal } from "store/app/appSlice";
+import withBase from "hocs/withBase";
 
 const { FaUpload } = icons;
 
-const UpdateProduct = ({ productData, render, setProductData }) => {
-  const dispatch = useDispatch();
+const UpdateProduct = ({ productData, render, setProductData }, props) => {
   const [invalidFields, setInvalidFields] = useState([]);
   const [payload, setPayload] = useState({ description: "" });
   const [preview, setPreview] = useState({ thumb: null, images: [] });
-  const [styles, setStyles] = useState("");
   const { categories } = useSelector((state) => state.app);
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isDirty },
     reset,
     watch,
   } = useForm();
@@ -37,9 +36,11 @@ const UpdateProduct = ({ productData, render, setProductData }) => {
       finalPayload.images =
         data.images?.length === 0 ? preview.images : data.images;
       for (let image of finalPayload.images) formData.append("images", image);
-      dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
+      props.dispatch(
+        showModal({ isShowModal: true, modalChildren: <Loading /> })
+      );
       const response = await apis.apiUpdateProduct(formData, productData._id);
-      dispatch(showModal({ isShowModal: false, modalChildren: null }));
+      props.dispatch(showModal({ isShowModal: false, modalChildren: null }));
       if (response.success)
         Swal.fire(
           "Thành công",
@@ -129,23 +130,6 @@ const UpdateProduct = ({ productData, render, setProductData }) => {
     if (watch("images") instanceof FileList && watch("images").length > 0)
       handlePreviewImages(watch("images"));
   }, [watch("images")]);
-  // CHECK EDIT
-  useEffect(() => {
-    if (
-      watch() &&
-      (watch("title") === productData?.title?.toLowerCase() || "") &&
-      (watch("price") === productData?.price || "") &&
-      (watch("color") === productData?.color?.toLowerCase() || "") &&
-      (watch("category") === productData?.category || "") &&
-      (watch("brand") === productData?.brand?.toLowerCase() || "") &&
-      watch("thumb") instanceof FileList &&
-      watch("thumb")?.length === 0 &&
-      watch("images") instanceof FileList &&
-      watch("images")?.length === 0
-    )
-      setStyles("btn-disabled");
-    else setStyles("");
-  }, [watch(), productData]);
 
   return (
     <div className="w-full h-[90%]">
@@ -300,7 +284,7 @@ const UpdateProduct = ({ productData, render, setProductData }) => {
             name={"Sửa sản phẩm"}
             wf
             type={"submit"}
-            styles={`mt-5 ${styles}`}
+            styles={`mt-5 ${!isDirty && "btn-disabled"}`}
           />
         </form>
       </div>
@@ -308,4 +292,4 @@ const UpdateProduct = ({ productData, render, setProductData }) => {
   );
 };
 
-export default UpdateProduct;
+export default withBase(UpdateProduct);

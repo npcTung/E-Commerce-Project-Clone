@@ -1,21 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, InputForm, Select, MarkDownEditer, Loading } from "components";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { validate, getBase64 } from "ultils/helpers";
 import { toast } from "react-toastify";
 import icons from "ultils/icons";
 import * as apis from "apis";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 import path from "ultils/path";
 import { showModal } from "store/app/appSlice";
+import withBase from "hocs/withBase";
 
 const { FaUpload } = icons;
 
-const CreateProduct = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+const CreateProduct = (props) => {
   const { categories } = useSelector((state) => state.app);
   const [invalidFields, setInvalidFields] = useState([]);
   const [payload, setPayload] = useState({ description: "" });
@@ -54,9 +52,11 @@ const CreateProduct = () => {
       if (finalPayload.thumb) formData.append("thumb", finalPayload.thumb[0]);
       if (finalPayload.images)
         for (let image of finalPayload.images) formData.append("images", image);
-      dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
+      props.dispatch(
+        showModal({ isShowModal: true, modalChildren: <Loading /> })
+      );
       const response = await apis.apiCreateProduct(formData);
-      dispatch(showModal({ isShowModal: false, modalChildren: null }));
+      props.dispatch(showModal({ isShowModal: false, modalChildren: null }));
       if (response.success)
         Swal.fire("Success", "Thêm sản phẩm thành công!!!", "success").then(
           () => {
@@ -71,7 +71,7 @@ const CreateProduct = () => {
               title: "Oops!",
             }).then((rs) => {
               if (!rs.isConfirmed)
-                navigate(`/${path.ADMIN}/${path.MANAGER_PRODUCT}`);
+                props.navigate(`/${path.ADMIN}/${path.MANAGER_PRODUCT}`);
             });
           }
         );
@@ -307,4 +307,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default withBase(CreateProduct);

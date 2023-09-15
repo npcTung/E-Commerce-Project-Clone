@@ -42,6 +42,7 @@ export { default as SearchItem } from "./search/SearchItem";
 // SIDEBAR
 export { default as Sidebar } from "./sidebar/Sidebar";
 export { default as AdminSidebar } from "./sidebar/AdminSidebar";
+export { default as MemberSidebar } from "./sidebar/MemberSidebar";
 // USERS
 export { default as EditUserAdmin } from "./users/EditUserAdmin";
 // VOTE

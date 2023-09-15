@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
   createSearchParams,
-  useLocation,
-  useNavigate,
   useParams,
   useSearchParams,
 } from "react-router-dom";
@@ -16,6 +14,7 @@ import {
 import * as apis from "apis";
 import Masonry from "react-masonry-css";
 import { sorts } from "ultils/contants";
+import withBase from "hocs/withBase";
 
 const breakpointColumnsObj = {
   default: 4,
@@ -24,10 +23,8 @@ const breakpointColumnsObj = {
   500: 1,
 };
 
-const Products = () => {
+const Products = (props) => {
   const { category } = useParams();
-  const navigate = useNavigate();
-  const location = useLocation();
   const [product, setProduct] = useState(null);
   const [activeClick, setActiveClick] = useState(null);
   const [sort, setSort] = useState();
@@ -59,7 +56,7 @@ const Products = () => {
       queries.sort = sort;
       delete queries.page;
     } else delete queries.sort;
-    navigate({
+    props.navigate({
       pathname: `/${category}`,
       search: createSearchParams(queries).toString(),
     });
@@ -87,7 +84,7 @@ const Products = () => {
     const q = { ...priceQuery, ...queries };
     fetchProductsByCategory(q);
     window.scrollTo(0, 0);
-  }, [params, location.pathname]);
+  }, [params, props.location.pathname]);
 
   return (
     <div className="w-full">
@@ -151,4 +148,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default withBase(Products);

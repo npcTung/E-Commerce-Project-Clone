@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { Button } from "components";
 import path from "ultils/path";
 import Logo from "assets/logo.png";
-import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import * as apis from "apis";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import withBase from "hocs/withBase";
 
-const ResetPassword = () => {
-  const navigate = useNavigate();
+const ResetPassword = (props) => {
   const { token } = useParams();
   const [password, setPassword] = useState("");
   //SUBMIT RESET PASSWORD
@@ -17,7 +16,7 @@ const ResetPassword = () => {
     const response = await apis.apiResetPassword({ password, token });
     if (response.success)
       Swal.fire("Congratulations", response.mes, "success").then(() => {
-        navigate(`/${path.HOME}`);
+        props.navigate(`/${path.HOME}`);
       });
     else toast.error(response.mes, { theme: "colored" });
   };
@@ -30,13 +29,13 @@ const ResetPassword = () => {
             alt="Logo"
             className="w-[234px] object-contain cursor-pointer"
             onClick={() => {
-              navigate(`/${path.HOME}`);
+              props.navigate(`/${path.HOME}`);
             }}
           />
           <span
             className="text-blue-500 capitalize hover:text-main transition-all cursor-pointer"
             onClick={() => {
-              navigate(`/${path.LOGIN}`);
+              props.navigate(`/${path.LOGIN}`);
             }}
           >
             quay lại trang đăng nhập
@@ -69,4 +68,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default withBase(ResetPassword);

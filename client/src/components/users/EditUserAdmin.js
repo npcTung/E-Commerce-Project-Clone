@@ -6,7 +6,7 @@ const EditUserAdmin = ({
   dataUser,
   register,
   errors,
-  styles,
+  isDirty,
   handleUpdate,
   handleSubmit,
 }) => {
@@ -102,7 +102,12 @@ const EditUserAdmin = ({
             classSelect={"select-bordered bg-gray-100"}
           />
         </div>
-        <Button wf name={"Cập nhật"} type={"submit"} styles={styles} />
+        <Button
+          wf
+          name={"Cập nhật"}
+          type={"submit"}
+          styles={!isDirty && "btn-disabled"}
+        />
       </form>
     </div>
   );

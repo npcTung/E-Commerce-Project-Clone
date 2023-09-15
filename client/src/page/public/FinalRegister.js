@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import path from "ultils/path";
 import Swal from "sweetalert2";
+import withBase from "hocs/withBase";
 
-const FinalRegister = () => {
+const FinalRegister = (props) => {
   const { status } = useParams();
-  const navigate = useNavigate();
   useEffect(() => {
     if (status === "failed")
       Swal.fire("Oops!", "Đăng ký không thành công", "error").then(() => {
-        navigate(`/${path.LOGIN}`);
+        props.navigate(`/${path.LOGIN}`);
       });
     if (status === "success")
       Swal.fire(
@@ -17,10 +17,10 @@ const FinalRegister = () => {
         "Đăng ký thành công. Hãy đăng nhập~",
         "success"
       ).then(() => {
-        navigate(`/${path.LOGIN}`);
+        props.navigate(`/${path.LOGIN}`);
       });
-  }, [navigate, status]);
+  }, [props.navigate, status]);
   return <div className="h-screen w-screen bg-gray-100"></div>;
 };
 
-export default FinalRegister;
+export default withBase(FinalRegister);

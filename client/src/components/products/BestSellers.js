@@ -13,6 +13,7 @@ const BestSellers = () => {
   const [bestSellers, setBestSellers] = useState(null);
   const [activedTab, setActivedTab] = useState(1);
   const [product, setProduct] = useState(null);
+  const [isShowOverlay, setIsShowOverlay] = useState(null);
   const dispatch = useDispatch();
   const { newProduct } = useSelector((state) => state.products);
 
@@ -51,17 +52,53 @@ const BestSellers = () => {
       <div className="mt-5 -mx-[10px]">
         <CustomSlider product={product} activedTab={activedTab} />
       </div>
-      <div className="flex justify-between mt-5 gap-5">
-        <img
-          src="https://digital-world-2.myshopify.com/cdn/shop/files/banner2-home2_2000x_crop_center.png?v=1613166657"
-          alt="Banner1"
-          className="flex-1 object-cover cursor-pointer"
-        />
-        <img
-          src="https://digital-world-2.myshopify.com/cdn/shop/files/banner1-home2_2000x_crop_center.png?v=1613166657https://digital-world-2.myshopify.com/cdn/shop/files/banner2-home2_2000x_crop_center.png?v=1613166657"
-          alt="Banner2"
-          className="flex-1 object-cover cursor-pointer"
-        />
+      <div className="mt-5 grid grid-cols-2 grid-rows-1 gap-5 cursor-pointer relative">
+        <div
+          className="col-span-1 row-span-1"
+          onMouseEnter={(e) => {
+            e.stopPropagation();
+            setIsShowOverlay("Banner1");
+          }}
+          onMouseLeave={(e) => {
+            e.stopPropagation();
+            setIsShowOverlay(null);
+          }}
+        >
+          <img
+            src="https://digital-world-2.myshopify.com/cdn/shop/files/banner2-home2_2000x_crop_center.png?v=1613166657"
+            alt="Banner1"
+            className="w-full h-full object-contain"
+          />
+          {isShowOverlay === "Banner1" && (
+            <>
+              <span className="absolute inset-0 bg-overlay20 animate-scale-up-tl"></span>
+              <span className="absolute inset-0 bg-overlay10 animate-scale-up-br"></span>
+            </>
+          )}
+        </div>
+        <div
+          className="col-span-1 row-span-1 cursor-pointer relative"
+          onMouseEnter={(e) => {
+            e.stopPropagation();
+            setIsShowOverlay("Banner2");
+          }}
+          onMouseLeave={(e) => {
+            e.stopPropagation();
+            setIsShowOverlay(null);
+          }}
+        >
+          <img
+            src="https://digital-world-2.myshopify.com/cdn/shop/files/banner1-home2_2000x_crop_center.png?v=1613166657https://digital-world-2.myshopify.com/cdn/shop/files/banner2-home2_2000x_crop_center.png?v=1613166657"
+            alt="Banner2"
+            className="w-full h-full object-contain"
+          />
+          {isShowOverlay === "Banner2" && (
+            <>
+              <span className="absolute inset-0 bg-overlay20 animate-scale-up-tl"></span>
+              <span className="absolute inset-0 bg-overlay10 animate-scale-up-br"></span>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

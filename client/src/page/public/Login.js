@@ -2,21 +2,18 @@ import React, { useCallback, useState } from "react";
 import { Button, InputField, Loading } from "components";
 import * as apis from "apis";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 import path from "ultils/path";
 import { login } from "store/user/userSlice";
-import { useDispatch } from "react-redux";
 import Logo from "assets/logo.png";
 import { toast } from "react-toastify";
 import { validate } from "ultils/helpers";
 import icons from "ultils/icons";
 import { showModal } from "store/app/appSlice";
+import withBase from "hocs/withBase";
 
 const { IoMdClose } = icons;
 
-const Login = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+const Login = (props) => {
   const [code, setCode] = useState("");
   const [isRegister, setIsRegister] = useState(false);
   const [invalidFields, setInvalidFields] = useState([]);
@@ -47,9 +44,11 @@ const Login = () => {
       : validate(data, setInvalidFields);
     if (invalids === 0) {
       if (isRegister) {
-        dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
+        props.dispatch(
+          showModal({ isShowModal: true, modalChildren: <Loading /> })
+        );
         const response = await apis.apiRegister(payLoad);
-        dispatch(showModal({ isShowModal: false, modalChildren: null }));
+        props.dispatch(showModal({ isShowModal: false, modalChildren: null }));
         if (response.success) setIsVerifiedEmail(true);
         else Swal.fire("Oops!", response.mes, "error");
       } else {
@@ -57,20 +56,20 @@ const Login = () => {
         if (response.success)
           Swal.fire("Congratulations", "Đăng nhập thành công", "success").then(
             () => {
-              dispatch(
+              props.dispatch(
                 login({
                   isLoggedIn: true,
                   token: response.accessToken,
                   userData: response.userData,
                 })
               );
-              navigate(`/${path.HOME}`);
+              props.navigate(`/${path.HOME}`);
             }
           );
         else Swal.fire("Oops!", response.mes, "error");
       }
     }
-  }, [payLoad, isRegister, dispatch, navigate]);
+  }, [payLoad, isRegister, props.dispatch, props.navigate]);
   //SUBMIT FORGOT PASSWORD
   const handleForgotPassword = async () => {
     const response = await apis.apiForgotPassword({ email });
@@ -151,7 +150,7 @@ const Login = () => {
                 alt="Logo"
                 className="w-[234px] object-contain cursor-pointer"
                 onClick={() => {
-                  navigate(`/${path.HOME}`);
+                  props.navigate(`/${path.HOME}`);
                 }}
               />
               <span
@@ -312,4 +311,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withBase(Login);

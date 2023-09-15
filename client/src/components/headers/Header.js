@@ -61,6 +61,7 @@ const Header = () => {
               <span className="px-1">Tài khoản</span>{" "}
               <Link
                 to={`/${path.MEMBER}/${path.PERSONAL}`}
+                target="_blank"
                 className="hover:text-main transition-all"
               >
                 {currentData?.firstName + " " + currentData?.lastName}
@@ -69,12 +70,17 @@ const Header = () => {
             <span className="flex gap-4 justify-center">
               <Link
                 to={`/${path.MEMBER}/${path.PERSONAL}`}
+                target="_blank"
                 className="hover:text-main transition-all"
               >
                 Tài khoản của tôi
               </Link>
               <span>/</span>
-              <Link to={"#"} className="hover:text-main transition-all">
+              <Link
+                to={path.WISHLIST}
+                target="_blank"
+                className="hover:text-main transition-all"
+              >
                 Sản phẩm yêu thích
               </Link>
               {+currentData?.role === 2002 && (

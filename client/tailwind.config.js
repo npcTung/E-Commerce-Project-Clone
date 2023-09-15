@@ -8,6 +8,15 @@ module.exports = {
       },
       colors: {
         main: "#ee3131",
+        overlay90: "rgba(0,0,0,0.9)",
+        overlay80: "rgba(0,0,0,0.8)",
+        overlay70: "rgba(0,0,0,0.7)",
+        overlay60: "rgba(0,0,0,0.6)",
+        overlay50: "rgba(0,0,0,0.5)",
+        overlay40: "rgba(0,0,0,0.4)",
+        overlay30: "rgba(0,0,0,0.3)",
+        overlay20: "rgba(0,0,0,0.2)",
+        overlay10: "rgba(0,0,0,0.1)",
       },
       fontFamily: {
         main: ["Poppins", "sans-serif"],
@@ -43,6 +52,34 @@ module.exports = {
             transform: "translateY(0);",
           },
         },
+        "scale-up-tl": {
+          "0%": {
+            "-webkit-transform": "scale(0.5);",
+            transform: "scale(0.5);",
+            "-webkit-transform-origin": "0% 0%;",
+            "transform-origin": "0% 0%;",
+          },
+          "100%": {
+            "-webkit-transform": "scale(1);",
+            transform: "scale(1);",
+            "-webkit-transform-origin": "0% 0%;",
+            "transform-origin": "0% 0%;",
+          },
+        },
+        "scale-up-br": {
+          "0%": {
+            "-webkit-transform": "scale(0.5);",
+            transform: "scale(0.5);",
+            "-webkit-transform-origin": "100% 100%;",
+            "transform-origin": "100% 100%;",
+          },
+          "100%": {
+            "-webkit-transform": "scale(1);",
+            transform: "scale(1);",
+            "-webkit-transform-origin": "100% 100%;",
+            "transform-origin": "100% 100%;",
+          },
+        },
       },
       animation: {
         "slide-top":
@@ -51,6 +88,10 @@ module.exports = {
           "scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;",
         "slide-bottom":
           "slide-bottom 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;",
+        "scale-up-tl":
+          "scale-up-tl 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;",
+        "scale-up-br":
+          "scale-up-br 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;",
       },
       fontWeight: {
         600: "600",

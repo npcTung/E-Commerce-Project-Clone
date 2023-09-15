@@ -1,25 +1,25 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Swal from "sweetalert2";
 import path from "ultils/path";
 import { AdminSidebar } from "components";
+import withBase from "hocs/withBase";
 
-const Admin = () => {
+const Admin = (props) => {
   const { isLoggedIn, currentData } = useSelector((state) => state.user);
-  const navigate = useNavigate();
   if (!isLoggedIn || !currentData)
     Swal.fire(
       "Oops!",
       "Bạn cần đăng nhập trước khi thực hiện thao tác này",
       "info"
-    ).then(() => navigate(`/${path.LOGIN}`));
+    ).then(() => props.navigate(`/${path.LOGIN}`));
   if (+currentData?.role !== 2002)
     Swal.fire(
       "Oops!",
       "Bạn cần có quyền admin để thực hiện thao tác này",
       "info"
-    ).then(() => navigate(`/${path.HOME}`));
+    ).then(() => props.navigate(`/${path.HOME}`));
   return (
     <div className="w-full flex min-h-screen">
       <AdminSidebar />
@@ -31,4 +31,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default withBase(Admin);

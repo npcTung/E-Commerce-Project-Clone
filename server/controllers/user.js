@@ -301,14 +301,17 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.user;
-  if (!id || Object.keys(req.body).length === 0)
+  const { firstName, lastName, email, phone } = req.body;
+  const data = { firstName, lastName, email, phone };
+  if (req.file) data.avatar = req.file.path;
+  if (!(id && firstName && lastName && email && phone))
     throw new Error("missing input");
-  const response = await User.findByIdAndUpdate({ _id: id }, req.body, {
+  const response = await User.findByIdAndUpdate({ _id: id }, data, {
     new: true,
   }).select("-password -role -refreshToken");
   return res.status(200).json({
     success: response ? true : false,
-    deletedUser: response ? response : "Some thing went wrong",
+    mes: response ? "updated." : "Some thing went wrong",
   });
 });
 

@@ -1,11 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import * as apis from "apis";
-import {
-  createSearchParams,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { createSearchParams, useSearchParams } from "react-router-dom";
 import moment from "moment";
 import { EditUserAdmin, InputField, Pagination } from "components";
 import useDebounce from "hooks/useDebounce";
@@ -16,6 +11,7 @@ import Swal from "sweetalert2";
 import NoUser from "assets/no-person.png";
 import { roles } from "ultils/contants";
 import { toast } from "react-toastify";
+import withBase from "hocs/withBase";
 
 const {
   LuEdit,
@@ -25,23 +21,19 @@ const {
   FaArrowUpWideShort,
 } = icons;
 
-const ManageUser = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+const ManageUser = (props) => {
   const [users, setUsers] = useState(null);
   const [queries, setQueries] = useState({ q: "" });
   const [editElm, setEditElm] = useState(null);
   const [update, setUpdate] = useState(false);
-  const [styles, setStyles] = useState("");
   const [sort, setSort] = useState(null);
   const [params] = useSearchParams();
   const queriesDebounce = useDebounce(queries.q, 800);
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isDirty },
     reset,
-    watch,
   } = useForm({
     email: "",
     firstName: "",
@@ -117,13 +109,13 @@ const ManageUser = () => {
   // SORT USERS TO NAVIGATE
   useEffect(() => {
     if (queriesDebounce)
-      navigate({
-        pathname: location.pathname,
+      props.navigate({
+        pathname: props.location.pathname,
         search: createSearchParams({ q: queriesDebounce }).toString(),
       });
     else
-      navigate({
-        pathname: location.pathname,
+      props.navigate({
+        pathname: props.location.pathname,
       });
   }, [queriesDebounce]);
   // RENDER USERS
@@ -133,20 +125,6 @@ const ManageUser = () => {
     fetchUsers(queries);
     window.scrollTo(0, 0);
   }, [params, update, sort]);
-  // CHECK EDIT
-  useEffect(() => {
-    if (
-      watch() &&
-      watch("email") === editElm?.email &&
-      watch("firstName") === editElm?.firstName &&
-      watch("lastName") === editElm?.lastName &&
-      watch("phone") === editElm?.phone &&
-      watch("role") === editElm?.role &&
-      watch("isBlocked") === editElm?.isBlocked
-    )
-      setStyles("btn-disabled");
-    else setStyles("");
-  }, [watch(), editElm]);
 
   return (
     <div className="w-full">
@@ -164,7 +142,7 @@ const ManageUser = () => {
               dataUser={editElm}
               register={register}
               errors={errors}
-              styles={styles}
+              isDirty={isDirty}
               handleUpdate={handleUpdate}
               handleSubmit={handleSubmit}
             />
@@ -318,4 +296,4 @@ const ManageUser = () => {
   );
 };
 
-export default ManageUser;
+export default withBase(ManageUser);

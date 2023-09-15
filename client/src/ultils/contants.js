@@ -23,6 +23,10 @@ const {
   CiSpeaker,
   TfiPrinter,
   TfiTablet,
+  PiHandbagFill,
+  MdHistoryEdu,
+  BsListCheck,
+  MdOutlinePersonalInjury,
 } = icons;
 
 // NAVIGATION
@@ -257,6 +261,33 @@ export const adminSidebar = [
     text: "Quản lý đơn hàng",
     path: `/${path.ADMIN}/${path.MANAGER_ORDER}`,
     icon: <RiBillLine />,
+  },
+];
+// MEMBER SIDEBAR
+export const memberSidebar = [
+  {
+    id: 1,
+    text: "Thông tin tài khoản",
+    path: `/${path.MEMBER}/${path.PERSONAL}`,
+    icon: <MdOutlinePersonalInjury />,
+  },
+  {
+    id: 2,
+    text: "Giỏ hàng của tôi",
+    path: `/${path.MEMBER}/${path.MY_CART}`,
+    icon: <PiHandbagFill />,
+  },
+  {
+    id: 3,
+    text: "Lịch sử mua hàng",
+    path: `/${path.MEMBER}/${path.HISTORY}`,
+    icon: <MdHistoryEdu />,
+  },
+  {
+    id: 4,
+    text: "Danh sách yêu thích",
+    path: `/${path.MEMBER}/${path.WISHLIST}`,
+    icon: <BsListCheck />,
   },
 ];
 // ROLES
