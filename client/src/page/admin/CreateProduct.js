@@ -13,7 +13,7 @@ import withBase from "hocs/withBase";
 
 const { FaUpload } = icons;
 
-const CreateProduct = (props) => {
+const CreateProduct = ({ dispatch, navigate }) => {
   const { categories } = useSelector((state) => state.app);
   const [invalidFields, setInvalidFields] = useState([]);
   const [payload, setPayload] = useState({ description: "" });
@@ -52,11 +52,9 @@ const CreateProduct = (props) => {
       if (finalPayload.thumb) formData.append("thumb", finalPayload.thumb[0]);
       if (finalPayload.images)
         for (let image of finalPayload.images) formData.append("images", image);
-      props.dispatch(
-        showModal({ isShowModal: true, modalChildren: <Loading /> })
-      );
+      dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
       const response = await apis.apiCreateProduct(formData);
-      props.dispatch(showModal({ isShowModal: false, modalChildren: null }));
+      dispatch(showModal({ isShowModal: false, modalChildren: null }));
       if (response.success)
         Swal.fire("Success", "Thêm sản phẩm thành công!!!", "success").then(
           () => {
@@ -71,7 +69,7 @@ const CreateProduct = (props) => {
               title: "Oops!",
             }).then((rs) => {
               if (!rs.isConfirmed)
-                props.navigate(`/${path.ADMIN}/${path.MANAGER_PRODUCT}`);
+                navigate(`/${path.ADMIN}/${path.MANAGER_PRODUCT}`);
             });
           }
         );

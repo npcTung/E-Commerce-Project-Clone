@@ -16,7 +16,7 @@ import withBase from "hocs/withBase";
 
 const { ImUpload } = icons;
 
-const Personal = (props) => {
+const Personal = ({ dispatch }) => {
   const { currentData } = useSelector((state) => state.user);
   const [isShowFile, setIsShowFile] = useState(false);
   const [avatar, setAvatar] = useState(null);
@@ -38,18 +38,16 @@ const Personal = (props) => {
     if (data.avatar.length > 0) formData.append("avatar", data.avatar[0]);
     delete data.avatar;
     for (let i of Object.entries(data)) formData.append(i[0], i[1]);
-    props.dispatch(
-      showModal({ isShowModal: true, modalChildren: <Loading /> })
-    );
+    dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
     const response = await apis.apiUpdateCurrentUser(formData);
-    props.dispatch(showModal({ isShowModal: false, modalChildren: null }));
+    dispatch(showModal({ isShowModal: false, modalChildren: null }));
     if (response.success)
       Swal.fire(
         "Successfully",
         "Cập nhật tài khoản thành công",
         "success"
       ).then(() => {
-        props.dispatch(getCurrent());
+        dispatch(getCurrent());
       });
     else toast.error(response.mes, { theme: "colored" });
   };

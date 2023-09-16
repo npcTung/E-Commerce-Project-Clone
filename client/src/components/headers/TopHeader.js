@@ -1,10 +1,11 @@
 import React, { memo, useEffect } from "react";
 import icons from "ultils/icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import path from "ultils/path";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { logout, clearMessages } from "store/user/userSlice";
 import Swal from "sweetalert2";
+import withBase from "hocs/withBase";
 
 const {
   BiLogoFacebook,
@@ -15,9 +16,7 @@ const {
   TbLogout,
 } = icons;
 
-const TopHeader = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+const TopHeader = ({ navigate, dispatch }) => {
   const { isLoggedIn, currentData, mes } = useSelector((state) => state.user);
   // ERROR TOKEN
   useEffect(() => {
@@ -81,4 +80,4 @@ const TopHeader = () => {
   );
 };
 
-export default memo(TopHeader);
+export default withBase(memo(TopHeader));

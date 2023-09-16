@@ -13,7 +13,7 @@ import withBase from "hocs/withBase";
 
 const { IoMdClose } = icons;
 
-const Login = (props) => {
+const Login = ({ dispatch, navigate }) => {
   const [code, setCode] = useState("");
   const [isRegister, setIsRegister] = useState(false);
   const [invalidFields, setInvalidFields] = useState([]);
@@ -44,11 +44,9 @@ const Login = (props) => {
       : validate(data, setInvalidFields);
     if (invalids === 0) {
       if (isRegister) {
-        props.dispatch(
-          showModal({ isShowModal: true, modalChildren: <Loading /> })
-        );
+        dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
         const response = await apis.apiRegister(payLoad);
-        props.dispatch(showModal({ isShowModal: false, modalChildren: null }));
+        dispatch(showModal({ isShowModal: false, modalChildren: null }));
         if (response.success) setIsVerifiedEmail(true);
         else Swal.fire("Oops!", response.mes, "error");
       } else {
@@ -56,20 +54,20 @@ const Login = (props) => {
         if (response.success)
           Swal.fire("Congratulations", "Đăng nhập thành công", "success").then(
             () => {
-              props.dispatch(
+              dispatch(
                 login({
                   isLoggedIn: true,
                   token: response.accessToken,
                   userData: response.userData,
                 })
               );
-              props.navigate(`/${path.HOME}`);
+              navigate(`/${path.HOME}`);
             }
           );
         else Swal.fire("Oops!", response.mes, "error");
       }
     }
-  }, [payLoad, isRegister, props.dispatch, props.navigate]);
+  }, [payLoad, isRegister, dispatch, navigate]);
   //SUBMIT FORGOT PASSWORD
   const handleForgotPassword = async () => {
     const response = await apis.apiForgotPassword({ email });
@@ -150,7 +148,7 @@ const Login = (props) => {
                 alt="Logo"
                 className="w-[234px] object-contain cursor-pointer"
                 onClick={() => {
-                  props.navigate(`/${path.HOME}`);
+                  navigate(`/${path.HOME}`);
                 }}
               />
               <span

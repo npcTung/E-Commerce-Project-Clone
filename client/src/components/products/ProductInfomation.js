@@ -3,13 +3,13 @@ import { Sideways } from "ultils/contants";
 import { VoteBar, VoteOption, Button, Comment } from "components";
 import { renderStarFromNumber } from "ultils/helpers";
 import * as apis from "apis";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { showModal } from "store/app/appSlice";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 import path from "ultils/path";
 import DOMPurify from "dompurify";
+import withBase from "hocs/withBase";
 
 const ProductInfomation = ({
   description,
@@ -18,9 +18,9 @@ const ProductInfomation = ({
   totalRating,
   pid,
   rerender,
+  dispatch,
+  navigate,
 }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [activedTab, setActivedTab] = useState(1);
   const { isLoggedIn } = useSelector((state) => state.user);
   // CALL API VOTE PRODUCT
@@ -191,4 +191,4 @@ const ProductInfomation = ({
   );
 };
 
-export default memo(ProductInfomation);
+export default withBase(memo(ProductInfomation));

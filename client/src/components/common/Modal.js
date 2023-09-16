@@ -1,19 +1,18 @@
+import withBase from "hocs/withBase";
 import React, { memo } from "react";
-import { useDispatch } from "react-redux";
 import { showModal } from "store/app/appSlice";
 
-const Modal = ({ children }) => {
-  const dispatch = useDispatch();
+const Modal = ({ children, dispatch }) => {
   return (
     <div
       onClick={() =>
         dispatch(showModal({ isShowModal: false, modalChildren: null }))
       }
-      className="fixed inset-0 bg-[rgba(0,0,0,0.6)] z-50 flex justify-center items-center"
+      className="fixed inset-0 bg-overlay60 z-50 flex justify-center items-center"
     >
       {children}
     </div>
   );
 };
 
-export default memo(Modal);
+export default withBase(memo(Modal));

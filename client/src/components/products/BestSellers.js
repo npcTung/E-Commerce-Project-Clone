@@ -2,19 +2,19 @@ import React, { memo, useEffect, useState } from "react";
 import { apiGetProducts } from "apis";
 import { CustomSlider } from "..";
 import { getNewProduct } from "store/products/asyncActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import withBase from "hocs/withBase";
 
 const tabs = [
   { id: 1, name: "best seller" },
   { id: 2, name: "new arivals" },
 ];
 
-const BestSellers = () => {
+const BestSellers = ({ dispatch }) => {
   const [bestSellers, setBestSellers] = useState(null);
   const [activedTab, setActivedTab] = useState(1);
   const [product, setProduct] = useState(null);
   const [isShowOverlay, setIsShowOverlay] = useState(null);
-  const dispatch = useDispatch();
   const { newProduct } = useSelector((state) => state.products);
 
   const fetchProducts = async () => {
@@ -104,4 +104,4 @@ const BestSellers = () => {
   );
 };
 
-export default memo(BestSellers);
+export default withBase(memo(BestSellers));

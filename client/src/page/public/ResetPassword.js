@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import withBase from "hocs/withBase";
 
-const ResetPassword = (props) => {
+const ResetPassword = ({ navigate }) => {
   const { token } = useParams();
   const [password, setPassword] = useState("");
   //SUBMIT RESET PASSWORD
@@ -16,7 +16,7 @@ const ResetPassword = (props) => {
     const response = await apis.apiResetPassword({ password, token });
     if (response.success)
       Swal.fire("Congratulations", response.mes, "success").then(() => {
-        props.navigate(`/${path.HOME}`);
+        navigate(`/${path.HOME}`);
       });
     else toast.error(response.mes, { theme: "colored" });
   };
@@ -29,13 +29,13 @@ const ResetPassword = (props) => {
             alt="Logo"
             className="w-[234px] object-contain cursor-pointer"
             onClick={() => {
-              props.navigate(`/${path.HOME}`);
+              navigate(`/${path.HOME}`);
             }}
           />
           <span
             className="text-blue-500 capitalize hover:text-main transition-all cursor-pointer"
             onClick={() => {
-              props.navigate(`/${path.LOGIN}`);
+              navigate(`/${path.LOGIN}`);
             }}
           >
             quay lại trang đăng nhập

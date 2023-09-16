@@ -3,8 +3,9 @@ import path from "ultils/path";
 import Logo from "assets/logo.png";
 import icons from "ultils/icons";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { logout } from "store/user/userSlice";
+import withBase from "hocs/withBase";
 
 const {
   RiPhoneFill,
@@ -15,9 +16,8 @@ const {
   IoMdClose,
 } = icons;
 
-const Header = () => {
+const Header = ({ dispatch }) => {
   const [isShowAccount, setIsShowAccount] = useState(false);
-  const dispatch = useDispatch();
   const { isLoggedIn, currentData } = useSelector((state) => state.user);
 
   return (
@@ -128,7 +128,11 @@ const Header = () => {
           <span className="text-center">Online Support 24/7</span>
         </div>
         <div className="flex border-r px-6 items-center">
-          <Link to={"#"} title="Sản phẩm yêu thích">
+          <Link
+            to={`/${path.MEMBER}/${path.WISHLIST}`}
+            target="_blank"
+            title="Sản phẩm yêu thích"
+          >
             <SlHeart color="#ee3131" size={21} />
           </Link>
         </div>
@@ -173,4 +177,4 @@ const Header = () => {
   );
 };
 
-export default memo(Header);
+export default withBase(memo(Header));

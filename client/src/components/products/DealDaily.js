@@ -1,21 +1,21 @@
 import React, { useState, useEffect, memo } from "react";
 import icons from "ultils/icons";
 import LogoImage from "assets/logo-image.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { apiGetProducts } from "apis";
 import { renderStarFromNumber, formatMoney, seconsToHms } from "ultils/helpers";
 import { CountDown } from "components";
 import moment from "moment";
+import withBase from "hocs/withBase";
 
 const { BsStarFill, PiListFill } = icons;
 
-const DealDaily = () => {
+const DealDaily = ({ navigate }) => {
   const [dealDaily, setDealDaily] = useState(null);
   const [hour, setHour] = useState(0);
   const [minute, setMinute] = useState(0);
   const [second, setSecond] = useState(0);
   const [expireTime, setExpireTime] = useState(false);
-  const navigate = useNavigate();
 
   const fetchDealDaily = async () => {
     const response = await apiGetProducts({
@@ -121,4 +121,4 @@ const DealDaily = () => {
   );
 };
 
-export default memo(DealDaily);
+export default withBase(memo(DealDaily));

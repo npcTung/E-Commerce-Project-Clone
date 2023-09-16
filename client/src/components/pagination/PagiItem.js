@@ -1,15 +1,9 @@
+import withBase from "hocs/withBase";
 import React, { memo } from "react";
-import {
-  createSearchParams,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { createSearchParams, useSearchParams } from "react-router-dom";
 
-const PagiItem = ({ value }) => {
+const PagiItem = ({ value, navigate, location }) => {
   const [params] = useSearchParams();
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const handlePagination = () => {
     const queries = Object.fromEntries([...params]);
@@ -36,4 +30,4 @@ const PagiItem = ({ value }) => {
   );
 };
 
-export default memo(PagiItem);
+export default withBase(memo(PagiItem));

@@ -23,7 +23,7 @@ const breakpointColumnsObj = {
   500: 1,
 };
 
-const Products = (props) => {
+const Products = ({ location, navigate }) => {
   const { category } = useParams();
   const [product, setProduct] = useState(null);
   const [activeClick, setActiveClick] = useState(null);
@@ -56,7 +56,7 @@ const Products = (props) => {
       queries.sort = sort;
       delete queries.page;
     } else delete queries.sort;
-    props.navigate({
+    navigate({
       pathname: `/${category}`,
       search: createSearchParams(queries).toString(),
     });
@@ -84,7 +84,7 @@ const Products = (props) => {
     const q = { ...priceQuery, ...queries };
     fetchProductsByCategory(q);
     window.scrollTo(0, 0);
-  }, [params, props.location.pathname]);
+  }, [params, location.pathname]);
 
   return (
     <div className="w-full">

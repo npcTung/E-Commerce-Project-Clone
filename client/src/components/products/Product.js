@@ -2,17 +2,27 @@ import React, { memo, useState } from "react";
 import LogoImage from "assets/logo-image.png";
 import LableRed from "assets/lable-red.png";
 import LableBlue from "assets/lable-blue.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { formatMoney } from "ultils/helpers";
 import { renderStarFromNumber } from "ultils/helpers";
-import { SelectOption } from "components";
+import { SelectOption, ShowProduct } from "components";
 import icons from "ultils/icons";
+import path from "ultils/path";
+import withBase from "hocs/withBase";
+import { showModal } from "store/app/appSlice";
 
 const { FaEye, PiListFill, HiHeart } = icons;
 
-const Product = ({ productData, isNew, newArrival, normal, masonry }) => {
+const Product = ({
+  productData,
+  isNew,
+  newArrival,
+  normal,
+  masonry,
+  navigate,
+  dispatch,
+}) => {
   const [isShowOption, setIsShowOption] = useState(false);
-  const navigate = useNavigate();
   return (
     <div className="w-full px-[10px]">
       <div
@@ -31,23 +41,30 @@ const Product = ({ productData, isNew, newArrival, normal, masonry }) => {
         <div className="w-full relative">
           {isShowOption && (
             <div className="absolute bottom-0 flex justify-center left-0 right-0 gap-3 animate-slide-top">
-              <span>
+              <span title="Yêu thích">
                 <SelectOption icon={<HiHeart />} />
               </span>
-              <span
-                onClick={() =>
-                  navigate(
-                    `/${productData.category.toLowerCase()}/${
-                      productData._id
-                    }/${productData.slug}`
-                  )
-                }
+              <Link
+                to={`/${productData.category.toLowerCase()}/${
+                  productData._id
+                }/${productData.slug}`}
+                title="Chi tiết sản phẩm"
               >
                 <SelectOption icon={<PiListFill />} />
-              </span>
-              <span>
+              </Link>
+              <div
+                onClick={() =>
+                  dispatch(
+                    showModal({
+                      isShowModal: true,
+                      modalChildren: <ShowProduct productData={productData} />,
+                    })
+                  )
+                }
+                title="Xem nhanh sản phẩm"
+              >
                 <SelectOption icon={<FaEye />} />
-              </span>
+              </div>
             </div>
           )}
           <Link
@@ -93,4 +110,4 @@ const Product = ({ productData, isNew, newArrival, normal, masonry }) => {
   );
 };
 
-export default memo(Product);
+export default withBase(memo(Product));

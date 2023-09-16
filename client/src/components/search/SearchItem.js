@@ -3,13 +3,13 @@ import icons from "ultils/icons";
 import { colors } from "ultils/contants";
 import {
   createSearchParams,
-  useNavigate,
   useParams,
   useSearchParams,
 } from "react-router-dom";
 import * as apis from "apis";
 import useDebounce from "hooks/useDebounce";
 import Swal from "sweetalert2";
+import withBase from "hocs/withBase";
 
 const { MdOutlineKeyboardArrowDown } = icons;
 
@@ -18,8 +18,8 @@ const SearchItem = ({
   activeClick,
   changeActiveFilter,
   type = "checkbox",
+  navigate,
 }) => {
-  const navigate = useNavigate();
   const { category } = useParams();
   const [params] = useSearchParams();
   const [selected, setSelected] = useState([]);
@@ -225,4 +225,4 @@ const SearchItem = ({
   );
 };
 
-export default memo(SearchItem);
+export default withBase(memo(SearchItem));

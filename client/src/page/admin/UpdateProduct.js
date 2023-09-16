@@ -12,7 +12,7 @@ import withBase from "hocs/withBase";
 
 const { FaUpload } = icons;
 
-const UpdateProduct = ({ productData, render, setProductData }, props) => {
+const UpdateProduct = ({ productData, render, setProductData, dispatch }) => {
   const [invalidFields, setInvalidFields] = useState([]);
   const [payload, setPayload] = useState({ description: "" });
   const [preview, setPreview] = useState({ thumb: null, images: [] });
@@ -36,11 +36,9 @@ const UpdateProduct = ({ productData, render, setProductData }, props) => {
       finalPayload.images =
         data.images?.length === 0 ? preview.images : data.images;
       for (let image of finalPayload.images) formData.append("images", image);
-      props.dispatch(
-        showModal({ isShowModal: true, modalChildren: <Loading /> })
-      );
+      dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
       const response = await apis.apiUpdateProduct(formData, productData._id);
-      props.dispatch(showModal({ isShowModal: false, modalChildren: null }));
+      dispatch(showModal({ isShowModal: false, modalChildren: null }));
       if (response.success)
         Swal.fire(
           "Thành công",

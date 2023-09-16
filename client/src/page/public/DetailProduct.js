@@ -64,7 +64,7 @@ const DetailProduct = () => {
       if (
         !Number(number) ||
         Number(number) < 1 ||
-        Number(number) > productData?.quantity
+        Number(number) > +productData?.quantity
       )
         return;
       else setQuantity(number);
@@ -74,11 +74,7 @@ const DetailProduct = () => {
   // CHARGE QUANTITY
   const handaleChargeQuantity = useCallback(
     (flag) => {
-      if (
-        (varriant && currentProduct.quantity === 0) ||
-        productData?.quantity === 0
-      )
-        return;
+      if (+productData?.quantity === 0) return;
       else {
         if (flag === "minus" && quantity === 1) return;
         else if (flag === "plus" && quantity >= productData?.quantity) return;

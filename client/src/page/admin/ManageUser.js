@@ -21,7 +21,7 @@ const {
   FaArrowUpWideShort,
 } = icons;
 
-const ManageUser = (props) => {
+const ManageUser = ({ navigate, location }) => {
   const [users, setUsers] = useState(null);
   const [queries, setQueries] = useState({ q: "" });
   const [editElm, setEditElm] = useState(null);
@@ -109,13 +109,13 @@ const ManageUser = (props) => {
   // SORT USERS TO NAVIGATE
   useEffect(() => {
     if (queriesDebounce)
-      props.navigate({
-        pathname: props.location.pathname,
+      navigate({
+        pathname: location.pathname,
         search: createSearchParams({ q: queriesDebounce }).toString(),
       });
     else
-      props.navigate({
-        pathname: props.location.pathname,
+      navigate({
+        pathname: location.pathname,
       });
   }, [queriesDebounce]);
   // RENDER USERS

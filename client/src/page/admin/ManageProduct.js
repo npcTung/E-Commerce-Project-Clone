@@ -22,7 +22,7 @@ const {
   BiCustomize,
 } = icons;
 
-const ManageProduct = (props) => {
+const ManageProduct = ({ navigate, location }) => {
   const [params] = useSearchParams();
   const [product, setProduct] = useState(null);
   const [editElm, setEditElm] = useState(null);
@@ -77,13 +77,13 @@ const ManageProduct = (props) => {
   // SORT PRODUCT TO NAVIGATE
   useEffect(() => {
     if (queryDecounce)
-      props.navigate({
-        pathname: props.location.pathname,
+      navigate({
+        pathname: location.pathname,
         search: createSearchParams({ q: queryDecounce }).toString(),
       });
     else
-      props.navigate({
-        pathname: props.location.pathname,
+      navigate({
+        pathname: location.pathname,
       });
   }, [queryDecounce]);
   // RENDER PRODUCT

@@ -6,8 +6,8 @@ import icons from "ultils/icons";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { showModal } from "store/app/appSlice";
-import { useDispatch } from "react-redux";
 import * as apis from "apis";
+import withBase from "hocs/withBase";
 
 const { FaUpload } = icons;
 
@@ -15,8 +15,8 @@ const CustomizeVarriants = ({
   customizeVarriants,
   render,
   setCustomizeVarriants,
+  dispatch,
 }) => {
-  const dispatch = useDispatch();
   const [preview, setPreview] = useState({ thumb: null, images: [] });
   const {
     handleSubmit,
@@ -266,4 +266,4 @@ const CustomizeVarriants = ({
   );
 };
 
-export default memo(CustomizeVarriants);
+export default withBase(memo(CustomizeVarriants));

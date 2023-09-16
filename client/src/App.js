@@ -23,13 +23,13 @@ import {
 import { History, Member, MyCart, Personal, WishList } from "page/member";
 import path from "ultils/path";
 import { getCategories } from "store/app/asyncActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { getCurrent } from "store/user/asyncActions";
 import { Modal } from "components";
+import withBase from "hocs/withBase";
 
-function App() {
-  const dispatch = useDispatch();
+function App({ dispatch }) {
   const { isLoggedIn } = useSelector((state) => state.user);
   const { isShowModal, modalChildren } = useSelector((state) => state.app);
 
@@ -96,4 +96,4 @@ function App() {
   );
 }
 
-export default App;
+export default withBase(App);
