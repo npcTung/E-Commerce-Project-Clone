@@ -11,7 +11,14 @@ import {
   FaBlenderPhone,
   FaUpload,
 } from "react-icons/fa";
-import { BsStarFill, BsStar, BsThreeDots, BsListCheck } from "react-icons/bs";
+import {
+  BsStarFill,
+  BsStar,
+  BsThreeDots,
+  BsListCheck,
+  BsFillCartPlusFill,
+  BsCartCheckFill,
+} from "react-icons/bs";
 import { HiHeart } from "react-icons/hi";
 import {
   MdOutlineKeyboardArrowRight,
@@ -44,6 +51,7 @@ import { LiaCameraRetroSolid } from "react-icons/lia";
 import { CiSpeaker } from "react-icons/ci";
 import { TfiPrinter, TfiTablet } from "react-icons/tfi";
 import { ImUpload } from "react-icons/im";
+import { HiArrowLongRight } from "react-icons/hi2";
 
 const icons = {
   RiPhoneFill,
@@ -97,6 +105,9 @@ const icons = {
   BsListCheck,
   MdOutlinePersonalInjury,
   ImUpload,
+  BsFillCartPlusFill,
+  BsCartCheckFill,
+  HiArrowLongRight,
 };
 
 export default icons;

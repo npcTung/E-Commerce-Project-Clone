@@ -20,6 +20,11 @@ router.put(
 );
 router.put("/address", [verifyAccessToken], userController.updateUserAddress);
 router.put("/cart", [verifyAccessToken], userController.updateCart);
+router.delete(
+  "/remove-cart/:pid/:color",
+  [verifyAccessToken],
+  userController.removeProductInCart
+);
 router.put("/finalregister/:token", userController.finalregister);
 router.delete("/:uid", [verifyAccessToken, isAdmin], userController.deleteUser);
 router.put(

@@ -41,13 +41,8 @@ const ShowProduct = ({ productData, dispatch }) => {
   // QUANTITY
   const handaleQuantity = useCallback(
     (number) => {
-      if (
-        !Number(number) ||
-        Number(number) < 1 ||
-        Number(number) > productData?.quantity
-      )
-        return;
-      else setQuantity(number);
+      if (Number(number) > 1 && Number(number) <= +productData?.quantity)
+        setQuantity(number);
     },
     [quantity]
   );
@@ -239,7 +234,7 @@ const ShowProduct = ({ productData, dispatch }) => {
           ))}
         </div>
         <div className="col-span-1 row-span-1">
-          <Button wf name={"add to cart"} />
+          <Button wf name={"Thêm vào giỏ hàng"} />
         </div>
       </div>
     </div>

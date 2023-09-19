@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { logout } from "store/user/userSlice";
 import withBase from "hocs/withBase";
+import { showModal } from "store/app/appSlice";
+import Cart from "components/cart/Cart";
 
 const {
   RiPhoneFill,
@@ -17,8 +19,8 @@ const {
 } = icons;
 
 const Header = ({ dispatch }) => {
-  const [isShowAccount, setIsShowAccount] = useState(false);
   const { isLoggedIn, currentData } = useSelector((state) => state.user);
+  const [isShowAccount, setIsShowAccount] = useState(false);
 
   return (
     <header className="w-main mx-auto h-[110px] py-[35px] flex justify-between">
@@ -140,9 +142,17 @@ const Header = ({ dispatch }) => {
           <span
             className="flex items-center justify-start gap-1 cursor-pointer hover:text-main transition-all"
             title="Giỏ hàng"
+            onClick={() =>
+              dispatch(
+                showModal({
+                  isShowModal: true,
+                  modalChildren: <Cart />,
+                })
+              )
+            }
           >
             <PiHandbagFill color="#ee3131" size={30} />
-            <span>0 items</span>
+            <span>{`${currentData?.cart.length || 0} items`}</span>
           </span>
         </div>
         {isLoggedIn && (

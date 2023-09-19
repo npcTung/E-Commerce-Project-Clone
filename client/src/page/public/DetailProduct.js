@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { createSearchParams, useParams } from "react-router-dom";
 import * as apis from "apis";
 import {
   Breadcrumbs,
   Button,
+  Cart,
   CustomSlider,
   ProductInfomation,
   SelectQuantity,
@@ -15,6 +16,13 @@ import icons from "ultils/icons";
 import { productInfo } from "ultils/contants";
 import DOMPurify from "dompurify";
 import NoImg from "assets/logo-image.png";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import withBase from "hocs/withBase";
+import { getCurrent } from "store/user/asyncActions";
+import { showModal } from "store/app/appSlice";
+import Swal from "sweetalert2";
+import path from "ultils/path";
 
 // SETTING SLIDER
 var settings = {
@@ -27,8 +35,9 @@ var settings = {
 // ICON
 const { BiLogoFacebook, AiOutlineTwitter, BiLogoPinterest } = icons;
 
-const DetailProduct = () => {
+const DetailProduct = ({ dispatch, navigate, location }) => {
   const { pid, category } = useParams();
+  const { currentData } = useSelector((state) => state.user);
   const [productData, setProductData] = useState(null);
   const [products, setProducts] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -43,16 +52,6 @@ const DetailProduct = () => {
     sold: null,
     color: "",
   });
-  // RESET VARRIANT
-  const resetVarriant = () =>
-    setCurrentProduct({
-      thumb: "",
-      images: [],
-      price: 0,
-      quantity: 0,
-      sold: 0,
-      color: "",
-    });
   // PRODUCT DETAIL
   const fetchProductData = async () => {
     const response = await apis.apiGetProduct(pid);
@@ -61,13 +60,8 @@ const DetailProduct = () => {
   // QUANTITY
   const handaleQuantity = useCallback(
     (number) => {
-      if (
-        !Number(number) ||
-        Number(number) < 1 ||
-        Number(number) > +productData?.quantity
-      )
-        return;
-      else setQuantity(number);
+      if (Number(number) > 1 && Number(number) <= +productData?.quantity)
+        setQuantity(number);
     },
     [quantity]
   );
@@ -93,6 +87,41 @@ const DetailProduct = () => {
   const rerender = useCallback(() => {
     setUpdate(!update);
   }, [update]);
+  // ADD TO CART
+  const handleAddToCart = async () => {
+    if (!currentData)
+      Swal.fire({
+        text: "Đăng nhập trước khi thực hiện thao tác này",
+        title: "Almost...",
+        icon: "info",
+        cancelButtonText: "Không",
+        cancelButtonColor: "#ee3131",
+        showCancelButton: true,
+        confirmButtonText: "Đăng nhập",
+      }).then((rs) => {
+        if (rs.isConfirmed)
+          navigate({
+            pathname: `/${path.LOGIN}`,
+            search: createSearchParams({
+              redirect: location.pathname,
+            }).toString(),
+          });
+      });
+    else {
+      const response = await apis.apiUpdateCart({
+        pid,
+        color: currentProduct.color || productData.color,
+        price: currentProduct.price || productData.price,
+        thumb: currentProduct.thumb || productData.thumb,
+        quantity,
+      });
+      if (response.success) {
+        toast.success("Thêm vào giỏ hành thành công", { theme: "colored" });
+        dispatch(getCurrent());
+        dispatch(showModal({ isShowModal: true, modalChildren: <Cart /> }));
+      } else toast.error(response.mes, { theme: "colored" });
+    }
+  };
   // USEEFFECT PRODUCT DATA
   useEffect(() => {
     if (pid) {
@@ -123,7 +152,14 @@ const DetailProduct = () => {
           productData?.thumb
       );
     } else {
-      resetVarriant();
+      setCurrentProduct({
+        thumb: productData?.thumb,
+        color: productData?.color,
+        images: productData?.images || [],
+        price: productData?.price,
+        quantity: productData?.quantity,
+        sold: productData?.sold,
+      });
       setImageBig(productData?.thumb);
     }
   }, [varriant]);
@@ -288,12 +324,13 @@ const DetailProduct = () => {
           </div>
           <Button
             wf
-            name={"add to cart"}
+            name={"thêm vào giỏ hàng"}
             styles={
               ((varriant && currentProduct.quantity === 0) ||
                 productData?.quantity === 0) &&
               "btn-disabled"
             }
+            handleOnClick={() => handleAddToCart()}
           />
           <div className="flex gap-3">
             <span className="text-xl p-2 rounded-full bg-black text-white hover:opacity-60 transition-all cursor-pointer">
@@ -345,4 +382,4 @@ const DetailProduct = () => {
   );
 };
 
-export default DetailProduct;
+export default withBase(DetailProduct);

@@ -61,12 +61,13 @@ const CreateProduct = ({ dispatch, navigate }) => {
             resetData();
             Swal.fire({
               text: `Bạn có muốn thêm sản phẩm tiếp`,
+              icon: "info",
+              title: "Oops!",
               showCancelButton: true,
               cancelButtonColor: "#ee3131",
               cancelButtonText: "không",
               confirmButtonText: "có",
               confirmButtonColor: "#2563EB",
-              title: "Oops!",
             }).then((rs) => {
               if (!rs.isConfirmed)
                 navigate(`/${path.ADMIN}/${path.MANAGER_PRODUCT}`);

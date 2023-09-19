@@ -6,6 +6,7 @@ export const userSlice = createSlice({
   initialState: {
     isLoggedIn: false,
     currentData: null,
+    currentCart: [],
     token: null,
     isLoading: false,
     mes: "",
@@ -18,12 +19,21 @@ export const userSlice = createSlice({
     logout: (state) => {
       state.isLoggedIn = false;
       state.token = null;
-      state.token = null;
+      state.currentData = null;
       state.isLoading = false;
       state.mes = "";
     },
     clearMessages: (state) => {
       state.mes = "";
+    },
+    updateCart: (state, action) => {
+      const { pid, color, quantity } = action.payload;
+      const updatingCart = JSON.parse(JSON.stringify(state.currentCart));
+      state.currentCart = updatingCart.map((el) => {
+        if (el.color === color && el.product?._id === pid)
+          return { ...el, quantity };
+        else return el;
+      });
     },
   },
   extraReducers: (builder) => {
@@ -34,6 +44,7 @@ export const userSlice = createSlice({
     builder.addCase(actions.getCurrent.fulfilled, (state, action) => {
       state.isLoading = false;
       state.currentData = action.payload;
+      state.currentCart = action.payload.cart;
       state.isLoggedIn = true;
     });
 
@@ -47,6 +58,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout, clearMessages } = userSlice.actions;
+export const { login, logout, clearMessages, updateCart } = userSlice.actions;
 
 export default userSlice.reducer;

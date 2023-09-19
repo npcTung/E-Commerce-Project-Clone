@@ -14,15 +14,17 @@ const Button = ({
       <button
         type={type}
         className={`uppercase btn bg-main btn-error text-white ${styles} ${
-          wf ? "w-full" : "w-fit"
+          wf && "w-full"
         }`}
         onClick={() => {
           handleOnClick && handleOnClick();
         }}
       >
-        {iconBefore && <span>{iconBefore}</span>}
-        <span>{name}</span>
-        {iconAfter && <span>{iconAfter}</span>}
+        <span className="flex items-center">
+          {iconBefore && <span>{iconBefore}</span>}
+          <span>{name}</span>
+          {iconAfter && <span>{iconAfter}</span>}
+        </span>
       </button>
     </div>
   );

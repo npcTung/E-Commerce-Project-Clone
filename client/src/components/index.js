@@ -10,6 +10,8 @@ export { default as CustomSlider } from "./common/CustomSlider";
 export { default as SelectQuantity } from "./common/SelectQuantity";
 export { default as Modal } from "./common/Modal";
 export { default as Loading } from "./common/Loading";
+// CART
+export { default as Cart } from "./cart/Cart";
 // FOOTER
 export { default as Footer } from "./footer/Footer";
 // HEADERS
@@ -37,6 +39,7 @@ export { default as HotCollection } from "./products/HotCollection";
 export { default as ProductInfomation } from "./products/ProductInfomation";
 export { default as CustomizeVarriants } from "./products/CustomizeVarriants";
 export { default as ShowProduct } from "./products/ShowProduct";
+export { default as OrderItem } from "./products/OrderItem";
 // SEARCH
 export { default as SelectOption } from "./search/SelectOption";
 export { default as SearchItem } from "./search/SearchItem";

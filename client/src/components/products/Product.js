@@ -2,16 +2,21 @@ import React, { memo, useState } from "react";
 import LogoImage from "assets/logo-image.png";
 import LableRed from "assets/lable-red.png";
 import LableBlue from "assets/lable-blue.png";
-import { Link } from "react-router-dom";
+import { Link, createSearchParams } from "react-router-dom";
 import { formatMoney } from "ultils/helpers";
 import { renderStarFromNumber } from "ultils/helpers";
-import { SelectOption, ShowProduct } from "components";
+import { Cart, SelectOption, ShowProduct } from "components";
 import icons from "ultils/icons";
-import path from "ultils/path";
 import withBase from "hocs/withBase";
 import { showModal } from "store/app/appSlice";
+import * as apis from "apis";
+import { toast } from "react-toastify";
+import { getCurrent } from "store/user/asyncActions";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import path from "ultils/path";
 
-const { FaEye, PiListFill, HiHeart } = icons;
+const { FaEye, BsFillCartPlusFill, HiHeart, BsCartCheckFill } = icons;
 
 const Product = ({
   productData,
@@ -19,10 +24,58 @@ const Product = ({
   newArrival,
   normal,
   masonry,
-  navigate,
   dispatch,
+  navigate,
+  location,
 }) => {
+  const { currentData } = useSelector((state) => state.user);
   const [isShowOption, setIsShowOption] = useState(false);
+
+  const handleClickOption = async (e, value) => {
+    e.stopPropagation();
+    if (value === "PRODUCT_SHORT")
+      dispatch(
+        showModal({
+          isShowModal: true,
+          modalChildren: <ShowProduct productData={productData} />,
+        })
+      );
+    if (value === "YEU_THICH") console.log("YEU_THICH");
+    if (value === "ADD_TO_CART") {
+      if (!currentData)
+        Swal.fire({
+          text: "Đăng nhập trước khi thực hiện thao tác này",
+          title: "Almost...",
+          icon: "info",
+          cancelButtonText: "Không",
+          cancelButtonColor: "#ee3131",
+          showCancelButton: true,
+          confirmButtonText: "Đăng nhập",
+        }).then((rs) => {
+          if (rs.isConfirmed)
+            navigate({
+              pathname: `/${path.LOGIN}`,
+              search: createSearchParams({
+                redirect: location.pathname,
+              }).toString(),
+            });
+        });
+      else {
+        const response = await apis.apiUpdateCart({
+          pid: productData._id,
+          color: productData.color,
+          price: productData.price,
+          thumb: productData.thumb,
+        });
+        if (response.success) {
+          toast.success("Thêm vào giỏ hành thành công", { theme: "colored" });
+          dispatch(getCurrent());
+          dispatch(showModal({ isShowModal: true, modalChildren: <Cart /> }));
+        } else toast.error(response.mes, { theme: "colored" });
+      }
+    }
+  };
+
   return (
     <div className="w-full px-[10px]">
       <div
@@ -41,26 +94,28 @@ const Product = ({
         <div className="w-full relative">
           {isShowOption && (
             <div className="absolute bottom-0 flex justify-center left-0 right-0 gap-3 animate-slide-top">
-              <span title="Yêu thích">
-                <SelectOption icon={<HiHeart />} />
-              </span>
-              <Link
-                to={`/${productData.category.toLowerCase()}/${
-                  productData._id
-                }/${productData.slug}`}
-                title="Chi tiết sản phẩm"
-              >
-                <SelectOption icon={<PiListFill />} />
-              </Link>
               <div
-                onClick={() =>
-                  dispatch(
-                    showModal({
-                      isShowModal: true,
-                      modalChildren: <ShowProduct productData={productData} />,
-                    })
-                  )
-                }
+                title="Yêu thích"
+                onClick={(e) => handleClickOption(e, "YEU_THICH")}
+              >
+                <SelectOption icon={<HiHeart />} />
+              </div>
+              {currentData?.cart?.some(
+                (el) => el.product._id === productData._id
+              ) ? (
+                <div title="Đã thêm vào giỏ hàng">
+                  <SelectOption icon={<BsCartCheckFill />} addCart />
+                </div>
+              ) : (
+                <div
+                  title="Thêm vào giỏ hàng"
+                  onClick={(e) => handleClickOption(e, "ADD_TO_CART")}
+                >
+                  <SelectOption icon={<BsFillCartPlusFill />} />
+                </div>
+              )}
+              <div
+                onClick={(e) => handleClickOption(e, "PRODUCT_SHORT")}
                 title="Xem nhanh sản phẩm"
               >
                 <SelectOption icon={<FaEye />} />

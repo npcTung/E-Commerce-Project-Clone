@@ -11,6 +11,7 @@ import {
   FAQ,
   FinalRegister,
   ResetPassword,
+  DetailCart,
 } from "page/public";
 import {
   Admin,
@@ -32,7 +33,6 @@ import withBase from "hocs/withBase";
 function App({ dispatch }) {
   const { isLoggedIn } = useSelector((state) => state.user);
   const { isShowModal, modalChildren } = useSelector((state) => state.app);
-
   useEffect(() => {
     const setTimeoutId = setTimeout(() => {
       dispatch(getCategories());
@@ -57,6 +57,7 @@ function App({ dispatch }) {
           <Route path={path.BLOGS} element={<Blogs />} />
           <Route path={path.OUR_SERVICES} element={<Services />} />
           <Route path={path.FAQS} element={<FAQ />} />
+          <Route path={path.DETAIL_CART} element={<DetailCart />} />
         </Route>
         {/* LOGIN/REGISTER */}
         <Route path={path.LOGIN} element={<Login />} />

@@ -80,6 +80,16 @@ module.exports = {
             "transform-origin": "100% 100%;",
           },
         },
+        "slide-left": {
+          "0%": {
+            "-webkit-transform": "translateX(100px);",
+            transform: "translateX(100px);",
+          },
+          "100%": {
+            "-webkit-transform": "translateX(0);",
+            transform: "translateX(0);",
+          },
+        },
       },
       animation: {
         "slide-top":
@@ -92,6 +102,8 @@ module.exports = {
           "scale-up-tl 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;",
         "scale-up-br":
           "scale-up-br 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;",
+        "slide-left":
+          "slide-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;",
       },
       fontWeight: {
         600: "600",

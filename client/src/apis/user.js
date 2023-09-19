@@ -67,3 +67,16 @@ export const apiUpdateCurrentUser = (data) =>
     method: "put",
     data,
   });
+
+export const apiUpdateCart = (data) =>
+  axiosConfig({
+    url: "/user/cart",
+    method: "put",
+    data,
+  });
+
+export const apiRemoveCart = (pid, color) =>
+  axiosConfig({
+    url: `/user/remove-cart/${pid}/${color}`,
+    method: "delete",
+  });

@@ -10,10 +10,12 @@ import { validate } from "ultils/helpers";
 import icons from "ultils/icons";
 import { showModal } from "store/app/appSlice";
 import withBase from "hocs/withBase";
+import { useSearchParams } from "react-router-dom";
 
 const { IoMdClose } = icons;
 
 const Login = ({ dispatch, navigate }) => {
+  const [searchParams] = useSearchParams();
   const [code, setCode] = useState("");
   const [isRegister, setIsRegister] = useState(false);
   const [invalidFields, setInvalidFields] = useState([]);
@@ -61,7 +63,9 @@ const Login = ({ dispatch, navigate }) => {
                   userData: response.userData,
                 })
               );
-              navigate(`/${path.HOME}`);
+              searchParams.get("redirect")
+                ? navigate(searchParams.get("redirect"))
+                : navigate(`/${path.HOME}`);
             }
           );
         else Swal.fire("Oops!", response.mes, "error");
