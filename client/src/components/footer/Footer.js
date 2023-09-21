@@ -1,18 +1,10 @@
 import React, { memo, useState } from "react";
 import icons from "ultils/icons";
 import { Link } from "react-router-dom";
-import path from "ultils/path";
 import Swal from "sweetalert2";
+import { socialNetwork, information, whoWeAre } from "ultils/contants";
 
-const {
-  TbMailFilled,
-  MdLocationOn,
-  RiPhoneFill,
-  AiOutlineGoogle,
-  BiLogoFacebook,
-  AiOutlineTwitter,
-  BiLogoPinterest,
-} = icons;
+const { TbMailFilled, MdLocationOn, RiPhoneFill } = icons;
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -79,21 +71,16 @@ const Footer = () => {
                 </span>
               </li>
               <li className="flex items-center gap-2">
-                <span className="cursor-pointer p-3 bg-[rgba(255,255,255,0.1)] rounded-md">
-                  <BiLogoFacebook />
-                </span>
-                <span className="cursor-pointer p-3 bg-[rgba(255,255,255,0.1)] rounded-md">
-                  <AiOutlineTwitter />
-                </span>
-                <span className="cursor-pointer p-3 bg-[rgba(255,255,255,0.1)] rounded-md">
-                  <BiLogoPinterest />
-                </span>
-                <span className="cursor-pointer p-3 bg-[rgba(255,255,255,0.1)] rounded-md">
-                  <AiOutlineGoogle />
-                </span>
-                <span className="cursor-pointer p-[10px] bg-[rgba(255,255,255,0.1)] rounded-md font-bold">
-                  in
-                </span>
+                {socialNetwork.map((el) => (
+                  <Link
+                    to={el.path}
+                    key={el.id}
+                    title={el.title}
+                    className="cursor-pointer p-3 bg-overlay10 rounded-md"
+                  >
+                    {el.icon}
+                  </Link>
+                ))}
               </li>
             </ul>
           </div>
@@ -102,21 +89,14 @@ const Footer = () => {
               information
             </span>
             <ul className="flex flex-col gap-2 text-sm">
-              <li className="opacity-70 hover:opacity-100 transition-all">
-                <Link to={path.HOME}>Typography</Link>
-              </li>
-              <li className="opacity-70 hover:opacity-100 transition-all">
-                <Link to={path.HOME}>Gallery</Link>
-              </li>
-              <li className="opacity-70 hover:opacity-100 transition-all">
-                <Link to={path.HOME}>Store Location</Link>
-              </li>
-              <li className="opacity-70 hover:opacity-100 transition-all">
-                <Link to={path.HOME}>Today's Deals</Link>
-              </li>
-              <li className="opacity-70 hover:opacity-100 transition-all">
-                <Link to={path.HOME}>Contact</Link>
-              </li>
+              {information.map((el) => (
+                <li
+                  key={el.id}
+                  className="opacity-70 hover:opacity-100 transition-all"
+                >
+                  <Link to={el.path}>{el.text}</Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div className="flex-1 flex flex-col gap-5">
@@ -124,21 +104,14 @@ const Footer = () => {
               who we are
             </span>
             <ul className="flex flex-col gap-2 text-sm">
-              <li className="opacity-70 hover:opacity-100 transition-all">
-                <Link to={path.HOME}>Help</Link>
-              </li>
-              <li className="opacity-70 hover:opacity-100 transition-all">
-                <Link to={path.HOME}>Free Shipping</Link>
-              </li>
-              <li className="opacity-70 hover:opacity-100 transition-all">
-                <Link to={path.HOME}>FAQs</Link>
-              </li>
-              <li className="opacity-70 hover:opacity-100 transition-all">
-                <Link to={path.HOME}>Return & Exchange</Link>
-              </li>
-              <li className="opacity-70 hover:opacity-100 transition-all">
-                <Link to={path.HOME}>Testimonials</Link>
-              </li>
+              {whoWeAre.map((el) => (
+                <li
+                  key={el.id}
+                  className="opacity-70 hover:opacity-100 transition-all"
+                >
+                  <Link to={el.path}>{el.text}</Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div className="flex-1">

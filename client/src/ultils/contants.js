@@ -27,6 +27,12 @@ const {
   MdHistoryEdu,
   BsListCheck,
   MdOutlinePersonalInjury,
+  BiLogoFacebook,
+  AiOutlineTwitter,
+  BiLogoPinterest,
+  FaLinkedinIn,
+  BiSolidMessageAltDots,
+  AiOutlineGoogle,
 } = icons;
 
 // NAVIGATION
@@ -353,5 +359,100 @@ export const siderBar = [
     id: 8,
     title: "Tablet",
     icons: <TfiTablet />,
+  },
+];
+// MẠNG XÃ HỘ
+export const socialNetwork = [
+  {
+    id: 1,
+    title: "Facebook",
+    icon: <BiLogoFacebook />,
+    path: path.HOME,
+  },
+  {
+    id: 2,
+    title: "Twitter",
+    icon: <AiOutlineTwitter />,
+    path: path.HOME,
+  },
+  {
+    id: 3,
+    icon: "Pinterest",
+    icon: <BiLogoPinterest />,
+    path: path.HOME,
+  },
+  {
+    id: 4,
+    title: "Google",
+    icon: <AiOutlineGoogle />,
+    path: path.HOME,
+  },
+  {
+    id: 5,
+    title: "In",
+    icon: <FaLinkedinIn />,
+    path: path.HOME,
+  },
+  {
+    id: 6,
+    title: "Dots",
+    icon: <BiSolidMessageAltDots />,
+    path: path.HOME,
+  },
+];
+// INFORMATION
+export const information = [
+  {
+    id: 1,
+    text: "Typography",
+    path: path.HOME,
+  },
+  {
+    id: 2,
+    text: "Gallery",
+    path: path.HOME,
+  },
+  {
+    id: 3,
+    text: "Store Location",
+    path: path.HOME,
+  },
+  {
+    id: 4,
+    text: `Today's Deals`,
+    path: path.HOME,
+  },
+  {
+    id: 5,
+    text: "Contact",
+    path: path.HOME,
+  },
+];
+// WHO WE ARE
+export const whoWeAre = [
+  {
+    id: 1,
+    text: "Help",
+    path: path.HOME,
+  },
+  {
+    id: 2,
+    text: "Free Shipping",
+    path: path.HOME,
+  },
+  {
+    id: 3,
+    text: "Help",
+    path: path.HOME,
+  },
+  {
+    id: 4,
+    text: "FAQs",
+    path: path.FAQS,
+  },
+  {
+    id: 5,
+    text: "Return & Exchange",
+    path: path.HOME,
   },
 ];

@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { getCurrent } from "store/user/asyncActions";
 import { updateCart } from "store/user/userSlice";
 
-const OrderItem = ({ cartData, dispatch, defaultQuantity = 1 }) => {
+const OrderItem = ({ cartData, dispatch, defaultQuantity = 1, location }) => {
   const [quantity, setQuantity] = useState(defaultQuantity);
   // QUANTITY
   const handaleQuantity = useCallback(
@@ -56,6 +56,7 @@ const OrderItem = ({ cartData, dispatch, defaultQuantity = 1 }) => {
           to={`/${createSlug(cartData.product.category)}/${
             cartData.product._id
           }/${cartData.product.slug}`}
+          target={location.pathname.split("/")[1] === "member" ? "_blank" : ""}
           className="text-lg line-clamp-1 hover:text-main transition-all"
         >
           {cartData.product.title?.toLowerCase()}

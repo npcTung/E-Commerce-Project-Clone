@@ -1,12 +1,18 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import Slider from "react-slick";
 import NoImg from "assets/logo-image.png";
-import { Link } from "react-router-dom";
+import { Link, createSearchParams } from "react-router-dom";
 import DOMPurify from "dompurify";
-import { Button, SelectQuantity } from "components";
+import { Button, Cart, SelectQuantity } from "components";
 import { formatMoney } from "ultils/helpers";
 import withBase from "hocs/withBase";
 import { showModal } from "store/app/appSlice";
+import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
+import path from "ultils/path";
+import * as apis from "apis";
+import { toast } from "react-toastify";
+import { getCurrent } from "store/user/asyncActions";
 
 var settings = {
   dots: false,
@@ -16,7 +22,8 @@ var settings = {
   slidesToScroll: 1,
 };
 
-const ShowProduct = ({ productData, dispatch }) => {
+const ShowProduct = ({ productData, dispatch, navigate, location }) => {
+  const { currentData } = useSelector((state) => state.user);
   const [preview, setPreview] = useState(productData?.thumb || NoImg);
   const [quantity, setQuantity] = useState(1);
   const [varriant, setVarriant] = useState(null);
@@ -59,6 +66,41 @@ const ShowProduct = ({ productData, dispatch }) => {
     },
     [quantity]
   );
+  // ADD TO CART
+  const handleAddToCart = async () => {
+    if (!currentData)
+      Swal.fire({
+        text: "Đăng nhập trước khi thực hiện thao tác này",
+        title: "Almost...",
+        icon: "info",
+        cancelButtonText: "Không",
+        cancelButtonColor: "#ee3131",
+        showCancelButton: true,
+        confirmButtonText: "Đăng nhập",
+      }).then((rs) => {
+        if (rs.isConfirmed)
+          navigate({
+            pathname: `/${path.LOGIN}`,
+            search: createSearchParams({
+              redirect: location.pathname,
+            }).toString(),
+          });
+      });
+    else {
+      const response = await apis.apiUpdateCart({
+        pid: productData._id,
+        color: currentProduct.color || productData.color,
+        price: currentProduct.price || productData.price,
+        thumb: currentProduct.thumb || productData.thumb,
+        quantity,
+      });
+      if (response.success) {
+        toast.success("Thêm vào giỏ hành thành công", { theme: "colored" });
+        dispatch(getCurrent());
+        dispatch(showModal({ isShowModal: true, modalChildren: <Cart /> }));
+      } else toast.error(response.mes, { theme: "colored" });
+    }
+  };
   // RENDER CURRENT PRODUCT VARRIANT
   useEffect(() => {
     if (varriant) {
@@ -77,7 +119,14 @@ const ShowProduct = ({ productData, dispatch }) => {
           productData?.thumb
       );
     } else {
-      resetVarriant();
+      resetVarriant({
+        thumb: productData?.thumb,
+        color: productData?.color,
+        images: productData?.images || [],
+        price: productData?.price,
+        quantity: productData?.quantity,
+        sold: productData?.sold,
+      });
       setPreview(productData?.thumb);
     }
   }, [varriant]);
@@ -234,7 +283,11 @@ const ShowProduct = ({ productData, dispatch }) => {
           ))}
         </div>
         <div className="col-span-1 row-span-1">
-          <Button wf name={"Thêm vào giỏ hàng"} />
+          <Button
+            wf
+            name={"Thêm vào giỏ hàng"}
+            handleOnClick={handleAddToCart}
+          />
         </div>
       </div>
     </div>

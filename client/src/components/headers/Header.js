@@ -59,7 +59,10 @@ const Header = ({ dispatch }) => {
                 <IoMdClose size={30} />
               </span>
             </div>
-            <span className="flex justify-center">
+            <span
+              onClick={() => setIsShowAccount(false)}
+              className="flex justify-center"
+            >
               <span className="px-1">Tài khoản</span>{" "}
               <Link
                 to={`/${path.MEMBER}/${path.PERSONAL}`}
@@ -73,6 +76,7 @@ const Header = ({ dispatch }) => {
               <Link
                 to={`/${path.MEMBER}/${path.PERSONAL}`}
                 target="_blank"
+                onClick={() => setIsShowAccount(false)}
                 className="hover:text-main transition-all"
               >
                 Tài khoản của tôi
@@ -80,7 +84,7 @@ const Header = ({ dispatch }) => {
               <span>/</span>
               <Link
                 to={path.WISHLIST}
-                target="_blank"
+                onClick={() => setIsShowAccount(false)}
                 className="hover:text-main transition-all"
               >
                 Sản phẩm yêu thích
@@ -91,6 +95,7 @@ const Header = ({ dispatch }) => {
                   <Link
                     to={`/${path.ADMIN}/${path.DASH_BOARD}`}
                     target="_blank"
+                    onClick={() => setIsShowAccount(false)}
                     className="hover:text-main transition-all"
                   >
                     Quản trị viên

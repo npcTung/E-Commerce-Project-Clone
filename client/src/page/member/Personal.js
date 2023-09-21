@@ -147,6 +147,12 @@ const Personal = ({ dispatch }) => {
             classInput={"input-bordered"}
           />
           <div className="w-full flex items-center gap-1">
+            <label className="label label-text">Địa chỉ:</label>
+            <span className={`font-semibold`}>
+              {currentData?.address || "Không có"}
+            </span>
+          </div>
+          <div className="w-full flex items-center gap-1">
             <label className="label label-text">Tình trạng tài khoản:</label>
             <span
               className={`font-semibold ${

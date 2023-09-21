@@ -52,6 +52,21 @@ const DetailProduct = ({ dispatch, navigate, location }) => {
     sold: null,
     color: "",
   });
+  // RESET DATA
+  const resetData = () => {
+    setProductData(null);
+    setVarriant(null);
+    setQuantity(1);
+    setImageBig("");
+    setCurrentProduct({
+      thumb: "",
+      images: [],
+      price: null,
+      quantity: null,
+      sold: null,
+      color: "",
+    });
+  };
   // PRODUCT DETAIL
   const fetchProductData = async () => {
     const response = await apis.apiGetProduct(pid);
@@ -125,15 +140,12 @@ const DetailProduct = ({ dispatch, navigate, location }) => {
   // USEEFFECT PRODUCT DATA
   useEffect(() => {
     if (pid) {
-      fetchProductData();
+      resetData();
       fetchProducts();
+      fetchProductData();
     }
     window.scrollTo(0, 0);
-  }, [pid]);
-  // USEEFFECT RE-UPDATING DATA
-  useEffect(() => {
-    if (pid) fetchProductData();
-  }, [update]);
+  }, [pid, update]);
   // RENDER CURRENT PRODUCT VARRIANT
   useEffect(() => {
     if (varriant) {
@@ -278,38 +290,36 @@ const DetailProduct = ({ dispatch, navigate, location }) => {
             />
           )}
           <div className="flex flex-col gap-4">
-            {productData?.color?.length > 0 && (
-              <div className="flex justify-start gap-4">
-                <span className="font-medium">Color: </span>
+            <div className="flex justify-start gap-4">
+              <span className="font-medium">Color: </span>
+              <span
+                onClick={() => {
+                  setVarriant(null);
+                  setQuantity(1);
+                }}
+                className={`p-2 border ${
+                  !varriant ? "border-main text-main" : "border-gray-500"
+                } cursor-pointer uppercase`}
+              >
+                {productData?.color || "black"}
+              </span>
+              {productData?.varriants?.map((el) => (
                 <span
+                  key={el._id}
                   onClick={() => {
-                    setVarriant(null);
+                    setVarriant(el._id);
                     setQuantity(1);
                   }}
                   className={`p-2 border ${
-                    !varriant ? "border-main text-main" : "border-gray-500"
+                    varriant === el._id
+                      ? "border-main text-main"
+                      : "border-gray-500"
                   } cursor-pointer uppercase`}
                 >
-                  {productData?.color}
+                  {el.color}
                 </span>
-                {productData?.varriants?.map((el) => (
-                  <span
-                    key={el._id}
-                    onClick={() => {
-                      setVarriant(el._id);
-                      setQuantity(1);
-                    }}
-                    className={`p-2 border ${
-                      varriant === el._id
-                        ? "border-main text-main"
-                        : "border-gray-500"
-                    } cursor-pointer uppercase`}
-                  >
-                    {el.color}
-                  </span>
-                ))}
-              </div>
-            )}
+              ))}
+            </div>
             <div className="flex items-center gap-5">
               <span className="font-medium">Quantity:</span>
               <SelectQuantity

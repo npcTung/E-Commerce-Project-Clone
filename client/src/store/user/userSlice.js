@@ -20,6 +20,7 @@ export const userSlice = createSlice({
       state.isLoggedIn = false;
       state.token = null;
       state.currentData = null;
+      state.currentCart = null;
       state.isLoading = false;
       state.mes = "";
     },
@@ -51,6 +52,7 @@ export const userSlice = createSlice({
     builder.addCase(actions.getCurrent.rejected, (state) => {
       state.isLoading = false;
       state.currentData = null;
+      state.currentCart = null;
       state.isLoggedIn = false;
       state.token = null;
       state.mes = "Phên đăng nhập đã hết hạn. Hãy đăng nhập lại";

@@ -21,7 +21,14 @@ import {
   ManageProduct,
   ManageUser,
 } from "page/admin";
-import { History, Member, MyCart, Personal, WishList } from "page/member";
+import {
+  Checkout,
+  History,
+  Member,
+  MyCart,
+  Personal,
+  WishList,
+} from "page/member";
 import path from "ultils/path";
 import { getCategories } from "store/app/asyncActions";
 import { useSelector } from "react-redux";
@@ -63,6 +70,8 @@ function App({ dispatch }) {
         <Route path={path.LOGIN} element={<Login />} />
         <Route path={path.FINAL_REGISTER} element={<FinalRegister />} />
         <Route path={path.RESET_PASSWORD} element={<ResetPassword />} />
+        {/* CHECK OUT */}
+        <Route path={path.CHECKOUT} element={<Checkout />} />
         {/* ADMIN */}
         <Route path={path.ADMIN} element={<Admin />}>
           <Route path={path.DASH_BOARD} element={<DashBoard />} />

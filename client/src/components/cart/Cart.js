@@ -112,7 +112,7 @@ const Cart = ({ dispatch, navigate }) => {
               }}
             />
             <Button
-              name={"thủ tục thanh toán"}
+              name={"thanh toán"}
               wf
               iconAfter={<HiArrowLongRight size={20} />}
               styles={"border-main"}

@@ -1,16 +1,13 @@
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
-import { formatMoney, renderStarFromNumber } from "ultils/helpers";
+import { createSlug, formatMoney, renderStarFromNumber } from "ultils/helpers";
 import LogoImage from "assets/logo-image.png";
 
 const ProductCard = ({ productData }) => {
   return (
-    <div
-      className="border flex w-[32.4%] h-[142px] py-4 gap-2"
-      key={productData?._id}
-    >
+    <div className="border flex w-[32.4%] h-[142px] py-4 gap-2">
       <Link
-        to={`/${productData?.category.toLowerCase()}/${productData._id}/${
+        to={`/${createSlug(productData?.category)}/${productData._id}/${
           productData.slug
         }`}
         className="p-2"
@@ -23,7 +20,7 @@ const ProductCard = ({ productData }) => {
       </Link>
       <div className="flex flex-col gap-2 w-full">
         <Link
-          to={`/${productData?.category.toLowerCase()}/${productData._id}/${
+          to={`/${createSlug(productData?.category)}/${productData._id}/${
             productData.slug
           }`}
           className="hover:text-main transition-all capitalize w-full line-clamp-1"

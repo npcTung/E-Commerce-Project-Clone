@@ -3,7 +3,7 @@ import LogoImage from "assets/logo-image.png";
 import LableRed from "assets/lable-red.png";
 import LableBlue from "assets/lable-blue.png";
 import { Link, createSearchParams } from "react-router-dom";
-import { formatMoney } from "ultils/helpers";
+import { createSlug, formatMoney } from "ultils/helpers";
 import { renderStarFromNumber } from "ultils/helpers";
 import { Cart, SelectOption, ShowProduct } from "components";
 import icons from "ultils/icons";
@@ -123,7 +123,7 @@ const Product = ({
             </div>
           )}
           <Link
-            to={`/${productData.category.toLowerCase()}/${productData._id}/${
+            to={`/${createSlug(productData.category)}/${productData._id}/${
               productData.slug
             }`}
           >

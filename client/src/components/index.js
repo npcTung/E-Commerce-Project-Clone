@@ -10,8 +10,11 @@ export { default as CustomSlider } from "./common/CustomSlider";
 export { default as SelectQuantity } from "./common/SelectQuantity";
 export { default as Modal } from "./common/Modal";
 export { default as Loading } from "./common/Loading";
+export { default as PayPal } from "./common/PayPal";
 // CART
 export { default as Cart } from "./cart/Cart";
+export { default as CartProduct } from "./cart/CartProduct";
+export { default as CheckOutOption } from "./cart/CheckOutOption";
 // FOOTER
 export { default as Footer } from "./footer/Footer";
 // HEADERS

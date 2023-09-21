@@ -10,6 +10,7 @@ import {
   FaShieldAlt,
   FaBlenderPhone,
   FaUpload,
+  FaLinkedinIn,
 } from "react-icons/fa";
 import {
   BsStarFill,
@@ -52,6 +53,7 @@ import { CiSpeaker } from "react-icons/ci";
 import { TfiPrinter, TfiTablet } from "react-icons/tfi";
 import { ImUpload } from "react-icons/im";
 import { HiArrowLongRight } from "react-icons/hi2";
+import { BiSolidMessageAltDots } from "react-icons/bi";
 
 const icons = {
   RiPhoneFill,
@@ -108,6 +110,8 @@ const icons = {
   BsFillCartPlusFill,
   BsCartCheckFill,
   HiArrowLongRight,
+  FaLinkedinIn,
+  BiSolidMessageAltDots,
 };
 
 export default icons;
