@@ -4,7 +4,7 @@ const { BsStarFill, BsStar } = icons;
 
 export const createSlug = (str) =>
   str
-    .toLowerCase()
+    ?.toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .split(" ")

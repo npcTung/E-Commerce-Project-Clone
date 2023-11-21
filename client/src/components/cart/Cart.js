@@ -56,17 +56,17 @@ const Cart = ({ dispatch, navigate }) => {
                 <div className="w-[78px] h-[78px] row-span-1 col-span-3">
                   <img
                     src={el.thumb}
-                    alt={el.product.title}
+                    alt={el.product?.title}
                     className="w-full h-full object-contain"
                   />
                 </div>
                 <div className="w-full h-full row-span-1 col-span-6 flex flex-col gap-1">
                   <span className="capitalize line-clamp-1">
-                    {el.product.title.toLowerCase()}
+                    {el.product?.title?.toLowerCase()}
                   </span>
                   {el.color && (
                     <span className="capitalize text-sm text-gray-400 line-clamp-1">
-                      {el.color.toLowerCase()}
+                      {el.color?.toLowerCase()}
                     </span>
                   )}
                   <span className="text-sm text-gray-400 line-clamp-1">{`Số lượng: ${el.quantity}`}</span>

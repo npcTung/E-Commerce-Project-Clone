@@ -23,7 +23,7 @@ const CheckOutOption = ({ cartData }) => {
                   <div className="w-[50px] h-[50px]">
                     <img
                       src={el.thumb || noImage}
-                      alt={el.product.title}
+                      alt={el.product?.title}
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -31,10 +31,10 @@ const CheckOutOption = ({ cartData }) => {
                 <td>
                   <span className="flex flex-col items-start capitalize gap-1">
                     <span className="font-semibold line-clamp-1">
-                      {el.product.title.toLowerCase()}
+                      {el.product?.title?.toLowerCase()}
                     </span>
                     <span className="flex items-center text-xs gap-2">
-                      <span>{`màu: ${el.color.toLowerCase()}`}</span>
+                      <span>{`màu: ${el.color?.toLowerCase()}`}</span>
                       <span>/</span>
                       <span>{`số lương: ${el.quantity}`}</span>
                     </span>

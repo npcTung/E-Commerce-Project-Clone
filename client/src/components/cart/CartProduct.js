@@ -44,7 +44,7 @@ const CartProduct = ({ cartData, dispatch, navigate }) => {
         <tbody>
           {cartData.map((el) => (
             <OrderItem
-              key={el._id}
+              key={el?._id}
               cartData={el}
               defaultQuantity={el.quantity}
             />
